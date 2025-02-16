@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct UsernameView: View {
-    @State private var username: String = ""
+    @StateObject var viewModel: TextfieldViewModel
     var body: some View {
         TextField(
                 "User name",
-                text: $username
+                text: $viewModel.textfieldLabel
             )
             .textFieldStyle(.roundedBorder)
             .textInputAutocapitalization(.never)
@@ -22,5 +22,9 @@ struct UsernameView: View {
 }
 
 #Preview {
-    UsernameView()
+    UsernameView(
+        viewModel: TextfieldViewModel(
+            didChangeCallback: { _ in }
+        )
+    )
 }

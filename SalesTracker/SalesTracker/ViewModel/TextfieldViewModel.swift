@@ -19,3 +19,5 @@ final class TextfieldViewModel {
         self.didChangeTextfieldLabel = didChangeCallback
     }
 }
+
+extension TextfieldViewModel: ObservableObject {}

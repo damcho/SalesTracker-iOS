@@ -13,7 +13,11 @@ struct SalesTrackerApp: App {
         WindowGroup {
             LoginScreen(
                 errorView: ErrorView(),
-                usernameView: UsernameView(),
+                usernameView: UsernameView(
+                    viewModel: TextfieldViewModel(
+                        didChangeCallback: { _ in }
+                    )
+                ),
                 passwordView: PasswordView(),
                 activityIndicatorView: ActivityIndicatorView(),
                 loginButtonView: LoginButtonView()
