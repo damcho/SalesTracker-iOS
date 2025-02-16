@@ -16,25 +16,30 @@ struct SalesTrackerApp: App {
     }
     
     static func composeLoginScreen() -> some View {
-        LoginScreen(
+        let loginButtonViewModel = LoginButtonViewModel()
+        let loginScreenViewModel = LoginScreenViewModel(
+            LoginEnabler: loginButtonViewModel
+        )
+
+        return LoginScreen(
             errorView: ErrorView(
                 viewModel: ErrorViewModel()
             ),
             usernameView: UsernameView(
                 viewModel: TextfieldViewModel(
-                    didChangeCallback: { _ in }
+                    didChangeCallback: loginScreenViewModel.didEnterUsername(_:)
                 )
             ),
             passwordView: PasswordView(
                 viewModel: TextfieldViewModel(
-                    didChangeCallback: {_ in }
+                    didChangeCallback: loginScreenViewModel.didEnterPassword(_:)
                 )
             ),
             activityIndicatorView: ActivityIndicatorView(
                 viewModel: ActivityIndicatorViewModel()
             ),
             loginButtonView: LoginButtonView(
-                loginButtonViewModel: LoginButtonViewModel()
+                loginButtonViewModel: loginButtonViewModel
             )
         )
     }
