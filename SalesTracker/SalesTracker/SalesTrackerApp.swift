@@ -11,25 +11,29 @@ import SwiftUI
 struct SalesTrackerApp: App {
     var body: some Scene {
         WindowGroup {
-            LoginScreen(
-                errorView: ErrorView(),
-                usernameView: UsernameView(
-                    viewModel: TextfieldViewModel(
-                        didChangeCallback: { _ in }
-                    )
-                ),
-                passwordView: PasswordView(
-                    viewModel: TextfieldViewModel(
-                        didChangeCallback: {_ in }
-                    )
-                ),
-                activityIndicatorView: ActivityIndicatorView(
-                    viewModel: ActivityIndicatorViewModel()
-                ),
-                loginButtonView: LoginButtonView(
-                    loginButtonViewModel: LoginButtonViewModel()
-                )
-            )
+            SalesTrackerApp.composeLoginScreen()
         }
+    }
+    
+    static func composeLoginScreen() -> some View {
+        LoginScreen(
+            errorView: ErrorView(),
+            usernameView: UsernameView(
+                viewModel: TextfieldViewModel(
+                    didChangeCallback: { _ in }
+                )
+            ),
+            passwordView: PasswordView(
+                viewModel: TextfieldViewModel(
+                    didChangeCallback: {_ in }
+                )
+            ),
+            activityIndicatorView: ActivityIndicatorView(
+                viewModel: ActivityIndicatorViewModel()
+            ),
+            loginButtonView: LoginButtonView(
+                loginButtonViewModel: LoginButtonViewModel()
+            )
+        )
     }
 }
