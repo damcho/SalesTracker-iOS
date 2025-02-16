@@ -17,7 +17,9 @@ struct SalesTrackerApp: App {
     
     static func composeLoginScreen() -> some View {
         LoginScreen(
-            errorView: ErrorView(),
+            errorView: ErrorView(
+                viewModel: ErrorViewModel()
+            ),
             usernameView: UsernameView(
                 viewModel: TextfieldViewModel(
                     didChangeCallback: { _ in }

@@ -8,12 +8,24 @@
 import SwiftUI
 
 struct ErrorView: View {
+    @StateObject var viewModel: ErrorViewModel
     var body: some View {
-        Text("Error view")
+        Text(viewModel.errorMessage)
             .foregroundStyle(.red)
     }
 }
 
 #Preview {
-    ErrorView()
+    ErrorView(
+        viewModel: ErrorViewModel()
+    )
+}
+
+#Preview {
+    let errorViewModel = ErrorViewModel()
+    let errorView = ErrorView(
+        viewModel: errorViewModel
+    )
+    errorViewModel.errorMessage = "some error"
+    return errorView
 }
