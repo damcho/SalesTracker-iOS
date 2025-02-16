@@ -19,6 +19,7 @@
 /* Begin PBXFileReference section */
 		8BB1C4522D6220DD007A5E60 /* SalesTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SalesTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BB1C4622D6220DE007A5E60 /* SalesTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SalesTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BDF8D292D6255C5005FFF7B /* SalesTracker.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = SalesTracker.xctestplan; path = SalesTrackerTests/SalesTracker.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -55,6 +56,7 @@
 		8BB1C4492D6220DD007A5E60 = {
 			isa = PBXGroup;
 			children = (
+				8BDF8D292D6255C5005FFF7B /* SalesTracker.xctestplan */,
 				8BB1C4542D6220DD007A5E60 /* SalesTracker */,
 				8BB1C4652D6220DE007A5E60 /* SalesTrackerTests */,
 				8BB1C4532D6220DD007A5E60 /* Products */,

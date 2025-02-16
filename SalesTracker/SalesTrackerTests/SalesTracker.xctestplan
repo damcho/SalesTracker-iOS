@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "B034F8D5-575A-46D4-A07E-2ECD1D4C1503",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:SalesTracker.xcodeproj",
+      "identifier" : "8BB1C4512D6220DD007A5E60",
+      "name" : "SalesTracker"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:SalesTracker.xcodeproj",
+        "identifier" : "8BB1C4612D6220DE007A5E60",
+        "name" : "SalesTrackerTests"
+      }
+    }
+  ],
+  "version" : 1
+}
