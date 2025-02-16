@@ -33,7 +33,11 @@ struct LoginScreen: View {
                 didChangeCallback: { _ in }
             )
         ),
-        passwordView: PasswordView(),
+        passwordView: PasswordView(
+            viewModel: TextfieldViewModel(
+                didChangeCallback: {_ in }
+            )
+        ),
         activityIndicatorView: ActivityIndicatorView(),
         loginButtonView: LoginButtonView()
     )

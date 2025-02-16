@@ -18,7 +18,11 @@ struct SalesTrackerApp: App {
                         didChangeCallback: { _ in }
                     )
                 ),
-                passwordView: PasswordView(),
+                passwordView: PasswordView(
+                    viewModel: TextfieldViewModel(
+                        didChangeCallback: {_ in }
+                    )
+                ),
                 activityIndicatorView: ActivityIndicatorView(),
                 loginButtonView: LoginButtonView()
             )

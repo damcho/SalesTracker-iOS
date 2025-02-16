@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct PasswordView: View {
+    @StateObject var viewModel: TextfieldViewModel
+
     var body: some View {
         SecureField(
             "Password",
-            text: .constant("")
+            text: $viewModel.textfieldLabel
         )
         .textFieldStyle(.roundedBorder)
         .textInputAutocapitalization(.never)
@@ -21,5 +23,9 @@ struct PasswordView: View {
 }
 
 #Preview {
-    PasswordView()
+    PasswordView(
+        viewModel: TextfieldViewModel(
+            didChangeCallback: {_ in }
+        )
+    )
 }
