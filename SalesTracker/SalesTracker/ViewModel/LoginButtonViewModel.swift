@@ -8,5 +8,11 @@
 import Foundation
 
 final class LoginButtonViewModel: ObservableObject {
-    var shouldEnableLoginButton: Bool = false
+    @Published var shouldEnableLoginButton: Bool = false
+}
+
+extension LoginButtonViewModel: LoginEnabler {
+    func enable(_ enabled: Bool) {
+        shouldEnableLoginButton = enabled
+    }
 }

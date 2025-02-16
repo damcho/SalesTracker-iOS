@@ -12,7 +12,7 @@ struct LoginButtonView: View {
     var body: some View {
         Button("Login") {}
             .disabled(
-                loginButtonViewModel.shouldEnableLoginButton
+                !loginButtonViewModel.shouldEnableLoginButton
             )
         .buttonStyle(.bordered)
         .controlSize(.large)
