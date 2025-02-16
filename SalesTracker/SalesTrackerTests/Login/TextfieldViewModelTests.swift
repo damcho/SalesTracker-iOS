@@ -6,19 +6,7 @@
 //
 
 import Testing
-
-final class TextfieldViewModel {
-    var textfieldLabel: String = "" {
-        didSet {
-            didChangeTextfieldLabel(textfieldLabel)
-        }
-    }
-    let didChangeTextfieldLabel: (String) -> Void
-    
-    init(didChangeCallback: @escaping (String) -> Void) {
-        self.didChangeTextfieldLabel = didChangeCallback
-    }
-}
+@testable import SalesTracker
 
 struct TextfieldViewModelTests {
     @Test func does_not_notify_username_change_on_init() throws {
