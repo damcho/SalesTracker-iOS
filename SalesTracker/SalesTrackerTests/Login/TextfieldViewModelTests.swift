@@ -7,20 +7,20 @@
 
 import Testing
 
-final class UsernameViewModel {
-    var username: String = "" {
+final class TextfieldViewModel {
+    var textfieldLabel: String = "" {
         didSet {
-            didChangeUsername(username)
+            didChangeTextfieldLabel(textfieldLabel)
         }
     }
-    let didChangeUsername: (String) -> Void
+    let didChangeTextfieldLabel: (String) -> Void
     
-    init(didChangeUsername: @escaping (String) -> Void) {
-        self.didChangeUsername = didChangeUsername
+    init(didChangeCallback: @escaping (String) -> Void) {
+        self.didChangeTextfieldLabel = didChangeCallback
     }
 }
 
-struct UsernameViewModelTests {
+struct TextfieldViewModelTests {
     @Test func does_not_notify_username_change_on_init() throws {
         var usernameChangedCallCount = 0
         _ = makeSUT { _ in
@@ -36,18 +36,18 @@ struct UsernameViewModelTests {
             username = newUsername
         }
         
-        sut.username = "t"
+        sut.textfieldLabel = "t"
 
         #expect(username == "t")
         
-        sut.username = "te"
+        sut.textfieldLabel = "te"
 
         #expect(username == "te")
     }
 }
 
-extension UsernameViewModelTests {
-    func makeSUT(callback: @escaping (String) -> Void) -> UsernameViewModel {
-        return UsernameViewModel(didChangeUsername: callback)
+extension TextfieldViewModelTests {
+    func makeSUT(callback: @escaping (String) -> Void) -> TextfieldViewModel {
+        return TextfieldViewModel(didChangeCallback: callback)
     }
 }
