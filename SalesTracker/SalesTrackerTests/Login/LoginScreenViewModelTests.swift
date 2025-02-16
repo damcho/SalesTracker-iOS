@@ -8,40 +8,6 @@
 import Testing
 @testable import SalesTracker
 
-protocol LoginEnabler {
-    func enable(_ enabled: Bool)
-}
-
-final class LoginScreenViewModel {
-    var username: String = "" {
-        didSet {
-            shouldEnableLogin()
-        }
-    }
-    var password: String = "" {
-        didSet {
-            shouldEnableLogin()
-        }
-    }
-    let LoginEnabler: LoginEnabler
-    
-    init(LoginEnabler: LoginEnabler) {
-        self.LoginEnabler = LoginEnabler
-    }
-    
-    func didEnterUsername(_ newUsername: String) {
-        username = newUsername
-    }
-    
-    func didEnterPassword(_ newPassword: String) {
-        password = newPassword
-    }
-    
-    func shouldEnableLogin() {
-        LoginEnabler.enable(!username.isEmpty && !password.isEmpty)
-    }
-}
-
 struct LoginScreenViewModelTests {
     
     @Test func enables_login_button_on_populated_username_and_password() async throws {
