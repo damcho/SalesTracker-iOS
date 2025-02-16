@@ -11,7 +11,13 @@ import SwiftUI
 struct SalesTrackerApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LoginScreen(
+                errorView: ErrorView(),
+                usernameView: UsernameView(),
+                passwordView: PasswordView(),
+                activityIndicatorView: ActivityIndicatorView(),
+                loginButtonView: LoginButtonView()
+            )
         }
     }
 }
