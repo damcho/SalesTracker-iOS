@@ -8,8 +8,16 @@
 import SwiftUI
 
 struct UsernameView: View {
+    @State private var username: String = ""
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        TextField(
+                "User name",
+                text: $username
+            )
+            .textInputAutocapitalization(.never)
+            .disableAutocorrection(true)
+            .border(.secondary)
+            .padding()
     }
 }
 
