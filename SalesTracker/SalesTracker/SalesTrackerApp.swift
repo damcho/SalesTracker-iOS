@@ -23,7 +23,9 @@ struct SalesTrackerApp: App {
                         didChangeCallback: {_ in }
                     )
                 ),
-                activityIndicatorView: ActivityIndicatorView(),
+                activityIndicatorView: ActivityIndicatorView(
+                    viewModel: ActivityIndicatorViewModel()
+                ),
                 loginButtonView: LoginButtonView(
                     loginButtonViewModel: LoginButtonViewModel()
                 )

@@ -8,11 +8,22 @@
 import SwiftUI
 
 struct ActivityIndicatorView: View {
+    @StateObject var viewModel: ActivityIndicatorViewModel
     var body: some View {
-        ProgressView().controlSize(.large)
+        if viewModel.shouldDisplayAcTivityIndicator {
+            ProgressView().controlSize(.large)
+        }
     }
 }
 
 #Preview {
-    ActivityIndicatorView()
+    let viewModel = ActivityIndicatorViewModel()
+    viewModel.shouldDisplayAcTivityIndicator = true
+    return ActivityIndicatorView(viewModel: viewModel)
+}
+
+#Preview {
+    let viewModel = ActivityIndicatorViewModel()
+    viewModel.shouldDisplayAcTivityIndicator = false
+    return ActivityIndicatorView(viewModel: viewModel)
 }
