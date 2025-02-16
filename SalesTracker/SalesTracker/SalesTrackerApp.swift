@@ -24,7 +24,9 @@ struct SalesTrackerApp: App {
                     )
                 ),
                 activityIndicatorView: ActivityIndicatorView(),
-                loginButtonView: LoginButtonView()
+                loginButtonView: LoginButtonView(
+                    loginButtonViewModel: LoginButtonViewModel()
+                )
             )
         }
     }

@@ -39,6 +39,8 @@ struct LoginScreen: View {
             )
         ),
         activityIndicatorView: ActivityIndicatorView(),
-        loginButtonView: LoginButtonView()
+        loginButtonView: LoginButtonView(
+            loginButtonViewModel: LoginButtonViewModel()
+        )
     )
 }

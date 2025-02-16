@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct LoginButtonView: View {
+    @StateObject var loginButtonViewModel: LoginButtonViewModel
     var body: some View {
         Button("Login") {}
+            .disabled(
+                loginButtonViewModel.shouldEnableLoginButton
+            )
         .buttonStyle(.bordered)
         .controlSize(.large)
         .padding()
@@ -17,5 +21,17 @@ struct LoginButtonView: View {
 }
 
 #Preview {
-    LoginButtonView()
+    let viewModel = LoginButtonViewModel()
+    viewModel.shouldEnableLoginButton = true
+    return LoginButtonView(
+        loginButtonViewModel: viewModel
+    )
+}
+
+#Preview {
+    let viewModel = LoginButtonViewModel()
+    viewModel.shouldEnableLoginButton = false
+    return LoginButtonView(
+        loginButtonViewModel: viewModel
+    )
 }
