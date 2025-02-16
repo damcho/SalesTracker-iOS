@@ -8,7 +8,11 @@
 import Testing
 
 final class UsernameViewModel {
-    var username: String = ""
+    var username: String = "" {
+        didSet {
+            didChangeUsername(username)
+        }
+    }
     let didChangeUsername: (String) -> Void
     
     init(didChangeUsername: @escaping (String) -> Void) {
@@ -24,6 +28,21 @@ struct UsernameViewModelTests {
         }
 
         #expect(usernameChangedCallCount == 0)
+    }
+    
+    @Test func notifies_username_text_changed() throws {
+        var username = ""
+        let sut = makeSUT { newUsername in
+            username = newUsername
+        }
+        
+        sut.username = "t"
+
+        #expect(username == "t")
+        
+        sut.username = "te"
+
+        #expect(username == "te")
     }
 }
 
