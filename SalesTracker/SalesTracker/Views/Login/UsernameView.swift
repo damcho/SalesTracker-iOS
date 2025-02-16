@@ -14,9 +14,9 @@ struct UsernameView: View {
                 "User name",
                 text: $username
             )
+            .textFieldStyle(.roundedBorder)
             .textInputAutocapitalization(.never)
             .disableAutocorrection(true)
-            .border(.secondary)
             .padding()
     }
 }

@@ -13,9 +13,9 @@ struct PasswordView: View {
             "Password",
             text: .constant("")
         )
+        .textFieldStyle(.roundedBorder)
         .textInputAutocapitalization(.never)
         .disableAutocorrection(true)
-        .border(.secondary)
         .padding()
     }
 }
