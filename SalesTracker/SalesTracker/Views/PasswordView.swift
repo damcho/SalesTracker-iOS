@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct passwordView: View {
+struct PasswordView: View {
     var body: some View {
         SecureField(
             "Password",
@@ -21,5 +21,5 @@ struct passwordView: View {
 }
 
 #Preview {
-    passwordView()
+    PasswordView()
 }
