@@ -10,45 +10,6 @@ import Foundation
 
 @testable import SalesTracker
 
-struct AuthenticationResult: Equatable {
-    
-}
-
-struct LoginCredentials {
-    
-}
-
-protocol Authenticable {
-    func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult
-}
-
-enum LoginError: Error {
-    case connectivity
-    case authentication
-}
-
-protocol ActivityIndicatorDisplayable {
-    func displayActivityIndicator()
-    func hideActivityIndicator()
-}
-struct ActivityIndicatorAuthenticationDecorator {
-    let decoratee: Authenticable
-    let activityIndicatorDisplayable: ActivityIndicatorDisplayable
-    
-    func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
-        activityIndicatorDisplayable.displayActivityIndicator()
-        var result: AuthenticationResult!
-        do {
-            result = try await decoratee.authenticate(with: credentials)
-            activityIndicatorDisplayable.hideActivityIndicator()
-        } catch {
-            activityIndicatorDisplayable.hideActivityIndicator()
-            throw error
-        }
-        return result
-    }
-}
-
 struct ActivityIndicatorAuthenticationDecoratorTests {
     
     @Test func throws_on_authentication_failure() async throws {
