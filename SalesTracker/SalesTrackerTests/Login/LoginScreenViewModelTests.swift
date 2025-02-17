@@ -13,7 +13,7 @@ struct LoginScreenViewModelTests {
     @Test func enables_login_button_on_populated_username_and_password() async throws {
         let (sut, spy) = makeSUT()
         #expect(spy.enableCalls == [])
-
+        
         sut.didEnterUsername("aUsername")
         #expect(spy.enableCalls == [false])
         
@@ -23,16 +23,35 @@ struct LoginScreenViewModelTests {
         sut.didEnterUsername("")
         #expect(spy.enableCalls == [false, true, false])
     }
+    
+    @Test func starts_authentication_with_login_credentials_on_login_tapped() async throws {
+        let (sut, _) = makeSUT(
+            authClosure: { credentials in
+                #expect(
+                    credentials == LoginCredentials(
+                        username: "aUsername",
+                        password: "aPassword"
+                    )
+                )
+            }
+        )
+        
+        sut.username = "aUsername"
+        sut.password = "aPassword"
+        
+        sut.didTapLogin()
+    }
 }
 
 extension LoginScreenViewModelTests {
-    func makeSUT() -> (LoginScreenViewModel, LoginEnablerSpy) {
-        let spy = LoginEnablerSpy()
+    func makeSUT(authClosure: @escaping Authenticator = {_ in }) -> (LoginScreenViewModel, LoginEnablerSpy) {
+        let loginEnablerSpy = LoginEnablerSpy()
         return (
             LoginScreenViewModel(
-                LoginEnabler: spy
+                LoginEnabler: loginEnablerSpy,
+                authenticator: authClosure
             ),
-            spy
+            loginEnablerSpy
         )
     }
 }

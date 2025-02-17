@@ -11,8 +11,9 @@ struct AuthenticationResult: Equatable {
     
 }
 
-struct LoginCredentials {
-    
+struct LoginCredentials: Equatable {
+    let username: String
+    let password: String
 }
 
 protocol Authenticable {

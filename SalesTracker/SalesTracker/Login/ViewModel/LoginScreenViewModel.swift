@@ -11,6 +11,8 @@ protocol LoginEnabler {
     func enable(_ enabled: Bool)
 }
 
+typealias Authenticator = (LoginCredentials) -> Void
+
 final class LoginScreenViewModel {
     var username: String = "" {
         didSet {
@@ -23,9 +25,11 @@ final class LoginScreenViewModel {
         }
     }
     let LoginEnabler: LoginEnabler
+    let authenticate: Authenticator
     
-    init(LoginEnabler: LoginEnabler) {
+    init(LoginEnabler: LoginEnabler, authenticator: @escaping Authenticator) {
         self.LoginEnabler = LoginEnabler
+        self.authenticate = authenticator
     }
     
     func didEnterUsername(_ newUsername: String) {
@@ -38,5 +42,14 @@ final class LoginScreenViewModel {
     
     func shouldEnableLogin() {
         LoginEnabler.enable(!username.isEmpty && !password.isEmpty)
+    }
+    
+    func didTapLogin() {
+        authenticate(
+            LoginCredentials(
+                username: username,
+                password: password
+            )
+        )
     }
 }

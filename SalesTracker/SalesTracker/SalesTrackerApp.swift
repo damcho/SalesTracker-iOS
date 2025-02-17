@@ -20,7 +20,8 @@ struct SalesTrackerApp: App {
             loginAction: {}
         )
         let loginScreenViewModel = LoginScreenViewModel(
-            LoginEnabler: loginButtonViewModel
+            LoginEnabler: loginButtonViewModel,
+            authenticator: {_ in }
         )
 
         return LoginScreen(

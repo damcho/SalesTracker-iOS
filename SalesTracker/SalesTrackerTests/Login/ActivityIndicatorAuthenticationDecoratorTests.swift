@@ -89,7 +89,7 @@ struct AuthenticableStub: Authenticable {
 }
 
 var anyLoginCredentials: LoginCredentials {
-    LoginCredentials()
+    LoginCredentials(username: "aUsername", password: "aPassword")
 }
 
 var anyError: Error {
