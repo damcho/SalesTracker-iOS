@@ -28,16 +28,12 @@ struct LoginScreenViewModelTests {
         let (sut, _) = makeSUT(
             authClosure: { credentials in
                 #expect(
-                    credentials == LoginCredentials(
-                        username: "aUsername",
-                        password: "aPassword"
-                    )
+                    credentials == anyLoginCredentials
                 )
             }
         )
         
-        sut.username = "aUsername"
-        sut.password = "aPassword"
+        sut.simulateLoginCredentialsFilled()
         
         sut.didTapLogin()
     }
@@ -53,6 +49,13 @@ extension LoginScreenViewModelTests {
             ),
             loginEnablerSpy
         )
+    }
+}
+
+extension LoginScreenViewModel {
+    func simulateLoginCredentialsFilled() {
+        username = anyLoginCredentials.username
+        password = anyLoginCredentials.password
     }
 }
 
