@@ -10,7 +10,9 @@ import SwiftUI
 struct LoginButtonView: View {
     @StateObject var loginButtonViewModel: LoginButtonViewModel
     var body: some View {
-        Button("Login") {}
+        Button("Login") {
+            loginButtonViewModel.didTapLoginAction()
+        }
             .disabled(
                 !loginButtonViewModel.shouldEnableLoginButton
             )
