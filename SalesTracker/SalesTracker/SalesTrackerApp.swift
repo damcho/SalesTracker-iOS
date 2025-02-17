@@ -16,7 +16,9 @@ struct SalesTrackerApp: App {
     }
     
     static func composeLoginScreen() -> some View {
-        let loginButtonViewModel = LoginButtonViewModel()
+        let loginButtonViewModel = LoginButtonViewModel(
+            loginAction: {}
+        )
         let loginScreenViewModel = LoginScreenViewModel(
             LoginEnabler: loginButtonViewModel
         )
