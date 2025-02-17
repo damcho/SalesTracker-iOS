@@ -10,7 +10,7 @@ import Foundation
 
 @testable import SalesTracker
 
-struct AuthenticationResult {
+struct AuthenticationResult: Equatable {
     
 }
 
@@ -27,52 +27,96 @@ enum LoginError: Error {
     case authentication
 }
 
+protocol ActivityIndicatorDisplayable {
+    func displayActivityIndicator()
+    func hideActivityIndicator()
+}
 struct ActivityIndicatorAuthenticationDecorator {
     let decoratee: Authenticable
+    let activityIndicatorDisplayable: ActivityIndicatorDisplayable
+    
     func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
-        throw LoginError.authentication
+        activityIndicatorDisplayable.displayActivityIndicator()
+        var result: AuthenticationResult!
+        do {
+            result = try await decoratee.authenticate(with: credentials)
+            activityIndicatorDisplayable.hideActivityIndicator()
+        } catch {
+            activityIndicatorDisplayable.hideActivityIndicator()
+            throw error
+        }
+        return result
     }
-        
 }
 
 struct ActivityIndicatorAuthenticationDecoratorTests {
     
     @Test func throws_on_authentication_failure() async throws {
-        let (sut, _) = makeSUT(decorateeStub: .failure(anyError))
+        let (sut, _) = makeSUT(
+            decorateeStub: .failure(LoginError.authentication)
+        )
         
         await #expect(throws: LoginError.authentication) {
             try await sut.authenticate(with: anyLoginCredentials)
         }
     }
 
-    @Test func displays_activity_indicator_on_authentication_started() async throws {
+    @Test func displays_and_hides_activity_indicator_on_authentication_success() async throws {
+        let (sut, activityIndicatorDisplayableSpy) = makeSUT()
 
+        _ = try await sut.authenticate(with: anyLoginCredentials)
+
+        #expect(activityIndicatorDisplayableSpy.activityIndicatorMessages == [true , false])
     }
     
-    @Test func hides_activity_indicator_on_authentication_failure() async throws {
+    @Test func displays_and_hides_activity_indicator_on_authentication_failure() async throws {
+        let (sut, activityIndicatorDisplayableSpy) = makeSUT(
+            decorateeStub: .failure(LoginError.authentication)
+        )
         
-    }
-    
-    @Test func hides_activity_indicator_on_authentication_success() async throws {
+        await #expect(throws: LoginError.authentication) {
+            try await sut.authenticate(with: anyLoginCredentials)
+        }
         
+        #expect(activityIndicatorDisplayableSpy.activityIndicatorMessages == [true , false])
     }
     
     @Test func forwards_result_on_authentication_completion() async throws {
-        
+        let expectedResult = anyAuthenticationResult
+        let (sut, _) = makeSUT(
+            decorateeStub: .success(expectedResult)
+        )
+
+        let result = try await sut.authenticate(with: anyLoginCredentials)
+
+        #expect(result == expectedResult)
     }
 }
 
 extension ActivityIndicatorAuthenticationDecoratorTests {
     func makeSUT(
         decorateeStub: Result<AuthenticationResult, Error> = .success(AuthenticationResult())
-    ) -> (ActivityIndicatorAuthenticationDecorator, AuthenticableStub) {
+    ) -> (ActivityIndicatorAuthenticationDecorator, activityIndicatorDisplayableSpy) {
         let stub = AuthenticableStub(stub: decorateeStub)
+        let activityIndicatorSpy = activityIndicatorDisplayableSpy()
         return (
             ActivityIndicatorAuthenticationDecorator(
-                decoratee: stub
+                decoratee: stub,
+                activityIndicatorDisplayable: activityIndicatorSpy
             ),
-            stub
+            activityIndicatorSpy
         )
+    }
+}
+
+final class activityIndicatorDisplayableSpy: ActivityIndicatorDisplayable {
+    var activityIndicatorMessages: [Bool] = []
+    func displayActivityIndicator() {
+        activityIndicatorMessages.append(true)
+    }
+    
+    func hideActivityIndicator() {
+        activityIndicatorMessages.append(false)
     }
 }
 
@@ -89,4 +133,8 @@ var anyLoginCredentials: LoginCredentials {
 
 var anyError: Error {
     NSError(domain: "", code: 0)
+}
+
+var anyAuthenticationResult: AuthenticationResult {
+    AuthenticationResult()
 }
