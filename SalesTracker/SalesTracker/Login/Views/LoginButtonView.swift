@@ -23,9 +23,7 @@ struct LoginButtonView: View {
 }
 
 #Preview {
-    let viewModel = LoginButtonViewModel(
-        loginAction: {}
-    )
+    let viewModel = LoginButtonViewModel()
     viewModel.shouldEnableLoginButton = true
     return LoginButtonView(
         loginButtonViewModel: viewModel
@@ -33,9 +31,7 @@ struct LoginButtonView: View {
 }
 
 #Preview {
-    let viewModel = LoginButtonViewModel(
-        loginAction: {}
-    )
+    let viewModel = LoginButtonViewModel()
     viewModel.shouldEnableLoginButton = false
     return LoginButtonView(
         loginButtonViewModel: viewModel

@@ -11,14 +11,11 @@ typealias LoginAction = () -> Void
 
 final class LoginButtonViewModel: ObservableObject {
     @Published var shouldEnableLoginButton: Bool = false
-    let loginAction: LoginAction
+    var loginAction: LoginAction?
     
-    init(loginAction: @escaping LoginAction) {
-        self.loginAction = loginAction
-    }
     
     func didTapLoginAction() {
-        loginAction()
+        loginAction?()
     }
 }
 

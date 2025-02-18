@@ -14,3 +14,16 @@ final class WeakRefVirtualProxy<T: AnyObject> {
         self.object = object
     }
 }
+
+// MARK: DeviceConnectable
+
+extension WeakRefVirtualProxy: LoginEnabler where T: LoginEnabler {
+    var loginAction: LoginAction? {
+        get { {} }
+        set { }
+    }
+    
+    func enable(_ enabled: Bool) {
+        object?.enable(enabled)
+    }
+}

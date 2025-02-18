@@ -8,7 +8,13 @@
 import Testing
 @testable import SalesTracker
 
-struct LoginScreenViewModelTests {
+final class LoginScreenViewModelTests {
+    
+    private var sutTracker: MemoryLeakTracker<LoginScreenViewModel>?
+     
+     deinit {
+         sutTracker?.verify()
+     }
     
     @Test func enables_login_button_on_populated_username_and_password() async throws {
         let (sut, spy) = makeSUT()
@@ -40,15 +46,18 @@ struct LoginScreenViewModelTests {
 }
 
 extension LoginScreenViewModelTests {
-    func makeSUT(authClosure: @escaping Authenticator = {_ in }) -> (LoginScreenViewModel, LoginEnablerSpy) {
+    func makeSUT(
+        authClosure: @escaping Authenticator = {_ in },
+        filePath: String = #file,
+        line: Int = #line,
+        column: Int = #column
+    ) -> (LoginScreenViewModel, LoginEnablerSpy) {
         let loginEnablerSpy = LoginEnablerSpy()
-        return (
-            LoginScreenViewModel(
-                LoginEnabler: loginEnablerSpy,
-                authenticator: authClosure
-            ),
-            loginEnablerSpy
-        )
+        let sut = SalesTrackerApp.composeLogin(with: loginEnablerSpy)
+        let sourceLocation = SourceLocation(fileID: #fileID, filePath: filePath, line: line, column: column)
+        sutTracker = .init(instance: sut, sourceLocation: sourceLocation)
+
+        return (sut, loginEnablerSpy)
     }
 }
 
@@ -60,6 +69,7 @@ extension LoginScreenViewModel {
 }
 
 class LoginEnablerSpy: LoginEnabler {
+    var loginAction: SalesTracker.LoginAction?
     var enableCalls: [Bool] = []
     
     func enable(_ enabled: Bool) {

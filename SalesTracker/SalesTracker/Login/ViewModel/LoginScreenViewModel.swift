@@ -7,7 +7,8 @@
 
 import Foundation
 
-protocol LoginEnabler {
+protocol LoginEnabler: AnyObject {
+    var loginAction: LoginAction? { get set }
     func enable(_ enabled: Bool)
 }
 
@@ -27,8 +28,8 @@ final class LoginScreenViewModel {
     let LoginEnabler: LoginEnabler
     let authenticate: Authenticator
     
-    init(LoginEnabler: LoginEnabler, authenticator: @escaping Authenticator) {
-        self.LoginEnabler = LoginEnabler
+    init(loginEnabler: LoginEnabler, authenticator: @escaping Authenticator) {
+        self.LoginEnabler = loginEnabler
         self.authenticate = authenticator
     }
     
