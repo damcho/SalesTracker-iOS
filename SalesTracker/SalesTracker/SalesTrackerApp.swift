@@ -27,11 +27,33 @@ struct SalesTrackerApp: App {
         return loginScreenViewModel
     }
     
+    static func composeActivityIndicator(
+        for authenticable: Authenticable,
+        activityIndicatorDisplayable: ActivityIndicatorDisplayable
+    ) -> Authenticable {
+        let activityIndicatorAuthDecorator = ActivityIndicatorAuthenticationDecorator(
+            decoratee: authenticable,
+            activityIndicatorDisplayable: MainThreadDispatcher(
+                decoratee: activityIndicatorDisplayable
+            )
+        )
+        return activityIndicatorAuthDecorator
+    }
+    
     static func composeLoginScreen() -> some View {
+        let activityIndicatorViewModel = ActivityIndicatorViewModel()
         let loginButtonViewModel = LoginButtonViewModel()
+        let activityIndicatorAuthenticable = composeActivityIndicator(
+            for: AuthenticableStub(),
+            activityIndicatorDisplayable: activityIndicatorViewModel
+        )
         let loginScreenViewModel = composeLogin(
             with: loginButtonViewModel,
-            authAction: {_ in }
+            authAction: { credentials in
+                Task {
+                    _ = try await activityIndicatorAuthenticable.authenticate(with: credentials)
+                }
+            }
         )
         return LoginScreen(
             errorView: ErrorView(
@@ -48,7 +70,7 @@ struct SalesTrackerApp: App {
                 )
             ),
             activityIndicatorView: ActivityIndicatorView(
-                viewModel: ActivityIndicatorViewModel()
+                viewModel: activityIndicatorViewModel
             ),
             loginButtonView: LoginButtonView(
                 loginButtonViewModel: loginButtonViewModel
@@ -56,3 +78,12 @@ struct SalesTrackerApp: App {
         )
     }
 }
+
+struct AuthenticableStub: Authenticable {
+    func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
+        sleep(2)
+        return AuthenticationResult()
+    }
+}
+
+
