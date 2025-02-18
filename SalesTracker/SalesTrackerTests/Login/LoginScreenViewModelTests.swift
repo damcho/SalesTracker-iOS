@@ -31,17 +31,18 @@ final class LoginScreenViewModelTests {
     }
     
     @Test func starts_authentication_with_login_credentials_on_login_tapped() async throws {
-        let (sut, _) = makeSUT(
-            authClosure: { credentials in
-                #expect(
-                    credentials == anyLoginCredentials
-                )
-            }
-        )
-        
-        sut.simulateLoginCredentialsFilled()
-        
-        sut.didTapLogin()
+        await confirmation { confirmation in
+            let (sut, _) = makeSUT(
+                authClosure: { credentials in
+                    #expect(
+                        credentials == anyLoginCredentials
+                    )
+                    confirmation()
+                }
+            )
+            sut.simulateLoginCredentialsFilled()
+            sut.didTapLogin()
+        }
     }
 }
 
@@ -53,7 +54,10 @@ extension LoginScreenViewModelTests {
         column: Int = #column
     ) -> (LoginScreenViewModel, LoginEnablerSpy) {
         let loginEnablerSpy = LoginEnablerSpy()
-        let sut = SalesTrackerApp.composeLogin(with: loginEnablerSpy)
+        let sut = SalesTrackerApp.composeLogin(
+            with: loginEnablerSpy,
+            authAction: authClosure
+        )
         let sourceLocation = SourceLocation(fileID: #fileID, filePath: filePath, line: line, column: column)
         sutTracker = .init(instance: sut, sourceLocation: sourceLocation)
 

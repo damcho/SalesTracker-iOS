@@ -15,10 +15,13 @@ struct SalesTrackerApp: App {
         }
     }
     
-    static func composeLogin(with enabler: some LoginEnabler) -> LoginScreenViewModel {
+    static func composeLogin(
+        with enabler: some LoginEnabler,
+        authAction: @escaping Authenticator
+    ) -> LoginScreenViewModel {
         let loginScreenViewModel = LoginScreenViewModel(
             loginEnabler: WeakRefVirtualProxy(enabler),
-            authenticator: {_ in }
+            authenticator: authAction
         )
         enabler.loginAction = loginScreenViewModel.didTapLogin
         return loginScreenViewModel
@@ -26,7 +29,10 @@ struct SalesTrackerApp: App {
     
     static func composeLoginScreen() -> some View {
         let loginButtonViewModel = LoginButtonViewModel()
-        let loginScreenViewModel = composeLogin(with: loginButtonViewModel)
+        let loginScreenViewModel = composeLogin(
+            with: loginButtonViewModel,
+            authAction: {_ in }
+        )
         return LoginScreen(
             errorView: ErrorView(
                 viewModel: ErrorViewModel()
