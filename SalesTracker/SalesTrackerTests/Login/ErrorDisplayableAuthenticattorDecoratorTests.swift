@@ -56,7 +56,11 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
     }
 
     @Test func does_not_dispatch_error_on_authentication_success() async throws {
-     
+        let (sut, errorDisplayableSpy) = makeSUT(decorateeStub: .success(anyAuthenticationResult))
+        
+        _ = try await sut.authenticate(with: anyLoginCredentials)
+
+        #expect(errorDisplayableSpy.errorDisplayMessages == [])
     }
 }
 
