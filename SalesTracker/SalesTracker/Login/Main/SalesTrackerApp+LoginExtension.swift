@@ -1,20 +1,14 @@
 //
-//  SalesTrackerApp.swift
+//  SalesTrackerApp+LoginExtension.swift
 //  SalesTracker
 //
-//  Created by Damian Modernell on 16/2/25.
+//  Created by Damian Modernell on 19/2/25.
 //
 
+import Foundation
 import SwiftUI
 
-@main
-struct SalesTrackerApp: App {
-    var body: some Scene {
-        WindowGroup {
-            SalesTrackerApp.composeLoginScreen()
-        }
-    }
-    
+extension SalesTrackerApp {
     static func composeLogin(
         with enabler: some LoginEnabler,
         authAction: @escaping Authenticator
@@ -94,13 +88,3 @@ struct SalesTrackerApp: App {
         )
     }
 }
-
-struct AuthenticableStub: Authenticable {
-    func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
-        sleep(2)
-        throw LoginError.authentication
-       // return AuthenticationResult()
-    }
-}
-
-
