@@ -8,26 +8,6 @@
 import Testing
 @testable import SalesTracker
 
-protocol ErrorDisplayable {
-    func display(_ error: Error)
-}
-
-struct ErrorDisplayableAuthenticattorDecorator {
-    let decoratee: Authenticable
-    let errorDisplayable: ErrorDisplayable
-}
-
-extension ErrorDisplayableAuthenticattorDecorator: Authenticable {
-    func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
-        do {
-            return try await decoratee.authenticate(with: credentials)
-        } catch {
-            errorDisplayable.display(error)
-            throw error
-        }
-    }
-}
-
 struct ErrorDisplayableAuthenticattorDecoratorTests {
     @Test func throws_on_authentication_error() async throws {
         let (sut, _) = makeSUT(decorateeStub: .failure(LoginError.authentication))
