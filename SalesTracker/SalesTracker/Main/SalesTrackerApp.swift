@@ -14,16 +14,6 @@ struct SalesTrackerApp: App {
             SalesTrackerApp.composeLoginScreen()
         }
     }
-    
-
-}
-
-struct AuthenticableStub: Authenticable {
-    func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
-        sleep(2)
-        throw LoginError.authentication
-       // return AuthenticationResult()
-    }
 }
 
 
