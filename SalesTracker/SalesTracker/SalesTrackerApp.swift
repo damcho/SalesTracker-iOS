@@ -55,8 +55,12 @@ struct SalesTrackerApp: App {
     static func composeLoginScreen() -> some View {
         let activityIndicatorViewModel = ActivityIndicatorViewModel()
         let loginButtonViewModel = LoginButtonViewModel()
+        let errorViewModel = ErrorViewModel()
         let activityIndicatorAuthenticable = composeActivityIndicator(
-            for: AuthenticableStub(),
+            for: composeErrorDisplayable(
+                decoratee: AuthenticableStub(),
+                with: errorViewModel
+            ),
             activityIndicatorDisplayable: activityIndicatorViewModel
         )
         let loginScreenViewModel = composeLogin(
@@ -69,7 +73,7 @@ struct SalesTrackerApp: App {
         )
         return LoginScreen(
             errorView: ErrorView(
-                viewModel: ErrorViewModel()
+                viewModel: errorViewModel
             ),
             usernameView: UsernameView(
                 viewModel: TextfieldViewModel(
@@ -94,7 +98,8 @@ struct SalesTrackerApp: App {
 struct AuthenticableStub: Authenticable {
     func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
         sleep(2)
-        return AuthenticationResult()
+        throw LoginError.authentication
+       // return AuthenticationResult()
     }
 }
 
