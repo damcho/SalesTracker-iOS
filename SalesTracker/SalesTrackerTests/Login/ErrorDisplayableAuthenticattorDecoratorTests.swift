@@ -9,18 +9,18 @@ import Testing
 @testable import SalesTracker
 
 struct ErrorDisplayableAuthenticattorDecorator {
-    
+    let decoratee: Authenticable
 }
 
 extension ErrorDisplayableAuthenticattorDecorator: Authenticable {
     func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
-        throw LoginError.authentication
+        try await decoratee.authenticate(with: credentials)
     }
 }
 
 struct ErrorDisplayableAuthenticattorDecoratorTests {
     @Test func throws_on_authentication_error() async throws {
-        let sut = makeSUT()
+        let sut = makeSUT(decorateeStub: .failure(LoginError.authentication))
         
         await #expect(throws: LoginError.authentication) {
             try await sut.authenticate(with: anyLoginCredentials)
@@ -28,8 +28,13 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
     }
     
     @Test func forwards_result_on_authentication_success() async throws {
+        let sut = makeSUT(decorateeStub: .success(anyAuthenticationResult))
         
+        let result = try await sut.authenticate(with: anyLoginCredentials)
+
+        #expect(result == anyAuthenticationResult)
     }
+    
     @Test func dispatches_error_on_authentication_error() async throws {
     }
 
@@ -39,7 +44,11 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
 }
 
 extension ErrorDisplayableAuthenticattorDecoratorTests {
-    func makeSUT() -> Authenticable {
-        ErrorDisplayableAuthenticattorDecorator()
+    func makeSUT(decorateeStub: Result<AuthenticationResult, Error>) -> Authenticable {
+        ErrorDisplayableAuthenticattorDecorator(
+            decoratee: AuthenticableStub(
+                stub: decorateeStub
+            )
+        )
     }
 }
