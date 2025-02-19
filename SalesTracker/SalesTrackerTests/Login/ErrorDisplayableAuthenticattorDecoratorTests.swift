@@ -5,6 +5,7 @@
 //  Created by Damian Modernell on 19/2/25.
 //
 
+import Foundation
 import Testing
 @testable import SalesTracker
 
@@ -25,6 +26,7 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
         #expect(result == anyAuthenticationResult)
     }
     
+    @MainActor
     @Test func dispatches_error_on_authentication_error() async throws {
         let (sut, errorDisplayableSpy) = makeSUT(decorateeStub: .failure(LoginError.authentication))
 
@@ -42,6 +44,21 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
 
         #expect(errorDisplayableSpy.errorDisplayMessages == [])
     }
+    
+    @MainActor
+    @Test func displays_error_on_main_thread() async throws {
+        let (sut, errorDisplayableSpy) = makeSUT(decorateeStub: .failure(LoginError.authentication))
+
+        let authTask = performActionInBackgroundThread {
+            await #expect(throws: LoginError.authentication) {
+                _ = try await sut.authenticate(with: anyLoginCredentials)
+            }
+        }
+       
+        try await authTask.value
+
+        #expect(errorDisplayableSpy.isMainThread)
+    }
 }
 
 extension ErrorDisplayableAuthenticattorDecoratorTests {
@@ -49,19 +66,33 @@ extension ErrorDisplayableAuthenticattorDecoratorTests {
         decorateeStub: Result<AuthenticationResult, Error>
     ) -> (Authenticable, ErrorDisplayableSpy) {
         let errorDisplayableSpy = ErrorDisplayableSpy()
-        let sut = ErrorDisplayableAuthenticattorDecorator(
-            decoratee: AuthenticableStub(
-                stub: decorateeStub
-            ),
-            errorDisplayable: errorDisplayableSpy
+        let sut = SalesTrackerApp.composeErrorDisplayable(
+            decoratee: AuthenticableStub(stub: decorateeStub),
+            with: errorDisplayableSpy
         )
         return (sut, errorDisplayableSpy)
     }
 }
 
+extension SalesTrackerApp {
+    static func composeErrorDisplayable(
+        decoratee: Authenticable,
+        with errorDisplayable: ErrorDisplayable
+    ) -> Authenticable {
+        ErrorDisplayableAuthenticattorDecorator(
+            decoratee: decoratee,
+            errorDisplayable: MainThreadDispatcher(
+                decoratee: errorDisplayable
+            )
+        )
+    }
+}
+
 final class ErrorDisplayableSpy: ErrorDisplayable {
+    var isMainThread = false
     var errorDisplayMessages: [LoginError?] = []
     func display(_ error: any Error) {
         errorDisplayMessages.append(error as? LoginError)
+        isMainThread = Thread.isMainThread
     }
 }
