@@ -7,12 +7,6 @@
 
 import Foundation
 
-struct MainThreadDispatcher<ObjectType> {
-    let decoratee: ObjectType
-}
-
-// MARK: BTCPriceDisplayable
-
 extension MainThreadDispatcher: ActivityIndicatorDisplayable where ObjectType == ActivityIndicatorDisplayable {
     func displayActivityIndicator() {
         Task { @MainActor in
