@@ -40,6 +40,18 @@ struct SalesTrackerApp: App {
         return activityIndicatorAuthDecorator
     }
     
+    static func composeErrorDisplayable(
+        decoratee: Authenticable,
+        with errorDisplayable: ErrorDisplayable
+    ) -> Authenticable {
+        ErrorDisplayableAuthenticattorDecorator(
+            decoratee: decoratee,
+            errorDisplayable: MainThreadDispatcher(
+                decoratee: errorDisplayable
+            )
+        )
+    }
+    
     static func composeLoginScreen() -> some View {
         let activityIndicatorViewModel = ActivityIndicatorViewModel()
         let loginButtonViewModel = LoginButtonViewModel()

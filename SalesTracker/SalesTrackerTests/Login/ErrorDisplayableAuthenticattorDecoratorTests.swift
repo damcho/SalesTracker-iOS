@@ -74,20 +74,6 @@ extension ErrorDisplayableAuthenticattorDecoratorTests {
     }
 }
 
-extension SalesTrackerApp {
-    static func composeErrorDisplayable(
-        decoratee: Authenticable,
-        with errorDisplayable: ErrorDisplayable
-    ) -> Authenticable {
-        ErrorDisplayableAuthenticattorDecorator(
-            decoratee: decoratee,
-            errorDisplayable: MainThreadDispatcher(
-                decoratee: errorDisplayable
-            )
-        )
-    }
-}
-
 final class ErrorDisplayableSpy: ErrorDisplayable {
     var isMainThread = false
     var errorDisplayMessages: [LoginError?] = []
