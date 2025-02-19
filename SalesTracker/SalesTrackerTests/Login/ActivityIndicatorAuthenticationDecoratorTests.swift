@@ -83,15 +83,6 @@ extension ActivityIndicatorAuthenticationDecoratorTests {
             activityIndicatorSpy
         )
     }
-    
-    @discardableResult
-    func performActionInBackgroundThread(
-        _ action: @escaping () async throws -> Void
-    ) -> Task<Void, Error> {
-        return Task {
-            try await action()
-        }
-    }
 }
 
 final class activityIndicatorDisplayableSpy: ActivityIndicatorDisplayable {
@@ -125,4 +116,13 @@ var anyError: Error {
 
 var anyAuthenticationResult: AuthenticationResult {
     AuthenticationResult()
+}
+
+@discardableResult
+func performActionInBackgroundThread(
+    _ action: @escaping () async throws -> Void
+) -> Task<Void, Error> {
+    return Task {
+        try await action()
+    }
 }
