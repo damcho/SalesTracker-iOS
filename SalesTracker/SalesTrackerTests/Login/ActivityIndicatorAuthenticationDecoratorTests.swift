@@ -31,6 +31,7 @@ struct ActivityIndicatorAuthenticationDecoratorTests {
         #expect(activityIndicatorDisplayableSpy.activityIndicatorMessages == [true , false])
     }
     
+    @MainActor
     @Test func displays_and_hides_activity_indicator_on_authentication_failure() async throws {
         let (sut, activityIndicatorDisplayableSpy) = makeSUT(
             decorateeStub: .failure(authError)
