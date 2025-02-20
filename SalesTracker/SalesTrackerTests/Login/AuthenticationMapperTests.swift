@@ -10,22 +10,41 @@ import Foundation
 
 @testable import SalesTracker
 
+struct DecodableHTTPErrorMessage: Decodable {
+    let message: String
+}
+
 enum AuthenticationMapper {
+    static let unauthorized = 401
+    static let success = 200
     static func map(_ response: HTTPURLResponse, _ data: Data) throws -> AuthenticationResult {
-        throw LoginError.authentication
+        switch response.statusCode {
+        case unauthorized:
+            let errorData = try JSONDecoder().decode(DecodableHTTPErrorMessage.self, from: data)
+
+            throw LoginError.authentication(errorData.message)
+        case 400, 402..<499:
+            throw LoginError.connectivity
+        case success: return AuthenticationResult()
+
+        default:
+            throw LoginError.other
+        }
     }
 }
 
 struct AuthenticationMapperTests {
 
     @Test func throws_authentication_error_on_401_http_response() async throws {
-        #expect(throws: LoginError.authentication, performing: {
-            _ = try AuthenticationMapper.map(invalidAuthHTTPResponse, errorMessageData)
+        #expect(throws: invalidCredentialsAuthError.error, performing: {
+            _ = try AuthenticationMapper.map(invalidAuthHTTPResponse, invalidCredentialsAuthError.http)
         })
     }
     
-    @Test func throws_connectivity_error_on_other_400_response() async throws {
-        
+    @Test func throws_connectivity_error_on_http_response_error() async throws {
+        #expect(throws: LoginError.connectivity, performing: {
+            _ = try AuthenticationMapper.map(notFoundHTTPResponse, Data())
+        })
     }
     
     @Test func throws_decoding_error_on_invalid_data() async throws {
@@ -46,6 +65,18 @@ var invalidAuthHTTPResponse: HTTPURLResponse {
     )!
 }
 
-var errorMessageData: Data {
-    #""message": "Invalid credentials""#.data(using: .utf8)!
+var notFoundHTTPResponse: HTTPURLResponse {
+    HTTPURLResponse(
+        url: URL(string: "https://example.com")!,
+        statusCode: 400,
+        httpVersion: nil,
+        headerFields: nil
+    )!
+}
+
+var invalidCredentialsAuthError: (error: LoginError, http: Data) {
+    (
+        LoginError.authentication("Invalid credentials"),
+        #"{"message": "Invalid credentials"}"#.data(using: .utf8)!
+    )
 }

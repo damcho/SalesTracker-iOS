@@ -11,9 +11,9 @@ import Testing
 
 struct ErrorDisplayableAuthenticattorDecoratorTests {
     @Test func throws_on_authentication_error() async throws {
-        let (sut, _) = makeSUT(decorateeStub: .failure(LoginError.authentication))
+        let (sut, _) = makeSUT(decorateeStub: .failure(authError))
         
-        await #expect(throws: LoginError.authentication) {
+        await #expect(throws: authError) {
             try await sut.authenticate(with: anyLoginCredentials)
         }
     }
@@ -28,13 +28,13 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
     
     @MainActor
     @Test func dispatches_error_on_authentication_error() async throws {
-        let (sut, errorDisplayableSpy) = makeSUT(decorateeStub: .failure(LoginError.authentication))
+        let (sut, errorDisplayableSpy) = makeSUT(decorateeStub: .failure(authError))
 
-        await #expect(throws: LoginError.authentication) {
+        await #expect(throws: authError) {
             _ = try await sut.authenticate(with: anyLoginCredentials)
         }
         
-        #expect(errorDisplayableSpy.errorDisplayMessages == [LoginError.authentication])
+        #expect(errorDisplayableSpy.errorDisplayMessages == [authError])
     }
 
     @Test func does_not_dispatch_error_on_authentication_success() async throws {
@@ -47,10 +47,10 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
     
     @MainActor
     @Test func displays_error_on_main_thread() async throws {
-        let (sut, errorDisplayableSpy) = makeSUT(decorateeStub: .failure(LoginError.authentication))
+        let (sut, errorDisplayableSpy) = makeSUT(decorateeStub: .failure(authError))
 
         let authTask = performActionInBackgroundThread {
-            await #expect(throws: LoginError.authentication) {
+            await #expect(throws: authError) {
                 _ = try await sut.authenticate(with: anyLoginCredentials)
             }
         }
@@ -81,4 +81,8 @@ final class ErrorDisplayableSpy: ErrorDisplayable {
         errorDisplayMessages.append(error as? LoginError)
         isMainThread = Thread.isMainThread
     }
+}
+
+var authError: LoginError {
+    LoginError.authentication("")
 }

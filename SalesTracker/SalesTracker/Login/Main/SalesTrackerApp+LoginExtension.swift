@@ -91,7 +91,7 @@ extension SalesTrackerApp {
 struct AuthenticableStub: Authenticable {
     func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
         sleep(2)
-        throw LoginError.authentication
+        throw LoginError.authentication("")
        // return AuthenticationResult()
     }
 }

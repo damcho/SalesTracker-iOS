@@ -14,10 +14,10 @@ struct ActivityIndicatorAuthenticationDecoratorTests {
     
     @Test func throws_on_authentication_failure() async throws {
         let (sut, _) = makeSUT(
-            decorateeStub: .failure(LoginError.authentication)
+            decorateeStub: .failure(authError)
         )
         
-        await #expect(throws: LoginError.authentication) {
+        await #expect(throws: authError) {
             try await sut.authenticate(with: anyLoginCredentials)
         }
     }
@@ -33,10 +33,10 @@ struct ActivityIndicatorAuthenticationDecoratorTests {
     
     @Test func displays_and_hides_activity_indicator_on_authentication_failure() async throws {
         let (sut, activityIndicatorDisplayableSpy) = makeSUT(
-            decorateeStub: .failure(LoginError.authentication)
+            decorateeStub: .failure(authError)
         )
         
-        await #expect(throws: LoginError.authentication) {
+        await #expect(throws: authError) {
             try await sut.authenticate(with: anyLoginCredentials)
         }
         

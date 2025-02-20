@@ -9,6 +9,7 @@ import Foundation
 
 struct AuthenticationResult: Equatable {
     
+    
 }
 
 struct LoginCredentials: Equatable {
@@ -20,9 +21,10 @@ protocol Authenticable {
     func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult
 }
 
-enum LoginError: Error {
+enum LoginError: Error, Equatable {
     case connectivity
-    case authentication
+    case authentication(String)
+    case other
 }
 
 protocol ActivityIndicatorDisplayable {
