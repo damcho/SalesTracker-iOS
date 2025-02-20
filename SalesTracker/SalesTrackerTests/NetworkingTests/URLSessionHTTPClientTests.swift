@@ -87,6 +87,8 @@ class URLSessionHTTPClientTests: XCTestCase {
         URLProtocolStub.observeRequests { request in
             XCTAssertEqual(request.url, url)
             XCTAssertEqual(request.httpMethod, "POST")
+            XCTAssertEqual(request.bodySteamAsJSON() as? String, encodableBody)
+
             exp.fulfill()
         }
         
@@ -94,6 +96,7 @@ class URLSessionHTTPClientTests: XCTestCase {
         
         await fulfillment(of: [exp], timeout: 1)
     }
+    
 	// MARK: - Helpers
 	
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> URLSessionHTTPClient {
@@ -159,6 +162,9 @@ extension URLSessionHTTPClient {
     func post<T: Encodable>(_ url: URL, _ body: T, completion: @escaping (HTTPResult) -> Void) -> HTTPClientTask {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
+        let data = try? JSONEncoder().encode(body)
+        request.httpBody = data
+
         return perform(request, for: completion)
     }
 }
