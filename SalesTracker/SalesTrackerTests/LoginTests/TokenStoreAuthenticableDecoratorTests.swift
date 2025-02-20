@@ -9,12 +9,12 @@ import Testing
 @testable import SalesTracker
 
 struct TokenStoreAuthenticableDecorator {
-    
+    let decoratee: Authenticable
 }
 
 extension TokenStoreAuthenticableDecorator: Authenticable {
     func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
-        throw authError
+        try await decoratee.authenticate(with: credentials)
     }
 }
 
@@ -28,6 +28,14 @@ struct TokenStoreAuthenticableDecoratorTests {
         })
     }
     
+    @Test func forwards_result() async throws {
+        let sut = makeSUT(stub: .success(anyAuthenticationResult))
+
+        let result = try await sut.authenticate(with: anyLoginCredentials)
+
+        #expect(result == anyAuthenticationResult)
+    }
+    
     @Test func throws_on_token_store_error() async throws {
      
     }
@@ -36,14 +44,17 @@ struct TokenStoreAuthenticableDecoratorTests {
      
     }
     
-    @Test func forwards_result() async throws {
-     
-    }
+    
 
 }
 
 extension TokenStoreAuthenticableDecoratorTests {
-    func makeSUT(stub: Result<AuthenticationResult, Error>) -> Authenticable {
-        TokenStoreAuthenticableDecorator()
+    func makeSUT(
+        stub: Result<AuthenticationResult, Error>
+    ) -> Authenticable {
+        
+        TokenStoreAuthenticableDecorator(
+            decoratee: AuthenticableStub(stub: stub)
+        )
     }
 }
