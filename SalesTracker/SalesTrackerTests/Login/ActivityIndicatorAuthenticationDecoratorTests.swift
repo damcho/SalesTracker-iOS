@@ -71,7 +71,7 @@ struct ActivityIndicatorAuthenticationDecoratorTests {
 
 extension ActivityIndicatorAuthenticationDecoratorTests {
     func makeSUT(
-        decorateeStub: Result<AuthenticationResult, Error> = .success(AuthenticationResult())
+        decorateeStub: Result<AuthenticationResult, Error> = .success(anyAuthenticationResult)
     ) -> (Authenticable, activityIndicatorDisplayableSpy) {
         let stub = AuthenticableStub(stub: decorateeStub)
         let activityIndicatorSpy = activityIndicatorDisplayableSpy()
@@ -115,7 +115,7 @@ var anyError: Error {
 }
 
 var anyAuthenticationResult: AuthenticationResult {
-    AuthenticationResult()
+    AuthenticationResult(authToken: "")
 }
 
 @discardableResult

@@ -8,8 +8,7 @@
 import Foundation
 
 struct AuthenticationResult: Equatable {
-    
-    
+    let authToken: String
 }
 
 struct LoginCredentials: Equatable {
