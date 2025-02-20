@@ -28,18 +28,27 @@ final class URLSessionHTTPClient {
 	}
 	
 	public func get(from url: URL, completion: @escaping (HTTPResult) -> Void) -> HTTPClientTask {
-		let task = session.dataTask(with: url) { data, response, error in
-			completion(Result {
-				if let error = error {
-					throw error
-				} else if let data = data, let response = response as? HTTPURLResponse {
-					return (data, response)
-				} else {
-					throw UnexpectedValuesRepresentation()
-				}
-			})
-		}
-		task.resume()
-		return URLSessionTaskWrapper(wrapped: task)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        return perform(request, for: completion)
 	}
+}
+
+extension URLSessionHTTPClient {
+    func perform(_ request: URLRequest, for completion: @escaping (HTTPResult) -> Void) -> HTTPClientTask {
+      
+        let task = session.dataTask(with: request) { data, response, error in
+            completion(Result {
+                if let error = error {
+                    throw error
+                } else if let data = data, let response = response as? HTTPURLResponse {
+                    return (data, response)
+                } else {
+                    throw UnexpectedValuesRepresentation()
+                }
+            })
+        }
+        task.resume()
+        return URLSessionTaskWrapper(wrapped: task)
+    }
 }

@@ -78,7 +78,22 @@ class URLSessionHTTPClientTests: XCTestCase {
 		XCTAssertEqual(receivedValues?.response.url, response.url)
 		XCTAssertEqual(receivedValues?.response.statusCode, response.statusCode)
 	}
-	
+    
+    func test_performs_post_request() async throws {
+        let url = anyURL
+        let encodableBody = "some string"
+        let exp = expectation(description: "Wait for request")
+        
+        URLProtocolStub.observeRequests { request in
+            XCTAssertEqual(request.url, url)
+            XCTAssertEqual(request.httpMethod, "POST")
+            exp.fulfill()
+        }
+        
+        try await makeSUT().post(url, encodableBody, completion: {_ in })
+        
+        await fulfillment(of: [exp], timeout: 1)
+    }
 	// MARK: - Helpers
 	
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> URLSessionHTTPClient {
@@ -138,5 +153,12 @@ class URLSessionHTTPClientTests: XCTestCase {
 	private func nonHTTPURLResponse() -> URLResponse {
 		return URLResponse(url: anyURL, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
 	}
-	
+}
+
+extension URLSessionHTTPClient {
+    func post<T: Encodable>(_ url: URL, _ body: T, completion: @escaping (HTTPResult) -> Void) -> HTTPClientTask {
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        return perform(request, for: completion)
+    }
 }
