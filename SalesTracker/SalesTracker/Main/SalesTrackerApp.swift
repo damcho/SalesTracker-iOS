@@ -9,11 +9,14 @@ import SwiftUI
 
 @main
 struct SalesTrackerApp: App {
+    static let httpClient = URLSessionHTTPClient(session: .shared)
+    
     var body: some Scene {
         WindowGroup {
             SalesTrackerApp.composeLoginScreen()
         }
     }
 }
+
 
 
