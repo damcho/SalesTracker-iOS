@@ -56,7 +56,15 @@ struct TokenStoreAuthenticableDecoratorTests {
     }
     
     @Test func stores_token_on_authentication_success() async throws {
+        let (sut, tokenStoreSpy)  = makeSUT(
+            stub: .success(anyAuthenticationResult)
+        )
+        tokenStoreSpy.stubResult = .success(())
+
+        let result = try await sut.authenticate(with: anyLoginCredentials)
         
+        #expect(tokenStoreSpy.storeMesages == [result.authToken])
+        #expect(result == anyAuthenticationResult)
     }
 }
 
