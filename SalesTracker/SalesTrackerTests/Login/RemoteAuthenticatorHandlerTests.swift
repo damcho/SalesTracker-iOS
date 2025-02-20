@@ -65,6 +65,18 @@ struct RemoteAuthenticatorHandlerTests {
         })
     }
     
+    @Test func throws_on_mapping_error() async throws {
+        await #expect(throws: LoginError.other, performing: {
+            let sut = makeSUT(
+                httpStub: .success((successfulHTTPResponse, validToken.data)),
+                mapper: {_, _ in
+                    throw LoginError.other
+                }
+            )
+            _ = try await sut.authenticate(with: anyLoginCredentials)
+        })
+    }
+    
     @Test func maps_on_http_successful_response() async throws {
         var mapResponseCount = 0
         let sut = makeSUT(
