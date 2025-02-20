@@ -71,7 +71,7 @@ var anyLoginCredentials: LoginCredentials {
     LoginCredentials(username: "aUsername", password: "aPassword")
 }
 
-var anyError: Error {
+var anyError: NSError {
     NSError(domain: "", code: 0)
 }
 

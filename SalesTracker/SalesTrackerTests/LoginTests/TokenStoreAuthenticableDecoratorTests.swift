@@ -8,20 +8,27 @@
 import Testing
 @testable import SalesTracker
 
+protocol TokenStore {
+    func store(_ token: String) throws
+}
+
 struct TokenStoreAuthenticableDecorator {
     let decoratee: Authenticable
+    let store: TokenStore
 }
 
 extension TokenStoreAuthenticableDecorator: Authenticable {
     func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
-        try await decoratee.authenticate(with: credentials)
+        let result = try await decoratee.authenticate(with: credentials)
+        try store.store(result.authToken)
+        return result
     }
 }
 
 struct TokenStoreAuthenticableDecoratorTests {
-
+    
     @Test func throws_on_autnetication_failure() async throws {
-        let sut = makeSUT(stub: .failure(authError))
+        let (sut, _) = makeSUT(stub: .failure(authError))
         
         await #expect(throws: authError, performing: {
             _ = try await sut.authenticate(with: anyLoginCredentials)
@@ -29,32 +36,50 @@ struct TokenStoreAuthenticableDecoratorTests {
     }
     
     @Test func forwards_result() async throws {
-        let sut = makeSUT(stub: .success(anyAuthenticationResult))
-
+        let (sut, _) = makeSUT(stub: .success(anyAuthenticationResult))
+        
         let result = try await sut.authenticate(with: anyLoginCredentials)
-
+        
         #expect(result == anyAuthenticationResult)
     }
     
     @Test func throws_on_token_store_error() async throws {
-     
+        let (sut, tokenStoreSpy)  = makeSUT(
+            stub: .success(anyAuthenticationResult)
+        )
+        tokenStoreSpy.stubResult = .failure(anyError)
+        
+        await #expect(throws: anyError, performing: {
+            let result = try await sut.authenticate(with: anyLoginCredentials)
+            #expect(tokenStoreSpy.storeMesages == [result.authToken])
+        })
     }
     
     @Test func stores_token_on_authentication_success() async throws {
-     
+        
     }
-    
-    
-
 }
 
 extension TokenStoreAuthenticableDecoratorTests {
     func makeSUT(
         stub: Result<AuthenticationResult, Error>
-    ) -> Authenticable {
-        
-        TokenStoreAuthenticableDecorator(
-            decoratee: AuthenticableStub(stub: stub)
+    ) -> (Authenticable, TokenStoreSpy) {
+        let tokenStoreSpy = TokenStoreSpy()
+        return (
+            TokenStoreAuthenticableDecorator(
+                decoratee: AuthenticableStub(stub: stub),
+                store: tokenStoreSpy
+            ),
+            tokenStoreSpy
         )
+    }
+}
+
+final class TokenStoreSpy: TokenStore {
+    var stubResult: Result<Void, Error>?
+    var storeMesages: [String] = []
+    func store(_ token: String) throws {
+        storeMesages.append(token)
+        try stubResult?.get()
     }
 }
