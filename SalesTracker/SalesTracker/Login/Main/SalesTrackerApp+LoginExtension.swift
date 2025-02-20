@@ -25,13 +25,12 @@ extension SalesTrackerApp {
         for authenticable: Authenticable,
         activityIndicatorDisplayable: ActivityIndicatorDisplayable
     ) -> Authenticable {
-        let activityIndicatorAuthDecorator = ActivityIndicatorAuthenticationDecorator(
+        ActivityIndicatorAuthenticationDecorator(
             decoratee: authenticable,
             activityIndicatorDisplayable: MainThreadDispatcher(
                 decoratee: activityIndicatorDisplayable
             )
         )
-        return activityIndicatorAuthDecorator
     }
     
     static func composeErrorDisplayable(
