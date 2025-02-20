@@ -22,7 +22,7 @@ struct RemoteAuthenticatorHandlerTests {
     @Test func throws_on_mapping_error() async throws {
         await #expect(throws: LoginError.other, performing: {
             let sut = makeSUT(
-                httpStub: .success((successfulHTTPResponse, validToken.data)),
+                httpStub: .success((validToken.data, successfulHTTPResponse)),
                 mapper: {_, _ in
                     throw LoginError.other
                 }
@@ -34,7 +34,7 @@ struct RemoteAuthenticatorHandlerTests {
     @Test func maps_on_http_successful_response() async throws {
         var mapResponseCount = 0
         let sut = makeSUT(
-            httpStub: .success((successfulHTTPResponse, validToken.data)),
+            httpStub: .success((validToken.data, successfulHTTPResponse)),
             mapper: {_, _ in
                 mapResponseCount += 1
                 return anyAuthenticationResult
@@ -61,14 +61,10 @@ extension RemoteAuthenticatorHandlerTests {
     }
 }
 
-typealias HTTPResult =  Result<(httpResponse: HTTPURLResponse, data: Data), Error>
 struct HTTPClientStub: SalesTrackerHTTPClient {
     let stub: HTTPResult
-    func post<T>(url: URL, body: T) async throws -> (httpResponse: HTTPURLResponse, data: Data) where T : Encodable {
+    func post<T>(url: URL, body: T) async throws -> (data: Data, httpResponse: HTTPURLResponse) where T : Encodable {
         try stub.get()
     }
 }
 
-var anyURL: URL {
-    URL(string: "https://example.com")!
-}

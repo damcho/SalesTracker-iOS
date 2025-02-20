@@ -11,7 +11,7 @@ protocol SalesTrackerHTTPClient {
     func post<T: Encodable>(
         url: URL,
         body: T
-    ) async throws -> (httpResponse: HTTPURLResponse, data: Data)
+    ) async throws -> (data: Data, httpResponse: HTTPURLResponse)
 }
 
 enum HTTPError: Error {

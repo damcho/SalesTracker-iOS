@@ -82,7 +82,3 @@ final class ErrorDisplayableSpy: ErrorDisplayable {
         isMainThread = Thread.isMainThread
     }
 }
-
-var authError: LoginError {
-    LoginError.authentication("")
-}

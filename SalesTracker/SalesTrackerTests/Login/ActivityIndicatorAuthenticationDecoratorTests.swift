@@ -106,24 +106,3 @@ struct AuthenticableStub: Authenticable {
         try stub.get()
     }
 }
-
-var anyLoginCredentials: LoginCredentials {
-    LoginCredentials(username: "aUsername", password: "aPassword")
-}
-
-var anyError: Error {
-    NSError(domain: "", code: 0)
-}
-
-var anyAuthenticationResult: AuthenticationResult {
-    AuthenticationResult(authToken: "")
-}
-
-@discardableResult
-func performActionInBackgroundThread(
-    _ action: @escaping () async throws -> Void
-) -> Task<Void, Error> {
-    return Task {
-        try await action()
-    }
-}
