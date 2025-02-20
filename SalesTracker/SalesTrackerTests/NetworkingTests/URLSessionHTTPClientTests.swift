@@ -157,14 +157,3 @@ class URLSessionHTTPClientTests: XCTestCase {
 		return URLResponse(url: anyURL, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
 	}
 }
-
-extension URLSessionHTTPClient {
-    func post<T: Encodable>(_ url: URL, _ body: T, completion: @escaping (HTTPResult) -> Void) -> HTTPClientTask {
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        let data = try? JSONEncoder().encode(body)
-        request.httpBody = data
-
-        return perform(request, for: completion)
-    }
-}
