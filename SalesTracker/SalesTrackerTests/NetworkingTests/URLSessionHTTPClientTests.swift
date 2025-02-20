@@ -23,7 +23,7 @@ class URLSessionHTTPClientTests: XCTestCase {
 			exp.fulfill()
 		}
 		
-		makeSUT().get(from: url) { _ in }
+		_ = makeSUT().get(from: url) { _ in }
 		
 		wait(for: [exp], timeout: 1.0)
 	}
@@ -92,7 +92,7 @@ class URLSessionHTTPClientTests: XCTestCase {
             exp.fulfill()
         }
         
-        try await makeSUT().post(url, encodableBody, completion: {_ in })
+        _ = makeSUT().post(url, encodableBody, completion: {_ in })
         
         await fulfillment(of: [exp], timeout: 1)
     }
