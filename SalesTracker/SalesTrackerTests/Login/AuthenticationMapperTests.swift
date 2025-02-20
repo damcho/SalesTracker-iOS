@@ -12,13 +12,13 @@ import Foundation
 
 struct AuthenticationMapperTests {
 
-    @Test func throws_authentication_error_on_401_http_response() async throws {
+    @Test func throws_authentication_error_on_401_status_code() async throws {
         #expect(throws: invalidCredentialsAuthError.error, performing: {
             _ = try AuthenticationMapper.map(invalidAuthHTTPResponse, invalidCredentialsAuthError.http)
         })
     }
     
-    @Test func throws_connectivity_error_on_http_response_error() async throws {
+    @Test func throws_connectivity_error_on_not_found_status_code() async throws {
         #expect(throws: LoginError.connectivity, performing: {
             _ = try AuthenticationMapper.map(notFoundHTTPResponse, Data())
         })
@@ -30,9 +30,24 @@ struct AuthenticationMapperTests {
         })
     }
     
-    @Test func returns_token_on_successful_200_response() async throws {
+    @Test func returns_token_on_successful_200_status_code() async throws {
         #expect(try AuthenticationMapper.map(successfulHTTPResponse, validToken.data) == AuthenticationResult(authToken: validToken.string))
     }
+    
+    @Test func throws_other_error_on_other_http_status_code() async throws {
+        #expect(throws: LoginError.other, performing: {
+            _ = try AuthenticationMapper.map(serverErrorHTTPResponse, Data())
+        })
+    }
+}
+
+var serverErrorHTTPResponse: HTTPURLResponse {
+    HTTPURLResponse(
+        url: URL(string: "https://example.com")!,
+        statusCode: 500,
+        httpVersion: nil,
+        headerFields: nil
+    )!
 }
 
 var invalidAuthHTTPResponse: HTTPURLResponse {
