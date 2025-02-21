@@ -45,22 +45,33 @@ extension SalesTrackerApp {
         )
     }
     
-    static func composeLoginScreen() -> some View {
+    static func composeLoginScreen(successfulAuthAction: @escaping () -> Void) -> some View {
         let activityIndicatorViewModel = ActivityIndicatorViewModel()
         let loginButtonViewModel = LoginButtonViewModel()
         let errorViewModel = ErrorViewModel()
         let activityIndicatorAuthenticable = composeActivityIndicator(
             for: composeErrorDisplayable(
-                decoratee: AuthenticableStub(),
+                decoratee: TokenStoreAuthenticableDecorator(
+                    decoratee: RemoteAuthenticatorHandler(
+                        httpClient: SalesTrackerApp.httpClient,
+                        url: Source.login.getURL(for: Source.baseURL),
+                        mapper: AuthenticationMapper.map
+                    ),
+                    store: keychain
+                ),
                 with: errorViewModel
             ),
             activityIndicatorDisplayable: activityIndicatorViewModel
         )
+        
         let loginScreenViewModel = composeLogin(
             with: loginButtonViewModel,
             authAction: { credentials in
                 Task {
-                    _ = try await activityIndicatorAuthenticable.authenticate(with: credentials)
+                    _ = try await activityIndicatorAuthenticable.authenticate(
+                        with: credentials
+                    )
+                    successfulAuthAction()
                 }
             }
         )
@@ -85,13 +96,5 @@ extension SalesTrackerApp {
                 loginButtonViewModel: loginButtonViewModel
             )
         )
-    }
-}
-
-struct AuthenticableStub: Authenticable {
-    func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
-        sleep(2)
-        throw LoginError.authentication("")
-       // return AuthenticationResult()
     }
 }

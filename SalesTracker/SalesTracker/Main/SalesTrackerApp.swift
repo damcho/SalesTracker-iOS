@@ -11,12 +11,15 @@ import SwiftUI
 struct SalesTrackerApp: App {
     static let httpClient = URLSessionHTTPClient(session: .shared)
     
+    static let keychain = KeychainStore()
+    
     var body: some Scene {
         WindowGroup {
-            SalesTrackerApp.composeLoginScreen()
+            SalesTrackerApp.composeLoginScreen(
+                successfulAuthAction: {
+                    print("Successfully authenticated!")
+                }
+            )
         }
     }
 }
-
-
-
