@@ -98,7 +98,14 @@ struct KeychainStoreTests {
     }
     
     @Test func returns_existing_value_for_key() async throws {
-    
+        let aKey = "aKey"
+        let aValue = "aValue1"
+        
+        let sut = makeSUT()
+        
+        try sut.store(aValue, for: aKey)
+        
+        #expect(try sut.retrieveValue(for: aKey) == aValue)
     }
     
 }
