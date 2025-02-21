@@ -56,3 +56,13 @@ struct KeychainStore {
         return retrievedValue
     }
 }
+
+extension KeychainStore: TokenStore {
+    var authTokenStoreKey: String {
+        "authTokenKey"
+    }
+    
+    func store(_ token: String) throws {
+        try store(token, for: authTokenStoreKey)
+    }
+}
