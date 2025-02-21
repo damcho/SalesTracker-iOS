@@ -35,8 +35,30 @@ struct KeychainStore {
             throw KeychainError.store
         }
     }
+    
+    func retrieveValue(for key: String) throws -> String {
+        let query: [CFString: Any] = [
+            kSecClass: kSecClassGenericPassword,
+            kSecAttrAccount: key,
+            kSecReturnData: kCFBooleanTrue!,
+            kSecMatchLimit: kSecMatchLimitOne
+        ]
+        
+        var result: AnyObject?
+        
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        
+        guard status == errSecSuccess,
+              let retrievedData = result as? Data,
+              let retrievedValue = String(data: retrievedData, encoding: .utf8)
+        else {
+            throw KeychainError.itemNotFound
+        }
+        return retrievedValue
+    }
 }
 
+@Suite(.serialized)
 struct KeychainStoreTests {
     
     init() {
@@ -56,7 +78,7 @@ struct KeychainStoreTests {
         let aKey = "aKey"
         let value1 = "aValue1"
         let value2 = "aValue2"
-
+        
         let sut = makeSUT()
         
         try sut.store(value1, for: aKey)
@@ -66,11 +88,17 @@ struct KeychainStoreTests {
     }
     
     @Test func throws_on_no_value_for_key() async throws {
+        let nonExistingKey = "aKey"
         
+        let sut = makeSUT()
+        
+        #expect(throws: KeychainError.itemNotFound) {
+            try sut.retrieveValue(for: nonExistingKey)
+        }
     }
     
     @Test func returns_existing_value_for_key() async throws {
-        
+    
     }
     
 }
@@ -113,19 +141,5 @@ extension KeychainStoreTests {
                 )
             )
         }
-    }
-}
-
-func clearKeychainFromArtifacts() {
-    let secItemClasses = [
-        kSecClassGenericPassword,
-        kSecClassInternetPassword,
-        kSecClassCertificate,
-        kSecClassKey,
-        kSecClassIdentity
-    ]
-    for secItemClass in secItemClasses {
-        let dictionary = [kSecClass as String: secItemClass]
-        SecItemDelete(dictionary as CFDictionary)
     }
 }
