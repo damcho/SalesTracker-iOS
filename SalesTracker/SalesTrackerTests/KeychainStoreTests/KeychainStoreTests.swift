@@ -53,7 +53,16 @@ struct KeychainStoreTests {
     }
     
     @Test func overrides_value_on_existing_value_for_key() async throws {
+        let aKey = "aKey"
+        let value1 = "aValue1"
+        let value2 = "aValue2"
+
+        let sut = makeSUT()
         
+        try sut.store(value1, for: aKey)
+        try sut.store(value2, for: aKey)
+        
+        assertStored(value2, for: aKey)
     }
     
     @Test func throws_on_no_value_for_key() async throws {
