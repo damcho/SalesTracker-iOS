@@ -7,16 +7,26 @@
 
 import SwiftUI
 
-struct ProductSalesView: View {
+
+
+struct ProductSalesView: View, Identifiable {
+    let id = UUID()
+    let viewModel: ProductSalesViewModel
+    
     var body: some View {
         HStack(spacing: 10, content: {
-            Text("Product A is a very long long product name").lineLimit(2)
+            Text(viewModel.productName).lineLimit(2)
             Spacer()
-            Text("234 Sales")
+            Text(viewModel.salesAmount)
         }).padding()
     }
 }
 
 #Preview {
-    ProductSalesView()
+    ProductSalesView(
+        viewModel: ProductSalesViewModel(
+            productName: "Product A is a very long long product name",
+            salesAmount: "234 Sales"
+        )
+    )
 }
