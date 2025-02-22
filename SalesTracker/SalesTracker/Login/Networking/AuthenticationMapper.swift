@@ -35,7 +35,7 @@ enum AuthenticationMapper {
         case success:
             return try JSONDecoder().decode(DecodableAuthenticationResult.self, from: data).toAuthenticationResult()
         default:
-            throw LoginError.other
+            throw HTTPError.other
         }
     }
 }

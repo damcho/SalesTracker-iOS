@@ -43,7 +43,7 @@ struct AuthenticationMapperTests: MapperSpecs {
     }
     
     @Test func throws_other_error_on_other_http_status_code() async throws {
-        #expect(throws: LoginError.other, performing: {
+        #expect(throws: HTTPError.other, performing: {
             _ = try AuthenticationMapper.map(serverErrorHTTPResponse, Data())
         })
     }

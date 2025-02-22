@@ -23,7 +23,6 @@ protocol Authenticable {
 enum LoginError: Error, Equatable {
     case connectivity
     case authentication(String)
-    case other
 }
 
 protocol ActivityIndicatorDisplayable {
