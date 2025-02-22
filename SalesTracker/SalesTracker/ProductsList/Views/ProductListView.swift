@@ -23,14 +23,18 @@ struct ProductListView: View {
         productSalesViews: [
             ProductSalesView(
                 viewModel: ProductSalesViewModel(
-                    productName: "a product",
-                    salesAmount: "222 sales"
+                    productInfo: ProductInfo(
+                        productId: UUID()
+                    ),
+                    selectedProductAction: {_ in }
                 )
             ),
             ProductSalesView(
                 viewModel: ProductSalesViewModel(
-                    productName: "a second product longer name",
-                    salesAmount: "343 sales"
+                    productInfo: ProductInfo(
+                        productId: UUID()
+                    ),
+                    selectedProductAction: {_ in }
                 )
             )
         ]

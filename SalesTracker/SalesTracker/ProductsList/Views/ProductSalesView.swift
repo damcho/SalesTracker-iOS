@@ -10,7 +10,7 @@ import SwiftUI
 
 
 struct ProductSalesView: View, Identifiable {
-    let id = UUID()
+    var id: UUID { viewModel.productInfo.productId }
     let viewModel: ProductSalesViewModel
     
     var body: some View {
@@ -19,14 +19,19 @@ struct ProductSalesView: View, Identifiable {
             Spacer()
             Text(viewModel.salesAmount)
         }).padding()
+            .onTapGesture {
+                viewModel.didSelectProduct()
+            }
     }
 }
 
 #Preview {
     ProductSalesView(
         viewModel: ProductSalesViewModel(
-            productName: "Product A is a very long long product name",
-            salesAmount: "234 Sales"
+            productInfo: ProductInfo(
+                productId: UUID()
+            ),
+            selectedProductAction: {_ in print("Tapped")}
         )
     )
 }
