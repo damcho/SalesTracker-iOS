@@ -11,13 +11,14 @@ typealias SelectedProductAction = (UUID) -> Void
 
 struct ProductInfo {
     let productId: UUID
+    let name: String
 }
 
 struct ProductSalesViewModel {
     let productInfo: ProductInfo
     let selectionAction: SelectedProductAction
     var productName: String {
-        "procut"
+        productInfo.name
     }
     var salesAmount: String {
         "prod"

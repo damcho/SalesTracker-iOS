@@ -9,25 +9,42 @@ import Testing
 import Foundation
 @testable import SalesTracker
 
-
-
 struct ProductSalesViewModelTests {
 
     @Test func executes_action_on_tap() async throws {
         var selectedProductCallCount = 0
-        let sut = ProductSalesViewModel(
-            productInfo: anyProductInfo,
-            selectedProductAction: { _ in
-                selectedProductCallCount += 1
-            }
-        )
+        let sut = makeSUT { _ in
+            selectedProductCallCount += 1
+        }
         
         sut.didSelectProduct()
         
         #expect(selectedProductCallCount == 1)
     }
+    
+    @Test func displays_product_name() async throws {
+        let aProduct = anyProductInfo
+        let sut = makeSUT(productInfo: aProduct)
+        
+        #expect(sut.productName == aProduct.name)
+    }
+}
+
+extension ProductSalesViewModelTests {
+    func makeSUT(
+        productInfo: ProductInfo = anyProductInfo,
+        didSelectProductAction: @escaping SelectedProductAction = {_ in }
+    ) -> ProductSalesViewModel {
+        ProductSalesViewModel(
+            productInfo: productInfo,
+            selectedProductAction: didSelectProductAction
+        )
+    }
 }
 
 var anyProductInfo: ProductInfo {
-    ProductInfo(productId: UUID())
+    ProductInfo(
+        productId: UUID(),
+        name: "prod name"
+    )
 }
