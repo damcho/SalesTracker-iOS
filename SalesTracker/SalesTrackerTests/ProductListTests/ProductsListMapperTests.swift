@@ -46,7 +46,9 @@ struct ProductsListMapperTests: MapperSpecs {
     }
     
     @Test func throws_decoding_error_on_invalid_data() async throws {
-        
+        #expect(throws: DecodingError.self, performing: {
+            _ = try ProductsListMapper.map(successfulHTTPResponse, invalidData)
+        })
     }
     
     @Test func returns_token_on_successful_200_status_code() async throws {

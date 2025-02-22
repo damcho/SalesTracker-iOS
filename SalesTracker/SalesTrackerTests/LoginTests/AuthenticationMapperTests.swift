@@ -33,8 +33,8 @@ struct AuthenticationMapperTests: MapperSpecs {
     }
     
     @Test func throws_decoding_error_on_invalid_data() async throws {
-        #expect(throws: LoginError.connectivity, performing: {
-            _ = try AuthenticationMapper.map(notFoundHTTPResponse, invalidData)
+        #expect(throws: DecodingError.self, performing: {
+            _ = try AuthenticationMapper.map(successfulHTTPResponse, invalidData)
         })
     }
     
