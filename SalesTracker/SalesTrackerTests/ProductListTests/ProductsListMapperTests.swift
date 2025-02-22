@@ -9,11 +9,25 @@ import Testing
 @testable import SalesTracker
 import Foundation
 
+struct DecodableProduct: Decodable {
+    let id: UUID
+    let name: String
+    
+    func toProduct() -> Product {
+        return Product(id: id, name: name)
+    }
+}
+
+struct Product: Equatable {
+    let id: UUID
+    let name: String
+}
+
 enum ProductsListMapper {
     static let unauthorized = 401
     static let success = 200
     
-    static func map(_ response: HTTPURLResponse, _ data: Data) throws -> AuthenticationResult {
+    static func map(_ response: HTTPURLResponse, _ data: Data) throws -> [Product] {
         switch response.statusCode {
         case unauthorized:
             let errorData = try JSONDecoder().decode(
@@ -24,7 +38,12 @@ enum ProductsListMapper {
         case 400, 402..<499:
             throw HTTPError.notFound
         case success:
-            return try JSONDecoder().decode(DecodableAuthenticationResult.self, from: data).toAuthenticationResult()
+            return try JSONDecoder().decode(
+                [DecodableProduct].self,
+                from: data
+            ).compactMap({ decodedProduct in
+                decodedProduct.toProduct()
+            })
         default:
             throw LoginError.other
         }
@@ -51,11 +70,28 @@ struct ProductsListMapperTests: MapperSpecs {
         })
     }
     
-    @Test func returns_token_on_successful_200_status_code() async throws {
-        
+    @Test func returns_mapped_data_on_successful_200_status_code() async throws {
+        #expect(try ProductsListMapper.map(successfulHTTPResponse, productListData.http) == [aProduct.domain])
     }
     
     @Test func throws_other_error_on_other_http_status_code() async throws {
         
     }
+}
+
+var productListData: (http: Data, decoded: [Product]) {
+    (
+        #"[{"id": "7019D8A7-0B35-4057-B7F9-8C5471961ED0", "name": "some productname"}]"#.data(using: .utf8)!,
+        [aProduct.domain]
+    )
+}
+
+var aProduct: (http: Data, domain: Product) {
+    (
+        #"{"id": "7019D8A7-0B35-4057-B7F9-8C5471961ED0", "name": "some productname"}"#.data(using: .utf8)!,
+        Product(
+            id: UUID(uuidString: "7019D8A7-0B35-4057-B7F9-8C5471961ED0")!,
+            name: "some productname"
+        )
+    )
 }
