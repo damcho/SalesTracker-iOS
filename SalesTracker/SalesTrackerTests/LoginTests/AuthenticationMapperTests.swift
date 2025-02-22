@@ -10,7 +10,15 @@ import Foundation
 
 @testable import SalesTracker
 
-struct AuthenticationMapperTests {
+protocol MapperSpecs {
+    func throws_authentication_error_on_401_status_code() async throws
+    func throws_connectivity_error_on_not_found_status_code() async throws
+    func throws_decoding_error_on_invalid_data() async throws
+    func returns_token_on_successful_200_status_code() async throws
+    func throws_other_error_on_other_http_status_code() async throws
+}
+
+struct AuthenticationMapperTests: MapperSpecs {
 
     @Test func throws_authentication_error_on_401_status_code() async throws {
         #expect(throws: invalidCredentialsAuthError.error, performing: {
