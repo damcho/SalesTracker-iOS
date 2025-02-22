@@ -28,6 +28,13 @@ struct ProductSalesViewModelTests {
         
         #expect(sut.productName == aProduct.name)
     }
+    
+    @Test func displays_product_sales_count() async throws {
+        let aProduct = anyProductInfo
+        let sut = makeSUT(productInfo: aProduct)
+        
+        #expect(sut.salesAmount == ProductSalesViewModel.ProductSalesRepresentation.sales(aProduct.sales.count).value)
+    }
 }
 
 extension ProductSalesViewModelTests {
@@ -45,6 +52,9 @@ extension ProductSalesViewModelTests {
 var anyProductInfo: ProductInfo {
     ProductInfo(
         productId: UUID(),
-        name: "prod name"
+        name: "prod name",
+        sales: [
+            Sale()
+        ]
     )
 }

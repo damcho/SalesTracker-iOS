@@ -30,7 +30,8 @@ struct ProductSalesView: View, Identifiable {
         viewModel: ProductSalesViewModel(
             productInfo: ProductInfo(
                 productId: UUID(),
-                name: "prod name"
+                name: "prod name",
+                sales: []
             ),
             selectedProductAction: {_ in print("Tapped")}
         )

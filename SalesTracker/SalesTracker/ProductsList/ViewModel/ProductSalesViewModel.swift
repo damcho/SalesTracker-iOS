@@ -9,19 +9,34 @@ import Foundation
 
 typealias SelectedProductAction = (UUID) -> Void
 
+struct Sale {
+    
+}
+
 struct ProductInfo {
     let productId: UUID
     let name: String
+    let sales: [Sale]
 }
 
 struct ProductSalesViewModel {
+    enum ProductSalesRepresentation {
+        case sales(Int)
+        
+        var value: String {
+            switch self {
+            case .sales(let value):
+                "\(value) Sales"
+            }
+        }
+    }
     let productInfo: ProductInfo
     let selectionAction: SelectedProductAction
     var productName: String {
         productInfo.name
     }
     var salesAmount: String {
-        "prod"
+        ProductSalesRepresentation.sales(productInfo.sales.count).value
     }
     
     init(productInfo: ProductInfo, selectedProductAction: @escaping SelectedProductAction) {

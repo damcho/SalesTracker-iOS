@@ -25,7 +25,8 @@ struct ProductListView: View {
                 viewModel: ProductSalesViewModel(
                     productInfo: ProductInfo(
                         productId: UUID(),
-                        name: "prod name"
+                        name: "prod name",
+                        sales: []
                     ),
                     selectedProductAction: {_ in }
                 )
@@ -34,7 +35,8 @@ struct ProductListView: View {
                 viewModel: ProductSalesViewModel(
                     productInfo: ProductInfo(
                         productId: UUID(),
-                        name: "prod name"
+                        name: "prod name",
+                        sales: []
                     ),
                     selectedProductAction: {_ in }
                 )
