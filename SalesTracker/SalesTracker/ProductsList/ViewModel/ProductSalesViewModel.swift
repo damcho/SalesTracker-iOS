@@ -9,16 +9,6 @@ import Foundation
 
 typealias SelectedProductAction = (UUID) -> Void
 
-struct Sale {
-    
-}
-
-struct ProductInfo {
-    let productId: UUID
-    let name: String
-    let sales: [Sale]
-}
-
 struct ProductSalesViewModel {
     enum ProductSalesRepresentation {
         case sales(Int)
