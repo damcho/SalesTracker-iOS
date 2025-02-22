@@ -16,4 +16,5 @@ protocol SalesTrackerHTTPClient {
 
 enum HTTPError: Error {
     case notFound
+    case other
 }

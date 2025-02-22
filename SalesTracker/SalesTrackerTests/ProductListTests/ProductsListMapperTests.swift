@@ -45,7 +45,7 @@ enum ProductsListMapper {
                 decodedProduct.toProduct()
             })
         default:
-            throw LoginError.other
+            throw HTTPError.other
         }
     }
 }
@@ -75,7 +75,9 @@ struct ProductsListMapperTests: MapperSpecs {
     }
     
     @Test func throws_other_error_on_other_http_status_code() async throws {
-        
+        #expect(throws: HTTPError.other, performing: {
+            _ = try ProductsListMapper.map(serverErrorHTTPResponse, Data())
+        })
     }
 }
 
