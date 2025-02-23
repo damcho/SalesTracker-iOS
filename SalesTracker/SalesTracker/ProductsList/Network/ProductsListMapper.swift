@@ -7,6 +7,15 @@
 
 import Foundation
 
+struct DecodableProduct: Decodable {
+    let id: UUID
+    let name: String
+    
+    func toProduct() -> Product {
+        return Product(id: id, name: name)
+    }
+}
+
 enum ProductsListMapper {
     static let unauthorized = 401
     static let success = 200
