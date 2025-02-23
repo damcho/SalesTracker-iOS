@@ -44,7 +44,9 @@ struct ProductsSalesMapperTests: MapperSpecs {
     }
     
     @Test func throws_connectivity_error_on_not_found_status_code() async throws {
-        
+        #expect(throws: HTTPError.notFound, performing: {
+            _ = try ProductsSalesMapper.map(notFoundHTTPResponse, Data())
+        })
     }
     
     @Test func throws_decoding_error_on_invalid_data() async throws {
