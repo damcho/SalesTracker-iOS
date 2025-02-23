@@ -55,8 +55,7 @@ var anyProductInfo: ProductInfo {
         productId: pdoructID,
         name: "prod name",
         sales: [
-            RemoteSale(
-                productID: pdoructID,
+            Sale(
                 date: .now,
                 amount: 12.3,
                 currencyCode: "USD"

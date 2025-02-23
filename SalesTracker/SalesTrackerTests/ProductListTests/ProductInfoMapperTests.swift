@@ -9,34 +9,22 @@ import Testing
 @testable import SalesTracker
 import Foundation
 
-struct Sale: Equatable {
-    let date: Date
-    let amount: Double
-    let currencyCode: String
-}
-
 enum ProductInfoMapper {
-    static func map(_ products: [DecodableProduct], _ sales: [RemoteSale]) -> [Product: [Sale]] {
+    static func map(_ products: [DecodableProduct], _ sales: [DecodableSale]) -> [Product: [Sale]] {
         var productsDictionary: [UUID: Product] = [:]
         var productsSalesDictionary: [Product: [Sale]] = [:]
-
-        products.forEach { product in
-            let aProduct = Product(id: product.id, name: product.name)
-            productsDictionary[product.id] = aProduct
+        
+        products.forEach { decodedProduct in
+            let aProduct = Product(id: decodedProduct.id, name: decodedProduct.name)
+            productsDictionary[decodedProduct.id] = aProduct
             productsSalesDictionary[aProduct] = []
         }
-        sales.forEach { remotesale in
-            if let aProduct = productsDictionary[remotesale.productID] {
-                productsSalesDictionary[aProduct]?.append(remotesale.toSale())
+        sales.forEach { decodedSale in
+            if let aProduct = productsDictionary[decodedSale.product_id] {
+                try? productsSalesDictionary[aProduct]?.append(decodedSale.toSale())
             }
         }
         return productsSalesDictionary
-    }
-}
-
-extension RemoteSale {
-    func toSale() -> Sale {
-        Sale(date: date, amount: amount, currencyCode: currencyCode)
     }
 }
 
@@ -46,19 +34,19 @@ struct ProductInfoMapperTests {
         let decodedProductUUID = UUID()
         let anotherDecodedProductUUID = UUID()
         let productsList = [
-            aProduct(id: decodedProductUUID).decoded,
-            aProduct(id: anotherDecodedProductUUID).decoded
+            aDecodedProduct(id: decodedProductUUID).decoded,
+            aDecodedProduct(id: anotherDecodedProductUUID).decoded
         ]
-        let salesList: [RemoteSale] = [
-            aRemoteSale(for: decodedProductUUID),
-            aRemoteSale(for: anotherDecodedProductUUID)
+        let salesList: [DecodableSale] = [
+            aDecodedSale(for: decodedProductUUID),
+            aDecodedSale(for: anotherDecodedProductUUID)
         ]
         
         let result = ProductInfoMapper.map(productsList, salesList)
         #expect(
             result == [
-                aProduct(id: decodedProductUUID).domain: [salesList[0].toSale()],
-                aProduct(id: anotherDecodedProductUUID).domain: [salesList[1].toSale()],
+                aDecodedProduct(id: decodedProductUUID).domain: try! [salesList[0].toSale()],
+                aDecodedProduct(id: anotherDecodedProductUUID).domain: try! [salesList[1].toSale()],
             ]
         )
     }
@@ -67,29 +55,55 @@ struct ProductInfoMapperTests {
         let decodedProductUUID = UUID()
         let anotherDecodedProductUUID = UUID()
         let productsList = [
-            aProduct(id: decodedProductUUID).decoded,
-            aProduct(id: anotherDecodedProductUUID).decoded
+            aDecodedProduct(id: decodedProductUUID).decoded,
+            aDecodedProduct(id: anotherDecodedProductUUID).decoded
         ]
-        let salesList: [RemoteSale] = [
-            aRemoteSale(for: decodedProductUUID),
-            aRemoteSale(for: invalidProductID)
+        let salesList: [DecodableSale] = [
+            aDecodedSale(for: decodedProductUUID),
+            aDecodedSale(for: invalidProductID)
         ]
         
         let result = ProductInfoMapper.map(productsList, salesList)
         #expect(
             result == [
-                aProduct(id: decodedProductUUID).domain: [salesList[0].toSale()],
-                aProduct(id: anotherDecodedProductUUID).domain: []
+                aDecodedProduct(id: decodedProductUUID).domain: try! [salesList[0].toSale()],
+                aDecodedProduct(id: anotherDecodedProductUUID).domain: []
             ]
         )
     }
+    
+    @Test func ignores_malformed_sale_object_with_incorrect_date_format() async throws {
+        let decodedProductUUID = UUID()
+        let anotherDecodedProductUUID = UUID()
+        let productsList = [
+            aDecodedProduct(id: decodedProductUUID).decoded,
+            aDecodedProduct(id: anotherDecodedProductUUID).decoded
+        ]
+        let salesList: [DecodableSale] = [
+            aDecodedSale(for: decodedProductUUID),
+            aDecodedSale(for: anotherDecodedProductUUID, date: invalidDateFormat)
+        ]
+        
+        let result = ProductInfoMapper.map(productsList, salesList)
+        #expect(
+            result == [
+                aDecodedProduct(id: decodedProductUUID).domain: try! [salesList[0].toSale()],
+                aDecodedProduct(id: anotherDecodedProductUUID).domain: []
+            ]
+        )
+    }
+}
+
+
+var invalidDateFormat: String {
+    "2024-07-2025"
 }
 
 var invalidProductID: UUID {
     UUID()
 }
 
-func aProduct(id: UUID) -> (domain: Product, decoded: DecodableProduct) {
+func aDecodedProduct(id: UUID) -> (domain: Product, decoded: DecodableProduct) {
     (
         Product(id: id, name: "some productname"),
         DecodableProduct(
@@ -99,11 +113,11 @@ func aProduct(id: UUID) -> (domain: Product, decoded: DecodableProduct) {
     )
 }
 
-func aRemoteSale(for productid: UUID) -> RemoteSale {
-    RemoteSale(
-        productID: productid,
-        date: .now,
-        amount: 10.2,
-        currencyCode: "USD"
+func aDecodedSale(for productid: UUID, date: String = "2024-07-20T15:45:27.366Z") -> DecodableSale {
+    DecodableSale(
+        product_id: productid,
+        amount: "10.2",
+        currency_code: "USD",
+        date: date
     )
 }

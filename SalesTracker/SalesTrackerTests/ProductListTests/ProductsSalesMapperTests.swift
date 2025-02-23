@@ -29,7 +29,7 @@ struct ProductsSalesMapperTests: MapperSpecs {
     }
     
     @Test func returns_mapped_data_on_successful_200_status_code() async throws {
-        #expect(try ProductsSalesMapper.map(successfulHTTPResponse, salesList.http) == salesList.domain)
+        #expect(try ProductsSalesMapper.map(successfulHTTPResponse, salesList.http) == salesList.decoded)
     }
     
     @Test func throws_other_error_on_other_http_status_code() async throws {
@@ -37,41 +37,25 @@ struct ProductsSalesMapperTests: MapperSpecs {
             _ = try ProductsSalesMapper.map(serverErrorHTTPResponse, Data())
         })
     }
-    
-    @Test func ignores_malformed_sale_object_with_incorrect_date_format() async throws {
-        #expect(try ProductsSalesMapper.map(successfulHTTPResponse, salesListWithMalformedSale.http) == salesListWithMalformedSale.domain)
-    }
-
 }
 
-var salesList: (http: Data, domain: [RemoteSale]) {
+var salesList: (http: Data, decoded: [DecodableSale]) {
     (
         "[\(String(data: aSale.http, encoding: .utf8)!)]".data(using: .utf8)!,
-        [aSale.domain]
-    )
-}
-    
-var malformedSaleWithIncorrectDateFormat: Data {
-    return #"{"currency_code": "AUD", "amount": "1480.79", "product_id": "7019D8A7-0B35-4057-B7F9-8C5471961ED0", "date": "2024-07-2025"}"#.data(using: .utf8)!
-}
-
-var salesListWithMalformedSale: (http: Data, domain: [RemoteSale]) {
-    (
-        "[\(String(data: aSale.http, encoding: .utf8)!),\(String(data: malformedSaleWithIncorrectDateFormat, encoding: .utf8)!)]".data(using: .utf8)!,
-        [aSale.domain]
+        [aSale.decoded]
     )
 }
 
-var aSale: (http: Data, domain: RemoteSale) {
+var aSale: (http: Data, decoded: DecodableSale) {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ"
     return (
         #"{"currency_code": "AUD", "amount": "1480.79", "product_id": "7019D8A7-0B35-4057-B7F9-8C5471961ED0", "date": "2024-07-20T15:45:27.366Z"}"#.data(using: .utf8)!,
-        RemoteSale(
-            productID: UUID(uuidString: "7019D8A7-0B35-4057-B7F9-8C5471961ED0")!,
-            date: dateFormatter.date(from: "2024-07-20T15:45:27.366Z")!,
-            amount: 1480.79,
-            currencyCode: "AUD"
+        DecodableSale(
+            product_id: UUID(uuidString: "7019D8A7-0B35-4057-B7F9-8C5471961ED0")!,
+            amount: "1480.79",
+            currency_code: "AUD",
+            date: "2024-07-20T15:45:27.366Z"
         )
     )
 }
