@@ -63,7 +63,32 @@ struct ProductInfoMapperTests {
         )
     }
     
+    @Test func ignores_sale_that_does_not_match_any_product() async throws {
+        let decodedProductUUID = UUID()
+        let anotherDecodedProductUUID = UUID()
+        let productsList = [
+            aProduct(id: decodedProductUUID).decoded,
+            aProduct(id: anotherDecodedProductUUID).decoded
+        ]
+        let salesList: [RemoteSale] = [
+            aRemoteSale(for: decodedProductUUID),
+            aRemoteSale(for: invalidProductID)
+        ]
+        
+        let result = ProductInfoMapper.map(productsList, salesList)
+        #expect(
+            result == [
+                aProduct(id: decodedProductUUID).domain: [salesList[0].toSale()],
+                aProduct(id: anotherDecodedProductUUID).domain: []
+            ]
+        )
+    }
 }
+
+var invalidProductID: UUID {
+    UUID()
+}
+
 func aProduct(id: UUID) -> (domain: Product, decoded: DecodableProduct) {
     (
         Product(id: id, name: "some productname"),
