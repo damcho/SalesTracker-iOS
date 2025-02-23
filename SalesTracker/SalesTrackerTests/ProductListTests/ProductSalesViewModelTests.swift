@@ -50,11 +50,17 @@ extension ProductSalesViewModelTests {
 }
 
 var anyProductInfo: ProductInfo {
-    ProductInfo(
-        productId: UUID(),
+    let pdoructID = UUID()
+    return ProductInfo(
+        productId: pdoructID,
         name: "prod name",
         sales: [
-            Sale()
+            Sale(
+                productID: pdoructID,
+                date: .now,
+                amount: 12.3,
+                currencyCode: "USD"
+            )
         ]
     )
 }

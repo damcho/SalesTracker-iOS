@@ -7,8 +7,11 @@
 
 import Foundation
 
-struct Sale {
-    
+struct Sale: Equatable {
+    let productID: UUID
+    let date: Date
+    let amount: Double
+    let currencyCode: String
 }
 
 struct ProductInfo {
