@@ -40,17 +40,17 @@ struct ProductsListMapperTests: MapperSpecs {
     }
 }
 
-var productListData: (http: Data, decoded: [Product]) {
+var productListData: (http: Data, decoded: [DecodableProduct]) {
     (
         #"[{"id": "7019D8A7-0B35-4057-B7F9-8C5471961ED0", "name": "some productname"}]"#.data(using: .utf8)!,
         [aProduct.domain]
     )
 }
 
-var aProduct: (http: Data, domain: Product) {
+var aProduct: (http: Data, domain: DecodableProduct) {
     (
         #"{"id": "7019D8A7-0B35-4057-B7F9-8C5471961ED0", "name": "some productname"}"#.data(using: .utf8)!,
-        Product(
+        DecodableProduct(
             id: UUID(uuidString: "7019D8A7-0B35-4057-B7F9-8C5471961ED0")!,
             name: "some productname"
         )

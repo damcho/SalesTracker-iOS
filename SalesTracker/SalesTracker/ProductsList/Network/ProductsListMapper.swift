@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DecodableProduct: Decodable {
+struct DecodableProduct: Decodable, Equatable {
     let id: UUID
     let name: String
     
@@ -20,7 +20,7 @@ enum ProductsListMapper {
     static let unauthorized = 401
     static let success = 200
     
-    static func map(_ response: HTTPURLResponse, _ data: Data) throws -> [Product] {
+    static func map(_ response: HTTPURLResponse, _ data: Data) throws -> [DecodableProduct] {
         switch response.statusCode {
         case unauthorized:
             let errorData = try JSONDecoder().decode(
@@ -34,9 +34,7 @@ enum ProductsListMapper {
             return try JSONDecoder().decode(
                 [DecodableProduct].self,
                 from: data
-            ).compactMap({ decodedProduct in
-                decodedProduct.toProduct()
-            })
+            )
         default:
             throw HTTPError.other
         }

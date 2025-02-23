@@ -66,5 +66,9 @@ struct HTTPClientStub: SalesTrackerHTTPClient {
     func post<T>(url: URL, body: T) async throws -> (data: Data, httpResponse: HTTPURLResponse) where T : Encodable {
         try stub.get()
     }
+    
+    func get(from url: URL) async throws -> (data: Data, httpResponse: HTTPURLResponse) {
+        try stub.get()
+    }
 }
 
