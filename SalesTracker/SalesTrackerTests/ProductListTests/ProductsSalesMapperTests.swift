@@ -12,32 +12,41 @@ import Foundation
 struct ProductsSalesMapperTests: MapperSpecs {
     @Test func throws_authentication_error_on_401_status_code() async throws {
         #expect(throws: invalidCredentialsAuthError.error, performing: {
-            _ = try ProductsSalesMapper.map(invalidAuthHTTPResponse, invalidCredentialsAuthError.http)
+            _ = try makeSUT().map(invalidAuthHTTPResponse, invalidCredentialsAuthError.http)
         })
     }
     
     @Test func throws_connectivity_error_on_not_found_status_code() async throws {
         #expect(throws: HTTPError.notFound, performing: {
-            _ = try ProductsSalesMapper.map(notFoundHTTPResponse, Data())
+            _ = try makeSUT().map(notFoundHTTPResponse, Data())
         })
     }
     
     @Test func throws_decoding_error_on_invalid_data() async throws {
         #expect(throws: DecodingError.self, performing: {
-            _ = try ProductsSalesMapper.map(successfulHTTPResponse, invalidData)
+            _ = try makeSUT().map(successfulHTTPResponse, invalidData)
         })
     }
     
     @Test func returns_mapped_data_on_successful_200_status_code() async throws {
-        #expect(try ProductsSalesMapper.map(successfulHTTPResponse, salesList.http) == salesList.decoded)
+        #expect(try makeSUT().map(successfulHTTPResponse, salesList.http) == salesList.decoded)
     }
     
     @Test func throws_other_error_on_other_http_status_code() async throws {
         #expect(throws: HTTPError.other, performing: {
-            _ = try ProductsSalesMapper.map(serverErrorHTTPResponse, Data())
+            _ = try makeSUT().map(serverErrorHTTPResponse, Data())
         })
     }
 }
+
+extension ProductsSalesMapperTests {
+    func makeSUT() -> ProductsSalesMapper {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ"
+        return ProductsSalesMapper(dateFormatter: dateFormatter)
+    }
+}
+
 
 var salesList: (http: Data, decoded: [DecodableSale]) {
     (
@@ -55,7 +64,7 @@ var aSale: (http: Data, decoded: DecodableSale) {
             product_id: UUID(uuidString: "7019D8A7-0B35-4057-B7F9-8C5471961ED0")!,
             amount: "1480.79",
             currency_code: "AUD",
-            date: "2024-07-20T15:45:27.366Z"
+            date: dateFormatter.date(from: "2024-07-20T15:45:27.366Z")!
         )
     )
 }

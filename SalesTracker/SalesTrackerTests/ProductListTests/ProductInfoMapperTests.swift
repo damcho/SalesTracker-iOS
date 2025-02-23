@@ -71,27 +71,6 @@ struct ProductInfoMapperTests {
             ]
         )
     }
-    
-    @Test func ignores_malformed_sale_object_with_incorrect_date_format() async throws {
-        let decodedProductUUID = UUID()
-        let anotherDecodedProductUUID = UUID()
-        let productsList = [
-            aDecodedProduct(id: decodedProductUUID).decoded,
-            aDecodedProduct(id: anotherDecodedProductUUID).decoded
-        ]
-        let salesList: [DecodableSale] = [
-            aDecodedSale(for: decodedProductUUID),
-            aDecodedSale(for: anotherDecodedProductUUID, date: invalidDateFormat)
-        ]
-        
-        let result = ProductInfoMapper.map(productsList, salesList)
-        #expect(
-            result == [
-                aDecodedProduct(id: decodedProductUUID).domain: try! [salesList[0].toSale()],
-                aDecodedProduct(id: anotherDecodedProductUUID).domain: []
-            ]
-        )
-    }
 }
 
 
@@ -113,11 +92,11 @@ func aDecodedProduct(id: UUID) -> (domain: Product, decoded: DecodableProduct) {
     )
 }
 
-func aDecodedSale(for productid: UUID, date: String = "2024-07-20T15:45:27.366Z") -> DecodableSale {
+func aDecodedSale(for productid: UUID) -> DecodableSale {
     DecodableSale(
         product_id: productid,
         amount: "10.2",
         currency_code: "USD",
-        date: date
+        date: .now
     )
 }

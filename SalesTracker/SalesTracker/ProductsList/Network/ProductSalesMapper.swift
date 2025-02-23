@@ -12,35 +12,29 @@ enum ProductSalesMapperError: Error {
 }
 
 struct DecodableSale: Decodable, Equatable {
-    static var dateFormatter: DateFormatter {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ"
-        return dateFormatter
-    }
-    
     let product_id: UUID
     let amount: String
     let currency_code: String
-    let date: String
+    let date: Date
     
     func toSale() throws -> Sale {
-        guard let aDate = DecodableSale.dateFormatter.date(from: date),
-              let anAmount = Double(amount) else {
+        guard let anAmount = Double(amount) else {
             throw ProductSalesMapperError.decoding
         }
         return Sale(
-            date: aDate,
+            date: date,
             amount: anAmount,
             currencyCode: currency_code
         )
     }
 }
 
-enum ProductsSalesMapper {
-    static let unauthorized = 401
-    static let success = 200
+struct ProductsSalesMapper {
+    let unauthorized = 401
+    let success = 200
+    let dateFormatter: DateFormatter
     
-    static func map(_ response: HTTPURLResponse, _ data: Data) throws -> [DecodableSale] {
+    func map(_ response: HTTPURLResponse, _ data: Data) throws -> [DecodableSale] {
         switch response.statusCode {
         case unauthorized:
             let errorData = try JSONDecoder().decode(
@@ -51,7 +45,9 @@ enum ProductsSalesMapper {
         case 400, 402..<499:
             throw HTTPError.notFound
         case success:
-            return try JSONDecoder().decode(
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .formatted(dateFormatter)
+            return try decoder.decode(
                 [DecodableSale].self,
                 from: data
             )
