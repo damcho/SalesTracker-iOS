@@ -9,20 +9,6 @@ import Testing
 @testable import SalesTracker
 import Foundation
 
-typealias RemoteSalesListMapper = ((data: Data, httpResponse: HTTPURLResponse)) throws -> [DecodableSale]
-
-struct RemoteSalesLoader {
-    let httpClient: SalesTrackerHTTPClient
-    let url: URL
-    let mapper: RemoteSalesListMapper
-}
-
-extension RemoteSalesLoader: RemoteSalesLoadable {
-    func loadSales() async throws -> [SalesTracker.DecodableSale] {
-        try await mapper(httpClient.get(from: url))
-    }
-}
-
 struct RemoteSalesLoaderTests {
 
     @Test func throws_on_products_load_error() async throws {
