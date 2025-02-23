@@ -24,9 +24,9 @@ struct ProductSalesLoader {
     let remoteSalesLoader: RemoteSalesLoadable
 
     func loadProductsAndSales() async throws -> [Product: [Sale]] {
-        let products = try await productsLoader.loadProducts()
-        let sales = try await remoteSalesLoader.loadSales()
-        return try mapper(products, sales)
+        async let products = try await productsLoader.loadProducts()
+        async let sales = try await remoteSalesLoader.loadSales()
+        return try await mapper(products, sales)
     }
 }
 
@@ -63,7 +63,6 @@ struct ProductSalesLoaderTests {
         
         #expect(mappedResultsCallCount == 1)
     }
-
 }
 
 extension ProductSalesLoaderTests {
