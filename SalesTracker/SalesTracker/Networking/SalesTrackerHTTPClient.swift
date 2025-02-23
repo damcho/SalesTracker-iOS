@@ -12,6 +12,10 @@ protocol SalesTrackerHTTPClient {
         url: URL,
         body: T
     ) async throws -> (data: Data, httpResponse: HTTPURLResponse)
+    
+    func get(
+        from url: URL
+    ) async throws -> (data: Data, httpResponse: HTTPURLResponse)
 }
 
 enum HTTPError: Error {
