@@ -7,12 +7,6 @@
 
 import Foundation
 
-struct Sale: Equatable {
-    let date: Date
-    let amount: Double
-    let currencyCode: String
-}
-
 struct ProductInfo {
     let productId: UUID
     let name: String
