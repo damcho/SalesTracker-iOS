@@ -26,7 +26,7 @@ struct ProductSalesViewModel {
         productInfo.name
     }
     var salesAmount: String {
-        ProductSalesRepresentation.sales(productInfo.sales.count).value
+        ProductSalesRepresentation.sales(productInfo.salesCount).value
     }
     
     init(productInfo: ProductInfo, selectedProductAction: @escaping SelectedProductAction) {

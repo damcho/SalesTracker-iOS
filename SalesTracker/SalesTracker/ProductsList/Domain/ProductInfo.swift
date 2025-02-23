@@ -16,5 +16,5 @@ struct Sale: Equatable {
 struct ProductInfo {
     let productId: UUID
     let name: String
-    let sales: [Sale]
+    let salesCount: Int
 }

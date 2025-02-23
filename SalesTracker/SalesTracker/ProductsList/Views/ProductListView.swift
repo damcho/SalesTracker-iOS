@@ -26,7 +26,7 @@ struct ProductListView: View {
                     productInfo: ProductInfo(
                         productId: UUID(),
                         name: "prod name",
-                        sales: []
+                        salesCount: 3
                     ),
                     selectedProductAction: {_ in }
                 )
@@ -36,7 +36,7 @@ struct ProductListView: View {
                     productInfo: ProductInfo(
                         productId: UUID(),
                         name: "prod name",
-                        sales: []
+                        salesCount: 3
                     ),
                     selectedProductAction: {_ in }
                 )

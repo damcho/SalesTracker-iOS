@@ -30,7 +30,7 @@ struct ProductSalesView: View, Identifiable {
             productInfo: ProductInfo(
                 productId: UUID(),
                 name: "prod name",
-                sales: []
+                salesCount: 3
             ),
             selectedProductAction: {_ in print("Tapped")}
         )

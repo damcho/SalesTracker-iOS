@@ -33,7 +33,7 @@ struct ProductSalesViewModelTests {
         let aProduct = anyProductInfo
         let sut = makeSUT(productInfo: aProduct)
         
-        #expect(sut.salesAmount == ProductSalesViewModel.ProductSalesRepresentation.sales(aProduct.sales.count).value)
+        #expect(sut.salesAmount == ProductSalesViewModel.ProductSalesRepresentation.sales(aProduct.salesCount).value)
     }
 }
 
@@ -54,12 +54,6 @@ var anyProductInfo: ProductInfo {
     return ProductInfo(
         productId: pdoructID,
         name: "prod name",
-        sales: [
-            Sale(
-                date: .now,
-                amount: 12.3,
-                currencyCode: "USD"
-            )
-        ]
+        salesCount: 3
     )
 }
