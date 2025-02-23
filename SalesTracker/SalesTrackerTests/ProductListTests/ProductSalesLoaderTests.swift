@@ -8,28 +8,6 @@
 import Testing
 @testable import SalesTracker
 
-typealias ProductSalesDictionaryMapper = ([DecodableProduct], [DecodableSale]) throws -> [Product: [Sale]]
-
-protocol RemoteSalesLoadable {
-    func loadSales() async throws -> [DecodableSale]
-}
-
-protocol RemoteProductsLoadable {
-    func loadProducts() async throws -> [DecodableProduct]
-}
-
-struct ProductSalesLoader {
-    let mapper: ProductSalesDictionaryMapper
-    let productsLoader: RemoteProductsLoadable
-    let remoteSalesLoader: RemoteSalesLoadable
-
-    func loadProductsAndSales() async throws -> [Product: [Sale]] {
-        async let products = try await productsLoader.loadProducts()
-        async let sales = try await remoteSalesLoader.loadSales()
-        return try await mapper(products, sales)
-    }
-}
-
 struct ProductSalesLoaderTests {
 
     @Test func throws_on_load_products_error() async throws {
@@ -70,8 +48,8 @@ extension ProductSalesLoaderTests {
         mapper: @escaping ProductSalesDictionaryMapper = {_, _ in [:] },
         productsLoadableStub: Result<[DecodableProduct], Error> = .success([]),
         salesLoadableStub: Result<[DecodableSale], Error> = .success([])
-    ) -> ProductSalesLoader {
-        return ProductSalesLoader(
+    ) -> RemoteProductSalesLoader {
+        return RemoteProductSalesLoader(
             mapper: mapper,
             productsLoader: RemoteProductsLoadableStub(
                 stub: productsLoadableStub
