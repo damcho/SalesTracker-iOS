@@ -58,7 +58,7 @@ enum ProductsSalesMapper {
                 [DecodableSale].self,
                 from: data
             ).compactMap({ decodedProduct in
-                try decodedProduct.toSale()
+                try? decodedProduct.toSale()
             })
         default:
             throw HTTPError.other
@@ -86,13 +86,17 @@ struct ProductsSalesMapperTests: MapperSpecs {
     }
     
     @Test func returns_mapped_data_on_successful_200_status_code() async throws {
-        #expect(try ProductsSalesMapper.map(successfulHTTPResponse, salesList.http) == [aSale.domain])
+        #expect(try ProductsSalesMapper.map(successfulHTTPResponse, salesList.http) == salesList.domain)
     }
     
     @Test func throws_other_error_on_other_http_status_code() async throws {
         #expect(throws: HTTPError.other, performing: {
             _ = try ProductsSalesMapper.map(serverErrorHTTPResponse, Data())
         })
+    }
+    
+    @Test func ignores_malformed_sale_object_with_incorrect_date_format() async throws {
+        #expect(try ProductsSalesMapper.map(successfulHTTPResponse, salesListWithMalformedSale.http) == salesListWithMalformedSale.domain)
     }
 
 }
@@ -104,6 +108,16 @@ var salesList: (http: Data, domain: [Sale]) {
     )
 }
     
+var malformedSaleWithIncorrectDateFormat: Data {
+    return #"{"currency_code": "AUD", "amount": "1480.79", "product_id": "7019D8A7-0B35-4057-B7F9-8C5471961ED0", "date": "2024-07-2025"}"#.data(using: .utf8)!
+}
+
+var salesListWithMalformedSale: (http: Data, domain: [Sale]) {
+    (
+        "[\(String(data: aSale.http, encoding: .utf8)!),\(String(data: malformedSaleWithIncorrectDateFormat, encoding: .utf8)!)]".data(using: .utf8)!,
+        [aSale.domain]
+    )
+}
 
 var aSale: (http: Data, domain: Sale) {
     let dateFormatter = DateFormatter()
