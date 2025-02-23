@@ -26,7 +26,7 @@ struct ProductSalesLoader {
     func loadProductsAndSales() async throws -> [Product: [Sale]] {
         let products = try await productsLoader.loadProducts()
         let sales = try await remoteSalesLoader.loadSales()
-        return [:]
+        return try mapper(products, sales)
     }
 }
 
@@ -50,6 +50,18 @@ struct ProductSalesLoaderTests {
         await #expect(throws: anyError, performing: {
             try await sut.loadProductsAndSales()
         })
+    }
+    
+    @Test func maps_on_products_and_sales_load_success() async throws {
+        var mappedResultsCallCount = 0
+        let sut = makeSUT(mapper: {_ ,_ in
+            mappedResultsCallCount += 1
+            return [:]
+        })
+      
+        _ = try await sut.loadProductsAndSales()
+        
+        #expect(mappedResultsCallCount == 1)
     }
 
 }
