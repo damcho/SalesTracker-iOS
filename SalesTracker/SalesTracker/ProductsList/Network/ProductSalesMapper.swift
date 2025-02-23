@@ -23,12 +23,12 @@ struct DecodableSale: Decodable {
     let currency_code: String
     let date: String
     
-    func toSale() throws -> Sale {
+    func toSale() throws -> RemoteSale {
         guard let aDate = DecodableSale.dateFormatter.date(from: date),
               let anAmount = Double(amount) else {
             throw ProductSalesMapperError.decoding
         }
-        return Sale(
+        return RemoteSale(
             productID: product_id,
             date: aDate,
             amount: anAmount,
@@ -41,7 +41,7 @@ enum ProductsSalesMapper {
     static let unauthorized = 401
     static let success = 200
     
-    static func map(_ response: HTTPURLResponse, _ data: Data) throws -> [Sale] {
+    static func map(_ response: HTTPURLResponse, _ data: Data) throws -> [RemoteSale] {
         switch response.statusCode {
         case unauthorized:
             let errorData = try JSONDecoder().decode(

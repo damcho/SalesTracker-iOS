@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Sale: Equatable {
+struct RemoteSale: Equatable {
     let productID: UUID
     let date: Date
     let amount: Double
@@ -17,5 +17,5 @@ struct Sale: Equatable {
 struct ProductInfo {
     let productId: UUID
     let name: String
-    let sales: [Sale]
+    let sales: [RemoteSale]
 }

@@ -44,7 +44,7 @@ struct ProductsSalesMapperTests: MapperSpecs {
 
 }
 
-var salesList: (http: Data, domain: [Sale]) {
+var salesList: (http: Data, domain: [RemoteSale]) {
     (
         "[\(String(data: aSale.http, encoding: .utf8)!)]".data(using: .utf8)!,
         [aSale.domain]
@@ -55,19 +55,19 @@ var malformedSaleWithIncorrectDateFormat: Data {
     return #"{"currency_code": "AUD", "amount": "1480.79", "product_id": "7019D8A7-0B35-4057-B7F9-8C5471961ED0", "date": "2024-07-2025"}"#.data(using: .utf8)!
 }
 
-var salesListWithMalformedSale: (http: Data, domain: [Sale]) {
+var salesListWithMalformedSale: (http: Data, domain: [RemoteSale]) {
     (
         "[\(String(data: aSale.http, encoding: .utf8)!),\(String(data: malformedSaleWithIncorrectDateFormat, encoding: .utf8)!)]".data(using: .utf8)!,
         [aSale.domain]
     )
 }
 
-var aSale: (http: Data, domain: Sale) {
+var aSale: (http: Data, domain: RemoteSale) {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ"
     return (
         #"{"currency_code": "AUD", "amount": "1480.79", "product_id": "7019D8A7-0B35-4057-B7F9-8C5471961ED0", "date": "2024-07-20T15:45:27.366Z"}"#.data(using: .utf8)!,
-        Sale(
+        RemoteSale(
             productID: UUID(uuidString: "7019D8A7-0B35-4057-B7F9-8C5471961ED0")!,
             date: dateFormatter.date(from: "2024-07-20T15:45:27.366Z")!,
             amount: 1480.79,

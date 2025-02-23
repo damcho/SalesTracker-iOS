@@ -30,7 +30,7 @@ struct ProductsListMapperTests: MapperSpecs {
     }
     
     @Test func returns_mapped_data_on_successful_200_status_code() async throws {
-        #expect(try ProductsListMapper.map(successfulHTTPResponse, productListData.http) == [aProduct.domain])
+        #expect(try ProductsListMapper.map(successfulHTTPResponse, productListData.http) == productListData.decoded)
     }
     
     @Test func throws_other_error_on_other_http_status_code() async throws {
