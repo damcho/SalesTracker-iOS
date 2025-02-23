@@ -13,7 +13,9 @@ struct RemoteProductsLoader {
     let httpClient: SalesTrackerHTTPClient
     let url: URL
     let mapper: RemoteProductsListMapper
-    
+}
+
+extension RemoteProductsLoader: RemoteProductsLoadable {
     func loadProducts() async throws -> [DecodableProduct] {
         try await mapper(httpClient.get(from: url))
     }

@@ -20,12 +20,12 @@ enum ProductsListMapper {
     static let unauthorized = 401
     static let success = 200
     
-    static func map(_ response: HTTPURLResponse, _ data: Data) throws -> [DecodableProduct] {
-        switch response.statusCode {
+    static func map(_ result: (data: Data, httpResponse: HTTPURLResponse)) throws -> [DecodableProduct] {
+        switch result.httpResponse.statusCode {
         case unauthorized:
             let errorData = try JSONDecoder().decode(
                 DecodableHTTPErrorMessage.self,
-                from: data
+                from: result.data
             )
             throw LoginError.authentication(errorData.message)
         case 400, 402..<499:
@@ -33,7 +33,7 @@ enum ProductsListMapper {
         case success:
             return try JSONDecoder().decode(
                 [DecodableProduct].self,
-                from: data
+                from: result.data
             )
         default:
             throw HTTPError.other

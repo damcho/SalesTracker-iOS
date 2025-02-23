@@ -12,29 +12,29 @@ import Foundation
 struct ProductsSalesMapperTests: MapperSpecs {
     @Test func throws_authentication_error_on_401_status_code() async throws {
         #expect(throws: invalidCredentialsAuthError.error, performing: {
-            _ = try makeSUT().map(invalidAuthHTTPResponse, invalidCredentialsAuthError.http)
+            _ = try makeSUT().map((invalidCredentialsAuthError.http, invalidAuthHTTPResponse))
         })
     }
     
     @Test func throws_connectivity_error_on_not_found_status_code() async throws {
         #expect(throws: HTTPError.notFound, performing: {
-            _ = try makeSUT().map(notFoundHTTPResponse, Data())
+            _ = try makeSUT().map((Data(), notFoundHTTPResponse))
         })
     }
     
     @Test func throws_decoding_error_on_invalid_data() async throws {
         #expect(throws: DecodingError.self, performing: {
-            _ = try makeSUT().map(successfulHTTPResponse, invalidData)
+            _ = try makeSUT().map((invalidData, successfulHTTPResponse))
         })
     }
     
     @Test func returns_mapped_data_on_successful_200_status_code() async throws {
-        #expect(try makeSUT().map(successfulHTTPResponse, salesList.http) == salesList.decoded)
+        #expect(try makeSUT().map((salesList.http, successfulHTTPResponse)) == salesList.decoded)
     }
     
     @Test func throws_other_error_on_other_http_status_code() async throws {
         #expect(throws: HTTPError.other, performing: {
-            _ = try makeSUT().map(serverErrorHTTPResponse, Data())
+            _ = try makeSUT().map((Data(), serverErrorHTTPResponse))
         })
     }
 }

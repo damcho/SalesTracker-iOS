@@ -34,12 +34,12 @@ struct ProductsSalesMapper {
     let success = 200
     let dateFormatter: DateFormatter
     
-    func map(_ response: HTTPURLResponse, _ data: Data) throws -> [DecodableSale] {
-        switch response.statusCode {
+    func map(_ result: (data: Data, httpResponse: HTTPURLResponse)) throws -> [DecodableSale] {
+        switch result.httpResponse.statusCode {
         case unauthorized:
             let errorData = try JSONDecoder().decode(
                 DecodableHTTPErrorMessage.self,
-                from: data
+                from: result.data
             )
             throw LoginError.authentication(errorData.message)
         case 400, 402..<499:
@@ -49,7 +49,7 @@ struct ProductsSalesMapper {
             decoder.dateDecodingStrategy = .formatted(dateFormatter)
             return try decoder.decode(
                 [DecodableSale].self,
-                from: data
+                from: result.data
             )
         default:
             throw HTTPError.other
