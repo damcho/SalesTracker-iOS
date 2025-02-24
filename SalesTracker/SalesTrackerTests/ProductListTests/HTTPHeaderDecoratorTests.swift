@@ -11,22 +11,23 @@ import Foundation
 @testable import SalesTracker
 
 struct HTTPHeaderDecorator {
+    let decoratee: SalesTrackerHTTPClient
 }
 
 extension HTTPHeaderDecorator: SalesTrackerHTTPClient {
     func post<T>(url: URL, body: T) async throws -> (data: Data, httpResponse: HTTPURLResponse) where T : Encodable {
-        throw HTTPError.notFound
+        try await decoratee.post(url: url, body: body)
     }
     
     func get(from url: URL) async throws -> (data: Data, httpResponse: HTTPURLResponse) {
-        throw HTTPError.notFound
+        try await decoratee.get(from: url)
     }
 }
 
 struct HTTPHeaderDecoratorTests {
 
     @Test func throws_on_http_call_failure() async throws {
-        let sut = makeSUT()
+        let sut = makeSUT(stub: .failure(HTTPError.notFound))
         
         await #expect(throws: HTTPError.notFound, performing: {
             try await sut.get(from: anyURL)
@@ -36,11 +37,18 @@ struct HTTPHeaderDecoratorTests {
             try await sut.post(url: anyURL, body: "some body")
         })
     }
-
+    
+    @Test func returns_result_on_successful_response() async throws {
+        let sut = makeSUT(stub: .success((anyData, successfulHTTPResponse)))
+      
+        #expect(try await sut.get(from: anyURL) == (data: anyData, httpResponse: successfulHTTPResponse))
+        #expect(try await sut.post(url: anyURL, body: "some body") == (anyData, successfulHTTPResponse))
+    }
 }
 
 extension HTTPHeaderDecoratorTests {
-    func makeSUT() -> HTTPHeaderDecorator {
-        return HTTPHeaderDecorator()
+    func makeSUT(stub: HTTPResult) -> HTTPHeaderDecorator {
+        let decorateeStub = HTTPClientStub(stub: stub)
+        return HTTPHeaderDecorator(decoratee: decorateeStub)
     }
 }

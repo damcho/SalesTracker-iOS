@@ -30,14 +30,12 @@ var invalidAuthHTTPResponse: HTTPURLResponse {
     )!
 }
 
-var successfulHTTPResponse: HTTPURLResponse {
-    HTTPURLResponse(
-        url: URL(string: "https://example.com")!,
-        statusCode: 200,
-        httpVersion: nil,
-        headerFields: nil
-    )!
-}
+let successfulHTTPResponse = HTTPURLResponse(
+    url: URL(string: "https://example.com")!,
+    statusCode: 200,
+    httpVersion: nil,
+    headerFields: nil
+)!
 
 var notFoundHTTPResponse: HTTPURLResponse {
     HTTPURLResponse(
@@ -93,7 +91,7 @@ var anyNSError: Error {
 }
 
 var anyData: Data {
-    Data()
+    "data".data(using: .utf8)!
 }
 
 func clearKeychainFromArtifacts() {
