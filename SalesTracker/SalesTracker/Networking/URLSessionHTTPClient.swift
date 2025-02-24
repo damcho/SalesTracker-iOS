@@ -27,10 +27,12 @@ final class URLSessionHTTPClient {
 		}
 	}
 	
-	func get(from url: URL, completion: @escaping (HTTPResult) -> Void) -> HTTPClientTask {
+	func get(from url: URL, headers: [HTTPHeader] = [], completion: @escaping (HTTPResult) -> Void) -> HTTPClientTask {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        
+        headers.forEach { header in
+            request.addValue(header.value, forHTTPHeaderField: header.key)
+        }
         return perform(request, for: completion)
 	}
     
