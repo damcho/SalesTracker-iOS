@@ -12,6 +12,12 @@ struct HTTPHeader: Equatable {
     let value: String
 }
 
+extension HTTPHeader {
+    static func authorization(accessToken: String) -> HTTPHeader {
+        HTTPHeader(key: "Authorization", value: accessToken)
+    }
+}
+
 protocol SalesTrackerHTTPClient {
     func post<T: Encodable>(
         url: URL,
