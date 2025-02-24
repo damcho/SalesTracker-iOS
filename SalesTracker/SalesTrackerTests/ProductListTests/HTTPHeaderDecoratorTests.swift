@@ -25,7 +25,7 @@ extension HTTPHeaderDecorator: SalesTrackerHTTPClient {
     }
     
     func get(from url: URL, headers: [HTTPHeader]) async throws -> (data: Data, httpResponse: HTTPURLResponse) {
-        try await decoratee.get(from: url)
+        try await decoratee.get(from: url, headers: addHeaders(to: headers))
     }
 }
 
@@ -63,6 +63,24 @@ struct HTTPHeaderDecoratorTests {
         _ = try await sut.post(
             url: anyURL,
             body: "body",
+            headers: [anHTTPHeader]
+        )
+        
+        #expect(decorateeSpy.httpclientHeaders == [anHTTPHeader, newHeader])
+    }
+    
+    @Test func decorates_get_request_with_headers() async throws {
+        let newHeader = HTTPHeader(
+            key: "new-header-key",
+            value: "new-header-value"
+        )
+        let (sut, decorateeSpy) = makeSUT(
+            stub: .success((anyData, successfulHTTPResponse)),
+            addedHeaders: [newHeader]
+        )
+
+        _ = try await sut.get(
+            from: anyURL,
             headers: [anHTTPHeader]
         )
         
