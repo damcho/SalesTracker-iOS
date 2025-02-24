@@ -8,7 +8,7 @@
 import Foundation
 
 extension URLSessionHTTPClient: SalesTrackerHTTPClient {
-    func get(from url: URL) async throws -> (data: Data, httpResponse: HTTPURLResponse) {
+    func get(from url: URL, headers: [HTTPHeader]) async throws -> (data: Data, httpResponse: HTTPURLResponse) {
         let result = await withCheckedContinuation { continuation in
             _ = get(from: url, completion: { result in
                 continuation.resume(returning: result)
@@ -17,7 +17,7 @@ extension URLSessionHTTPClient: SalesTrackerHTTPClient {
         return try result.get()
     }
     
-    func post<T>(url: URL, body: T) async throws -> (data: Data, httpResponse: HTTPURLResponse) where T : Encodable {
+    func post<T>(url: URL, body: T, headers: [HTTPHeader]) async throws -> (data: Data, httpResponse: HTTPURLResponse) where T : Encodable {
         let result = await withCheckedContinuation { continuation in
             _ = post(url, body) { result in
                 continuation.resume(returning: result)

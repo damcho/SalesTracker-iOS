@@ -61,14 +61,22 @@ extension RemoteAuthenticatorHandlerTests {
     }
 }
 
-struct HTTPClientStub: SalesTrackerHTTPClient {
+final class HTTPClientStub: SalesTrackerHTTPClient {
     let stub: HTTPResult
-    func post<T>(url: URL, body: T) async throws -> (data: Data, httpResponse: HTTPURLResponse) where T : Encodable {
-        try stub.get()
+    var httpclientHeaders: [HTTPHeader] = []
+    
+    init(stub: HTTPResult) {
+        self.stub = stub
     }
     
-    func get(from url: URL) async throws -> (data: Data, httpResponse: HTTPURLResponse) {
-        try stub.get()
+    func post<T>(url: URL, body: T, headers: [HTTPHeader]) async throws -> (data: Data, httpResponse: HTTPURLResponse) where T : Encodable {
+        httpclientHeaders = headers
+        return try stub.get()
+    }
+    
+    func get(from url: URL, headers: [HTTPHeader]) async throws -> (data: Data, httpResponse: HTTPURLResponse) {
+        httpclientHeaders = headers
+        return try stub.get()
     }
 }
 

@@ -7,15 +7,37 @@
 
 import Foundation
 
+struct HTTPHeader: Equatable {
+    let key: String
+    let value: String
+}
+
 protocol SalesTrackerHTTPClient {
     func post<T: Encodable>(
         url: URL,
-        body: T
+        body: T,
+        headers: [HTTPHeader]
     ) async throws -> (data: Data, httpResponse: HTTPURLResponse)
     
     func get(
-        from url: URL
+        from url: URL,
+        headers: [HTTPHeader]
     ) async throws -> (data: Data, httpResponse: HTTPURLResponse)
+}
+
+extension SalesTrackerHTTPClient {
+    func get(
+        from url: URL
+    ) async throws -> (data: Data, httpResponse: HTTPURLResponse) {
+        try await get(from: url, headers: [])
+    }
+    
+    func post<T: Encodable>(
+        url: URL,
+        body: T
+    ) async throws -> (data: Data, httpResponse: HTTPURLResponse) {
+        try await post(url: url, body: body, headers: [])
+    }
 }
 
 enum HTTPError: Error {
