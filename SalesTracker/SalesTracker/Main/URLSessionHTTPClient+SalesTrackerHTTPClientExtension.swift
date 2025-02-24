@@ -10,7 +10,7 @@ import Foundation
 extension URLSessionHTTPClient: SalesTrackerHTTPClient {
     func get(from url: URL, headers: [HTTPHeader]) async throws -> (data: Data, httpResponse: HTTPURLResponse) {
         let result = await withCheckedContinuation { continuation in
-            _ = get(from: url, completion: { result in
+            _ = get(from: url, headers: headers, completion: { result in
                 continuation.resume(returning: result)
             })
         }
@@ -19,7 +19,7 @@ extension URLSessionHTTPClient: SalesTrackerHTTPClient {
     
     func post<T>(url: URL, body: T, headers: [HTTPHeader]) async throws -> (data: Data, httpResponse: HTTPURLResponse) where T : Encodable {
         let result = await withCheckedContinuation { continuation in
-            _ = post(url, body) { result in
+            _ = post(url, body, headers: headers) { result in
                 continuation.resume(returning: result)
             }
         }

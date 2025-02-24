@@ -36,9 +36,12 @@ final class URLSessionHTTPClient {
         return perform(request, for: completion)
 	}
     
-    func post<T: Encodable>(_ url: URL, _ body: T, completion: @escaping (HTTPResult) -> Void) -> HTTPClientTask {
+    func post<T: Encodable>(_ url: URL, _ body: T, headers: [HTTPHeader] = [], completion: @escaping (HTTPResult) -> Void) -> HTTPClientTask {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
+        headers.forEach { header in
+            request.addValue(header.value, forHTTPHeaderField: header.key)
+        }
         let data = try? JSONEncoder().encode(body)
         request.httpBody = data
 

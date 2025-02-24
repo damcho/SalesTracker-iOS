@@ -110,7 +110,21 @@ class URLSessionHTTPClientTests: XCTestCase {
     }
     
     func test_encodes_headers_on_post_request() async throws {
+        let exp = expectation(description: "Wait for request")
+
+        URLProtocolStub.observeRequests { request in
+            XCTAssertTrue(
+                request.allHTTPHeaderFields?.contains(
+                    where: { key, value in
+                        key == anHTTPHeader.key && value == anHTTPHeader.value
+                    }
+                ) != nil
+            )
+            exp.fulfill()
+        }
         
+        _ = makeSUT().post(anyURL, "body", headers: [anHTTPHeader], completion: {_ in })
+        await fulfillment(of: [exp], timeout: 1)
     }
     
 	// MARK: - Helpers
