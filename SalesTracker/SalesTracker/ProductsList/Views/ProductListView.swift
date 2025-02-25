@@ -17,10 +17,8 @@ struct ProductListView: View {
             }
         }.refreshable {
             productSalesViews = await onRefresh()
-        }.onAppear {
-            Task {
-                productSalesViews = await onRefresh()
-            }
+        }.task {
+            productSalesViews = await onRefresh()
         }
     }
 }
