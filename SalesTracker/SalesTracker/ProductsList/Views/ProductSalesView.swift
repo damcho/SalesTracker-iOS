@@ -18,7 +18,9 @@ struct ProductSalesView: View, Identifiable {
             Text(viewModel.productName).lineLimit(2)
             Spacer()
             Text(viewModel.salesAmount)
-        }).onTapGesture {
+        })
+        .background()
+        .onTapGesture {
             viewModel.didSelectProduct()
         }
     }
