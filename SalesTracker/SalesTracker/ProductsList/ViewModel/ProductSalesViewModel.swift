@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias SelectedProductAction = (UUID) -> Void
+typealias SelectedProductAction = (Product) -> Void
 
 struct ProductSalesViewModel {
     enum ProductSalesRepresentation {
@@ -23,7 +23,7 @@ struct ProductSalesViewModel {
     let productInfo: ProductInfo
     let selectionAction: SelectedProductAction
     var productName: String {
-        productInfo.name
+        productInfo.product.name
     }
     var salesAmount: String {
         ProductSalesRepresentation.sales(productInfo.salesCount).value
@@ -35,6 +35,6 @@ struct ProductSalesViewModel {
     }
     
     func didSelectProduct() {
-        selectionAction(productInfo.productId)
+        selectionAction(productInfo.product)
     }
 }

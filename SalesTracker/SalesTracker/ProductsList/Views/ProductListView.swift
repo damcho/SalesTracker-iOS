@@ -8,11 +8,18 @@
 import SwiftUI
 
 struct ProductListView: View {
-    let productSalesViews: [ProductSalesView]
+    let onRefresh: () async -> [ProductSalesView]
+    @State var productSalesViews: [ProductSalesView] = []
     var body: some View {
         List {
             ForEach(productSalesViews){ productSalesView in
                 productSalesView
+            }
+        }.refreshable {
+            productSalesViews = await onRefresh()
+        }.onAppear {
+            Task {
+                productSalesViews = await onRefresh()
             }
         }
     }
@@ -20,27 +27,20 @@ struct ProductListView: View {
 
 #Preview {
     ProductListView(
-        productSalesViews: [
-            ProductSalesView(
-                viewModel: ProductSalesViewModel(
-                    productInfo: ProductInfo(
-                        productId: UUID(),
-                        name: "prod name",
-                        salesCount: 3
-                    ),
-                    selectedProductAction: {_ in }
+        onRefresh: {
+            [
+                ProductSalesView(
+                    viewModel: ProductSalesViewModel(
+                        productInfo: ProductInfo(
+                            product: .init(
+                                id:  UUID(),
+                                name: "aname"),
+                            salesCount: 3
+                        ),
+                        selectedProductAction: {_ in }
+                    )
                 )
-            ),
-            ProductSalesView(
-                viewModel: ProductSalesViewModel(
-                    productInfo: ProductInfo(
-                        productId: UUID(),
-                        name: "prod name",
-                        salesCount: 3
-                    ),
-                    selectedProductAction: {_ in }
-                )
-            )
-        ]
+            ]
+        }
     )
 }

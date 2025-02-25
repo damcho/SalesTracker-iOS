@@ -8,7 +8,6 @@
 import Foundation
 
 struct ProductInfo {
-    let productId: UUID
-    let name: String
+    let product: Product
     let salesCount: Int
 }

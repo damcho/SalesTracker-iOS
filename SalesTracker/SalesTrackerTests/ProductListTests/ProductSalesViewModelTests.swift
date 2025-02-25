@@ -26,7 +26,7 @@ struct ProductSalesViewModelTests {
         let aProduct = anyProductInfo
         let sut = makeSUT(productInfo: aProduct)
         
-        #expect(sut.productName == aProduct.name)
+        #expect(sut.productName == aProduct.product.name)
     }
     
     @Test func displays_product_sales_count() async throws {
@@ -52,8 +52,9 @@ extension ProductSalesViewModelTests {
 var anyProductInfo: ProductInfo {
     let pdoructID = UUID()
     return ProductInfo(
-        productId: pdoructID,
-        name: "prod name",
+        product: .init(
+            id:  pdoructID,
+            name: "aname"),
         salesCount: 3
     )
 }
