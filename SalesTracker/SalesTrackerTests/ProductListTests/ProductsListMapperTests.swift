@@ -43,11 +43,11 @@ struct ProductsListMapperTests: MapperSpecs {
 var productListData: (http: Data, decoded: [DecodableProduct]) {
     (
         #"[{"id": "7019D8A7-0B35-4057-B7F9-8C5471961ED0", "name": "some productname"}]"#.data(using: .utf8)!,
-        [aProduct.domain]
+        [aProduct.decoded]
     )
 }
 
-var aProduct: (http: Data, domain: DecodableProduct) {
+var aProduct: (http: Data, decoded: DecodableProduct) {
     (
         #"{"id": "7019D8A7-0B35-4057-B7F9-8C5471961ED0", "name": "some productname"}"#.data(using: .utf8)!,
         DecodableProduct(

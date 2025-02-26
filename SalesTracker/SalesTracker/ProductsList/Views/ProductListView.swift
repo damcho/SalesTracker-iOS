@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProductListView: View {
-    let onRefresh: () async -> [ProductSalesView]
+    let onRefresh: () async throws -> [ProductSalesView]
     @State var productSalesViews: [ProductSalesView] = []
     var body: some View {
         List {
@@ -16,9 +16,13 @@ struct ProductListView: View {
                 productSalesView
             }
         }.refreshable {
-            productSalesViews = await onRefresh()
+            do {
+                productSalesViews = try await onRefresh()
+            } catch { }
         }.task {
-            productSalesViews = await onRefresh()
+            do {
+                productSalesViews = try await onRefresh()
+            } catch { }
         }
     }
 }

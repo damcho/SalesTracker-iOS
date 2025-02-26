@@ -21,7 +21,9 @@ struct RemoteProductSalesLoader {
     let mapper: ProductSalesDictionaryMapper
     let productsLoader: RemoteProductsLoadable
     let remoteSalesLoader: RemoteSalesLoadable
+}
 
+extension RemoteProductSalesLoader: ProductSalesLoadable {
     func loadProductsAndSales() async throws -> [Product: [Sale]] {
         async let products = try await productsLoader.loadProducts()
         async let sales = try await remoteSalesLoader.loadSales()
