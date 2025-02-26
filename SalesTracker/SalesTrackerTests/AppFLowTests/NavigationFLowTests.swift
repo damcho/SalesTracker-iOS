@@ -21,8 +21,13 @@ class NavigationFLow: ObservableObject {
     
     func resolveInitialView() -> any View {
         do {
-            _ = try tokenLoadable.loadAccessToken()
-            return AnyView(EmptyView())
+            let accessToken = try tokenLoadable.loadAccessToken()
+            return ProductsListComposer.compose(
+                with: ProductsListComposer.composeProductSalesLoader(
+                    with: accessToken
+                ),
+                productSelection:  {_, _ in }
+            )
         } catch {
             return SalesTrackerApp.composeLoginScreen(
                 successfulAuthAction: {}
@@ -35,11 +40,29 @@ class NavigationFLow: ObservableObject {
 struct NavigationFLowTests {
 
     @Test func loads_login_screen_on_access_token_load_failure() async throws {
-        let sut = NavigationFLow(tokenLoadable: TokenLoadableStub(stub: .failure(anyError)))
+        let sut = makeSUT(stub: .failure(anyError))
         
         let aView = sut.resolveInitialView()
         
         #expect(aView is LoginScreen)
+    }
+    
+    @Test func loads_products_list_on_existing_access_token_stored() async throws {
+        let sut = makeSUT(stub: .success("aToken"))
+        
+        let aView = sut.resolveInitialView()
+
+        #expect(aView is ProductListView)
+    }
+}
+
+extension NavigationFLowTests {
+    func makeSUT(stub: Result<String, Error>) -> NavigationFLow {
+        NavigationFLow(
+            tokenLoadable: TokenLoadableStub(
+                stub: stub
+            )
+        )
     }
 }
 
