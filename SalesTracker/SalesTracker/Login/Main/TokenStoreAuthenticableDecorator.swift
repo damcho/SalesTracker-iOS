@@ -7,6 +7,10 @@
 
 import Foundation
 
+protocol TokenLoadable {
+    func loadAccessToken() throws -> String
+}
+
 protocol TokenStore {
     func store(_ token: String) throws
 }

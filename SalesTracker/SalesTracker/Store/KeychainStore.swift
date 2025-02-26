@@ -66,3 +66,9 @@ extension KeychainStore: TokenStore {
         try store(token, for: authTokenStoreKey)
     }
 }
+
+extension KeychainStore: TokenLoadable {
+    func loadAccessToken() throws -> String {
+        try retrieveValue(for: authTokenStoreKey)
+    }
+}

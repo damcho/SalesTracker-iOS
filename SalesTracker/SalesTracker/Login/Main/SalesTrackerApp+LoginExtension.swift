@@ -45,7 +45,7 @@ extension SalesTrackerApp {
         )
     }
     
-    static func composeLoginScreen(successfulAuthAction: @escaping () -> Void) -> some View {
+    static func composeLoginScreen(successfulAuthAction: @escaping () -> Void) -> LoginScreen {
         let activityIndicatorViewModel = ActivityIndicatorViewModel()
         let loginButtonViewModel = LoginButtonViewModel()
         let errorViewModel = ErrorViewModel()

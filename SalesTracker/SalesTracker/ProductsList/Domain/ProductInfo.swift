@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ProductInfo {
+struct ProductInfo: Equatable {
     let product: Product
     let salesCount: Int
 }
