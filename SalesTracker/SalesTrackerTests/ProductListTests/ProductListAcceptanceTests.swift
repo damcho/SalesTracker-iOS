@@ -10,21 +10,27 @@ import Foundation
 
 @testable import SalesTracker
 
-struct ProductListAcceptanceTests {
+struct ProductListAcceptanceTests {    
+    @Test func creates_product_sales_views_on_successful_load() async throws {
+        let sut = makeSUT(stub: .success(productInfo.raw))
 
-    @Test func does_not_update_on_load_error() async throws {
-        let sut = makeSUT(stub: .failure(anyError))
-        await #expect(sut.productSalesViews.count == 0)
+        let productSalesViews = try await sut.onRefresh()
 
-        await #expect(throws: anyError, performing: {
-            _ = try await sut.onRefresh()
-        })
-        
-        await #expect(sut.productSalesViews.count == 0)
+        assertProductSalesViewModels(
+            for: productSalesViews,
+            expectedResult: [productInfo.info]
+        )
     }
 }
 
 extension ProductListAcceptanceTests {
+    func assertProductSalesViewModels(for views: [ProductSalesView], expectedResult: [ProductInfo]) {
+        let productsInfoArray = views.map { view in
+            view.viewModel.productInfo
+        }
+        #expect(productsInfoArray == expectedResult)
+    }
+    
     func makeSUT(stub: Result<[Product : [Sale]], Error>) -> ProductListView {
         try! ProductsListComposer.compose(
             with: ProductSalesLoadableStub(stub: stub),
@@ -45,5 +51,15 @@ var someSale: Sale {
 }
 
 var someProduct: Product {
-    Product(id: UUID(), name: "aname")
+    Product(id: UUID(uuidString: "7019D8A7-0B35-4057-B7F9-8C5471961ED0")!, name: "aname")
+}
+
+var productInfo: (info: ProductInfo, raw: [Product: [Sale]]) {
+    (
+        ProductInfo(
+            product: someProduct,
+            salesCount: 1
+        ),
+        [someProduct: [someSale]]
+    )
 }
