@@ -9,11 +9,17 @@ import Foundation
 enum Source {
     static let baseURL: URL = URL(string: "https://ile-b2p4.essentialdeveloper.com")!
     case login
+    case productsList
+    case salesList
     
     func getURL(for baseURL: URL) -> URL {
         switch self {
         case .login:
             return baseURL.appendingPathComponent("login")
+        case .productsList:
+            return baseURL.appendingPathComponent("products")
+        case .salesList:
+            return baseURL.appendingPathComponent("sales")
         }
     }
 }
