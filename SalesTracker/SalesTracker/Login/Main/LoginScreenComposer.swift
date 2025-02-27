@@ -1,14 +1,13 @@
 //
-//  SalesTrackerApp+LoginExtension.swift
+//  LoginScreenComposer.swift
 //  SalesTracker
 //
-//  Created by Damian Modernell on 19/2/25.
+//  Created by Damian Modernell on 27/2/25.
 //
 
 import Foundation
-import SwiftUI
 
-extension SalesTrackerApp {
+enum LoginScreenComposer {
     static func composeLogin(
         with enabler: some LoginEnabler,
         authAction: @escaping Authenticator
@@ -57,7 +56,7 @@ extension SalesTrackerApp {
                         url: Source.login.getURL(for: Source.baseURL),
                         mapper: AuthenticationMapper.map
                     ),
-                    store: keychain
+                    store: SalesTrackerApp.keychain
                 ),
                 with: errorViewModel
             ),

@@ -66,7 +66,7 @@ extension ErrorDisplayableAuthenticattorDecoratorTests {
         decorateeStub: Result<AuthenticationResult, Error>
     ) -> (Authenticable, ErrorDisplayableSpy) {
         let errorDisplayableSpy = ErrorDisplayableSpy()
-        let sut = SalesTrackerApp.composeErrorDisplayable(
+        let sut = LoginScreenComposer.composeErrorDisplayable(
             decoratee: AuthenticableStub(stub: decorateeStub),
             with: errorDisplayableSpy
         )

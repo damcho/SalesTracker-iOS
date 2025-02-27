@@ -77,7 +77,7 @@ extension ActivityIndicatorAuthenticationDecoratorTests {
         let stub = AuthenticableStub(stub: decorateeStub)
         let activityIndicatorSpy = activityIndicatorDisplayableSpy()
         return (
-            SalesTrackerApp.composeActivityIndicator(
+            LoginScreenComposer.composeActivityIndicator(
                 for: stub,
                 activityIndicatorDisplayable: activityIndicatorSpy
             ),

@@ -54,7 +54,7 @@ extension LoginScreenViewModelTests {
         column: Int = #column
     ) -> (LoginScreenViewModel, LoginEnablerSpy) {
         let loginEnablerSpy = LoginEnablerSpy()
-        let sut = SalesTrackerApp.composeLogin(
+        let sut = LoginScreenComposer.composeLogin(
             with: loginEnablerSpy,
             authAction: authClosure
         )

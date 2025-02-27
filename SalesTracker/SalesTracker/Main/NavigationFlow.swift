@@ -38,7 +38,7 @@ class NavigationFLow: ObservableObject {
     }
     
     func resolveInitialScreen() -> LoginScreen {
-        return SalesTrackerApp.composeLoginScreen(
+        return LoginScreenComposer.composeLoginScreen(
             successfulAuthAction: { accesstoken in
                 self.push(.productsList(accesstoken))
             }
