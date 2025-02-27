@@ -26,5 +26,5 @@ struct LoginScreen: View {
 }
 
 #Preview {
-    SalesTrackerApp.composeLoginScreen(successfulAuthAction: {})
+    SalesTrackerApp.composeLoginScreen(successfulAuthAction: {_ in })
 }

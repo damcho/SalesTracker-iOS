@@ -45,7 +45,7 @@ extension SalesTrackerApp {
         )
     }
     
-    static func composeLoginScreen(successfulAuthAction: @escaping () -> Void) -> LoginScreen {
+    static func composeLoginScreen(successfulAuthAction: @escaping (String) -> Void) -> LoginScreen {
         let activityIndicatorViewModel = ActivityIndicatorViewModel()
         let loginButtonViewModel = LoginButtonViewModel()
         let errorViewModel = ErrorViewModel()
@@ -68,10 +68,10 @@ extension SalesTrackerApp {
             with: loginButtonViewModel,
             authAction: { credentials in
                 Task {
-                    _ = try await activityIndicatorAuthenticable.authenticate(
+                    let response = try await activityIndicatorAuthenticable.authenticate(
                         with: credentials
                     )
-                    successfulAuthAction()
+                    successfulAuthAction(response.authToken)
                 }
             }
         )

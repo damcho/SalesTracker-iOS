@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Sale: Equatable {
+struct Sale: Equatable, Hashable {
     let date: Date
     let amount: Double
     let currencyCode: String

@@ -8,28 +8,58 @@
 import Foundation
 import SwiftUI
 
+enum Screen: Hashable {
+    case login
+    case productsList(String)
+    case productDetail(String, [Product: [Sale]])
+}
+
 class NavigationFLow: ObservableObject {
-    @Published var navigationPath = NavigationPath()
-    
-    let tokenLoadable: TokenLoadable
-    
+    @Published var navigationPath: NavigationPath
+        
     init(tokenLoadable: TokenLoadable) {
-        self.tokenLoadable = tokenLoadable
+        if let anAccessToken = try? tokenLoadable.loadAccessToken() {
+            navigationPath = NavigationPath(
+                [
+                    Screen.productsList(anAccessToken)
+                ]
+            )
+        } else {
+            navigationPath = NavigationPath()
+        }
     }
     
-    func resolveInitialView() -> any View {
-        do {
-            let accessToken = try tokenLoadable.loadAccessToken()
-            return ProductsListComposer.compose(
-                with: ProductsListComposer.composeProductSalesLoader(
-                    with: accessToken
-                ),
-                productSelection:  {_, _ in }
+    func push(_ screen: Screen) {
+        navigationPath.append(screen)
+    }
+    
+    func popToRoot() {
+        navigationPath.removeLast(navigationPath.count)
+    }
+    
+    func resolveInitialScreen() -> LoginScreen {
+        return SalesTrackerApp.composeLoginScreen(
+            successfulAuthAction: { accesstoken in
+                self.push(.productsList(accesstoken))
+            }
+        )
+    }
+    
+    func destinations(for screen: Screen) -> any View {
+        switch screen {
+        case .login:
+            return resolveInitialScreen()
+        case .productsList(let accessToken):
+            let productsList = ProductsListComposer.compose(
+                accessToken: accessToken,
+                productSelection: {_, _ in },
+                authErrorHandler: {
+                    self.popToRoot()
+                }
             )
-        } catch {
-            return SalesTrackerApp.composeLoginScreen(
-                successfulAuthAction: {}
-            )
+            return productsList.navigationBarBackButtonHidden(true)
+        case .productDetail(let productSalesDic):
+            return AnyView(EmptyView())
         }
     }
 }
