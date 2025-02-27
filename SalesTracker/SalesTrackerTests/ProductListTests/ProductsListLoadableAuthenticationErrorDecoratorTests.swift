@@ -8,26 +8,6 @@
 import Testing
 @testable import SalesTracker
 
-struct AuthenticationErrorDecorator {
-    let authErrorHandler: () -> Void
-    let decoratee: ProductSalesLoadable
-}
-
-extension AuthenticationErrorDecorator: ProductSalesLoadable {
-    func loadProductsAndSales() async throws -> [Product : [Sale]] {
-        do {
-            return try await decoratee.loadProductsAndSales()
-        } catch let error as LoginError {
-            if case .authentication = error {
-                authErrorHandler()
-            }
-            throw error
-        } catch {
-            throw error
-        }
-    }
-}
-
 struct ProductsListLoadableAuthenticationErrorDecoratorTests {
     
     @Test func forwards_error_on_loader_error() async throws {
