@@ -69,7 +69,22 @@ struct ProductsListLoadableAuthenticationErrorDecoratorTests {
         
         #expect(errorHandlerCallCount == 0)
     }
+    
+    @Test func forwards_result_on_successful_load() async throws {
+        var errorHandlerCallCount = 0
+        let expectedResult = [someProduct: [someSale]]
+        let sut = makeSUT(
+            stub: .success(expectedResult),
+            authErrorHandler: {
+                errorHandlerCallCount += 1
+            }
+        )
+        
+        let result = try await sut.loadProductsAndSales()
 
+        #expect(result == expectedResult)
+        #expect(errorHandlerCallCount == 0)
+    }
 }
 
 extension ProductsListLoadableAuthenticationErrorDecoratorTests {
