@@ -15,8 +15,16 @@ struct AuthenticationErrorDecorator {
 
 extension AuthenticationErrorDecorator: ProductSalesLoadable {
     func loadProductsAndSales() async throws -> [Product : [Sale]] {
-        authErrorHandler()
-        return try await decoratee.loadProductsAndSales()
+        do {
+            return try await decoratee.loadProductsAndSales()
+        } catch let error as LoginError {
+            if case .authentication = error {
+                authErrorHandler()
+            }
+            throw error
+        } catch {
+            throw error
+        }
     }
 }
 
@@ -41,9 +49,27 @@ struct ProductsListLoadableAuthenticationErrorDecoratorTests {
         
         await #expect(throws: authError, performing: {
             _ = try await sut.loadProductsAndSales()
-            #expect(errorHandlerCallCount == 1)
         })
+        
+        #expect(errorHandlerCallCount == 1)
     }
+    
+    @Test func does_not_call_auth_error_closure_on_other_error() async throws {
+        var errorHandlerCallCount = 0
+        let sut = makeSUT(
+            stub: .failure(anyError),
+            authErrorHandler: {
+                errorHandlerCallCount += 1
+            }
+        )
+        
+        await #expect(throws: anyError, performing: {
+            _ = try await sut.loadProductsAndSales()
+        })
+        
+        #expect(errorHandlerCallCount == 0)
+    }
+
 }
 
 extension ProductsListLoadableAuthenticationErrorDecoratorTests {
