@@ -13,6 +13,10 @@ struct CurrencyConvertion {
     let rate: Double
 }
 
+enum CurrencyConverterError: Error {
+    case missingRate
+}
+
 struct CurrencyConverter {
     var currencyConvertionsMap: [String: [String: Double]] = [:]
     init(currencyConvertions: [CurrencyConvertion]) {
@@ -29,6 +33,10 @@ struct CurrencyConverter {
                 currencyConvertionsMap[currencyConvertion.toCurrencyCode] = [currencyConvertion.fromCurrencyCode: 1 / currencyConvertion.rate]
             }
         }
+    }
+    
+    func convert(amount: Double, fromCurrency: String, toCurrency: String) throws -> Double {
+        throw CurrencyConverterError.missingRate
     }
 }
 
@@ -64,6 +72,27 @@ struct CurrencyConverterTests {
         let sut = CurrencyConverter(currencyConvertions: initialConvertionss)
         print(sut.currencyConvertionsMap)
         #expect(sut.currencyConvertionsMap == expectedConvertionsMap)
+    }
+    
+    @Test func throws_on_missing_convertion_rate() async throws {
+        let initialConvertionss = [
+            CurrencyConvertion(
+                fromCurrencyCode: "USD",
+                toCurrencyCode: "AUD",
+                rate: 1.1
+            ),
+            CurrencyConvertion(
+                fromCurrencyCode: "USD",
+                toCurrencyCode: "ARS",
+                rate: 1000
+            )
+        ]
+        
+        let sut = CurrencyConverter(currencyConvertions: initialConvertionss)
+
+        #expect(throws: CurrencyConverterError.missingRate, performing: {
+            try sut.convert(amount: 123.4, fromCurrency: "EUR", toCurrency: "USD")
+        })
     }
 }
 
