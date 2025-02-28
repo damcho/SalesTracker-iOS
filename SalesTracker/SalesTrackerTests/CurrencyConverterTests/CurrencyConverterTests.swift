@@ -7,32 +7,33 @@
 
 import Testing
 
-struct CurrencyConvertion: Hashable {
+struct CurrencyConvertion {
     let fromCurrencyCode: String
     let toCurrencyCode: String
     let rate: Double
 }
 
 struct CurrencyConverter {
-    var currencyConvertionsSet = Set<CurrencyConvertion>()
+    var currencyConvertionsMap: [String: [String: Double]] = [:]
     init(currencyConvertions: [CurrencyConvertion]) {
         currencyConvertions.forEach { currencyConvertion in
-            currencyConvertionsSet.insert(currencyConvertion)
-            currencyConvertionsSet.insert(
-                CurrencyConvertion(
-                    fromCurrencyCode: currencyConvertion.toCurrencyCode,
-                    toCurrencyCode: currencyConvertion.fromCurrencyCode,
-                    rate: 1 / currencyConvertion.rate
-                )
-            )
+            if currencyConvertionsMap[currencyConvertion.fromCurrencyCode] != nil {
+                currencyConvertionsMap[currencyConvertion.fromCurrencyCode]?[currencyConvertion.toCurrencyCode] = currencyConvertion.rate
+            } else {
+                currencyConvertionsMap[currencyConvertion.fromCurrencyCode] = [currencyConvertion.toCurrencyCode: currencyConvertion.rate]
+            }
+            
+            if currencyConvertionsMap[currencyConvertion.toCurrencyCode] != nil {
+                currencyConvertionsMap[currencyConvertion.toCurrencyCode]?[currencyConvertion.fromCurrencyCode] = 1 / currencyConvertion.rate
+            } else {
+                currencyConvertionsMap[currencyConvertion.toCurrencyCode] = [currencyConvertion.fromCurrencyCode: 1 / currencyConvertion.rate]
+            }
         }
     }
-    
-    
 }
 
 struct CurrencyConverterTests {
-    
+
     @Test func creates_all_convertion_rates_couples_on_init() async throws {
         let initialConvertionss = [
             CurrencyConvertion(
@@ -47,21 +48,22 @@ struct CurrencyConverterTests {
             )
         ]
         
-        let expectedConvertions = Set(
-            initialConvertionss +
-            [CurrencyConvertion(
-                fromCurrencyCode: "AUD",
-                toCurrencyCode: "USD",
-                rate: 1 / 1.1
-            ),
-             CurrencyConvertion(
-                fromCurrencyCode: "ARS",
-                toCurrencyCode: "USD",
-                rate: 1 / 1000
-             )])
-        
+        let expectedConvertionsMap: [String: [String: Double]] = [
+            "USD": [
+                "AUD": 1.1,
+                "ARS": 1000
+            ],
+            "AUD": [
+                "USD": 1 / 1.1
+            ],
+            "ARS": [
+                "USD": 1 / 1000
+            ]
+        ]
+
         let sut = CurrencyConverter(currencyConvertions: initialConvertionss)
-        #expect(sut.currencyConvertionsSet == expectedConvertions)
+        print(sut.currencyConvertionsMap)
+        #expect(sut.currencyConvertionsMap == expectedConvertionsMap)
     }
 }
 
