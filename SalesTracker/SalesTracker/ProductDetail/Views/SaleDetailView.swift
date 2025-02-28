@@ -7,16 +7,35 @@
 
 import SwiftUI
 
+struct SaleDetailViewModel {
+    let sale: Sale
+    let currencyConvertion: CurrencyConvertion
+    
+    var saleDate: String {
+        "\(sale.date)"
+    }
+    
+    var localCurrencySaleAmount: String {
+        "\(sale.amount)"
+    }
+    
+    var convertedCurrencySaleAmount: String {
+        ""
+    }
+}
+
 struct SaleDetailView: View {
+    let viewModel: SaleDetailViewModel
+    
     var body: some View {
         VStack {
             HStack {
-                Text("Hello, World!")
+                Text(viewModel.localCurrencySaleAmount)
                 Spacer()
-                Text("Hello, World!")
+                Text(viewModel.convertedCurrencySaleAmount)
             }
             HStack {
-                Text("Hello, World!")
+                Text(viewModel.saleDate)
                 Spacer()
             }
         }.padding()
@@ -24,5 +43,18 @@ struct SaleDetailView: View {
 }
 
 #Preview {
-    SaleDetailView()
+    SaleDetailView(
+        viewModel: SaleDetailViewModel(
+            sale: Sale(
+                date: .now,
+                amount: 133432.34,
+                currencyCode: "ARS"
+            ),
+            currencyConvertion: CurrencyConvertion(
+                fromCurrencyCode: "ARS",
+                toCurrencyCode: "USD",
+                rate: 1000
+            )
+        )
+    )
 }
