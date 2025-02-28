@@ -36,7 +36,7 @@ struct SaleDetailView: View {
             currencyConvertion: CurrencyConvertion(
                 fromCurrencyCode: "ARS",
                 toCurrencyCode: "USD",
-                rate: 1000
+                rate: 1 / 1000
             )
         )
     )
