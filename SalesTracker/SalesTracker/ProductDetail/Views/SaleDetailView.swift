@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-struct SaleDetailView: View {
+struct SaleDetailView: View, Identifiable {
+    var id: UUID { UUID() }
+    
     let viewModel: SaleDetailViewModel
     
     var body: some View {
