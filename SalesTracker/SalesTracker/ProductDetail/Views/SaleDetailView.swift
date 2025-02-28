@@ -7,23 +7,6 @@
 
 import SwiftUI
 
-struct SaleDetailViewModel {
-    let sale: Sale
-    let currencyConvertion: CurrencyConvertion
-    
-    var saleDate: String {
-        "\(sale.date)"
-    }
-    
-    var localCurrencySaleAmount: String {
-        "\(sale.amount)"
-    }
-    
-    var convertedCurrencySaleAmount: String {
-        ""
-    }
-}
-
 struct SaleDetailView: View {
     let viewModel: SaleDetailViewModel
     
