@@ -21,9 +21,34 @@ struct ProductListAcceptanceTests {
             expectedResult: [productInfo.info]
         )
     }
+    
+    @Test func orders_products_by_products_name_asc() async throws {
+        let shuffledProducts = [
+            Product(id: UUID(), name: "product B"): [someSale],
+            Product(id: UUID(), name: "product A"): [someSale],
+            Product(id: UUID(), name: "product C"): [someSale]
+        ]
+        let sut = makeSUT(stub: .success(shuffledProducts))
+
+        let productSalesViews = try await sut.onRefresh()
+
+
+        assertProductSalesViewModelsOrder(
+            for: productSalesViews,
+            expectedResult: ["product A", "product B", "product C"]
+        )
+    }
 }
 
 extension ProductListAcceptanceTests {
+    func assertProductSalesViewModelsOrder(for views: [ProductSalesView], expectedResult: [String]) {
+        let productsNames = views.map { view in
+            view.viewModel.productName
+        }
+        
+        #expect(productsNames == expectedResult)
+    }
+    
     func assertProductSalesViewModels(for views: [ProductSalesView], expectedResult: [ProductInfo]) {
         let productsInfoArray = views.map { view in
             view.viewModel.productInfo

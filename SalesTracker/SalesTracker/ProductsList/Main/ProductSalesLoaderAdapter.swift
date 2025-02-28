@@ -14,10 +14,10 @@ protocol ProductSalesLoadable {
 struct ProductSalesLoaderAdapter {
     let productSalesLoader: ProductSalesLoadable
     let onSelectedProduct: (Product, [Sale]) -> Void
+    let productsOrder: (ProductSalesView, ProductSalesView) -> Bool
     
     func loadProductsAndSales() async throws -> [ProductSalesView] {
-        let productSalesDictionary = try await productSalesLoader.loadProductsAndSales()
-        return productSalesDictionary.map { product, sales in
+        try await productSalesLoader.loadProductsAndSales().map { product, sales in
             ProductSalesView(
                 viewModel: ProductSalesViewModel(
                     productInfo: ProductInfo(
@@ -28,7 +28,7 @@ struct ProductSalesLoaderAdapter {
                         onSelectedProduct(product, sales)
                     })
             )
-        }
+        }.sorted(by: productsOrder)
     }
 }
     

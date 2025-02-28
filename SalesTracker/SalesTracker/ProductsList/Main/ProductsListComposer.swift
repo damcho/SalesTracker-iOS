@@ -49,7 +49,10 @@ enum ProductsListComposer {
             productSalesLoader: AuthenticationErrorDecorator(
                 authErrorHandler: authErrorHandler,
                 decoratee: productsLoadable),
-            onSelectedProduct: productSelection
+            onSelectedProduct: productSelection,
+            productsOrder: { view1, view2 in
+                view1.viewModel.productName < view2.viewModel.productName
+            }
         )
         return ProductListView(
             onRefresh: {
