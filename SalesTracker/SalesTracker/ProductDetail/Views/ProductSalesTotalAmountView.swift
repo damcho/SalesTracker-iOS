@@ -7,16 +7,6 @@
 
 import SwiftUI
 
-struct ProductSalesTotalAmountViewModel {
-    let totalSalesAmount: Double
-    let salesCount: Int
-    let product: Product
-    
-    var productSalesLabelText: String {
-        return "sales label"
-    }
-}
-
 struct ProductSalesTotalAmountView: View {
     let viewModel: ProductSalesTotalAmountViewModel
     
@@ -34,7 +24,8 @@ struct ProductSalesTotalAmountView: View {
             product: Product(
                 id: UUID(),
                 name: "Product A"
-            )
+            ),
+            currencyCode: "USD"
         )
     )
 }
