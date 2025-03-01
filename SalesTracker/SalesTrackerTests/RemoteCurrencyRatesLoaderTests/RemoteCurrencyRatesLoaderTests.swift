@@ -9,20 +9,6 @@ import Testing
 @testable import SalesTracker
 import Foundation
 
-typealias RemoteCurrencyRatesMapper = ((data: Data, httpResponse: HTTPURLResponse)) throws -> [CurrencyConvertion]
-
-struct RemoteCurrencyRatesLoader {
-    let httpCLient: SalesTrackerHTTPClient
-    let url: URL
-    let mapper: RemoteCurrencyRatesMapper
-    
-    func loadCurrencyRates() async throws -> CurrencyConverter {
-        try await CurrencyConverter(
-            currencyConvertions: mapper(httpCLient.get(from: url))
-        )
-    }
-}
-
 struct RemoteCurrencyRatesLoaderTests {
 
     @Test func throws_on_currency_rates_load_error() async throws {
