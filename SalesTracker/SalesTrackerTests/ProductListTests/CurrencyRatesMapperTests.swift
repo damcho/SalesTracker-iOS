@@ -10,11 +10,15 @@ import Foundation
 @testable import SalesTracker
 
 struct DecodedCurrencyConvertion: Decodable {
+    let from: String
+    let to: String
+    let rate: Double
+    
     func toCurrencyConvertion() -> CurrencyConvertion {
         return .init(
-            fromCurrencyCode: "USD",
-            toCurrencyCode: "ARS",
-            rate: 123.45
+            fromCurrencyCode: from,
+            toCurrencyCode: to,
+            rate: rate
         )
     }
 }
@@ -53,12 +57,23 @@ struct CurrencyRatesMapperTests: MapperSpecs {
     }
     
     @Test func returns_mapped_data_on_successful_200_status_code() async throws {
-        
+        #expect(try CurrencyRatesMapper.map(( currencyRates.http, successfulHTTPResponse)) == [currencyRates.decoded])
     }
     
     @Test func throws_other_error_on_other_http_status_code() async throws {
         
     }
 
+}
+
+var currencyRates: (http: Data, decoded: CurrencyConvertion) {
+    (
+        #"[{"from": "USD","to": "ARS","rate": 123.45}]"#.data(using: .utf8)!,
+        CurrencyConvertion(
+            fromCurrencyCode: "USD",
+            toCurrencyCode: "ARS",
+            rate: 123.45
+        )
+    )
 }
 
