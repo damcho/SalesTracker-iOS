@@ -11,7 +11,7 @@ import SwiftUI
 enum Screen: Hashable {
     case login
     case productsList(String)
-    case productDetail([Product: [Sale]])
+    case productDetail(Product, [Sale], CurrencyConverter)
 }
 
 class NavigationFLow: ObservableObject {
@@ -56,14 +56,20 @@ class NavigationFLow: ObservableObject {
         case .productsList(let accessToken):
             let productsList = ProductsListComposer.compose(
                 accessToken: accessToken,
-                productSelection: {_, _ in },
+                productSelection: {product, sales, currencyConverter in
+                    self.push(.productDetail(product, sales, currencyConverter))
+                },
                 authErrorHandler: {[weak self] in
                     self?.popToRoot()
                 }
             )
             return productsList.navigationBarBackButtonHidden(true)
-        case .productDetail:
-            return AnyView(EmptyView())
+        case .productDetail(let product, let sales, let currencyConverter):
+            return ProductDetailComposer.compose(
+                with: product,
+                sales: sales,
+                currencyConverter: currencyConverter
+            )
         }
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias productSelectionHandler = (Product, [Sale]) -> Void
+typealias ProductSelectionHandler = (Product, [Sale], CurrencyConverter) -> Void
 
 enum ProductsListComposer {
     static var dateFormatter: DateFormatter {
@@ -36,19 +36,25 @@ enum ProductsListComposer {
                 mapper: ProductsSalesMapper(
                     dateFormatter: dateFormatter
                 ).map
+            ),
+            currencyRatesLoader: RemoteCurrencyRatesLoader(
+                httpCLient: SalesTrackerApp.httpClient,
+                url: Source.currencyRates.getURL(for: Source.baseURL),
+                mapper: CurrencyRatesMapper.map
             )
         )
     }
     
     static func compose(
         with productsLoadable: ProductSalesLoadable,
-        productSelection: @escaping productSelectionHandler,
+        productSelection: @escaping ProductSelectionHandler,
         authErrorHandler: @escaping () -> Void
     ) -> ProductListView {
         let productSalesAdapter = ProductSalesLoaderAdapter(
             productSalesLoader: AuthenticationErrorDecorator(
                 authErrorHandler: authErrorHandler,
-                decoratee: productsLoadable),
+                decoratee: productsLoadable
+            ),
             onSelectedProduct: productSelection,
             productsOrder: { view1, view2 in
                 view1.viewModel.productName < view2.viewModel.productName
@@ -63,7 +69,7 @@ enum ProductsListComposer {
     
     static func compose(
         accessToken: String,
-        productSelection: @escaping productSelectionHandler,
+        productSelection: @escaping ProductSelectionHandler,
         authErrorHandler: @escaping () -> Void
     ) -> ProductListView {
         compose(

@@ -13,7 +13,7 @@ struct AuthenticationErrorDecorator {
 }
 
 extension AuthenticationErrorDecorator: ProductSalesLoadable {
-    func loadProductsAndSales() async throws -> [Product : [Sale]] {
+    func loadProductsAndSales() async throws -> ProductsSalesInfo {
         do {
             return try await decoratee.loadProductsAndSales()
         } catch let error as LoginError {

@@ -52,7 +52,10 @@ struct ProductsListLoadableAuthenticationErrorDecoratorTests {
     
     @Test func forwards_result_on_successful_load() async throws {
         var errorHandlerCallCount = 0
-        let expectedResult = [someProduct: [someSale]]
+        let expectedResult = ProductsSalesInfo(
+            productsSalesMap: [someProduct: [someSale]],
+            currencyConverter: anyCurrencyCOnverter
+        )
         let sut = makeSUT(
             stub: .success(expectedResult),
             authErrorHandler: {
@@ -69,7 +72,7 @@ struct ProductsListLoadableAuthenticationErrorDecoratorTests {
 
 extension ProductsListLoadableAuthenticationErrorDecoratorTests {
     func makeSUT(
-        stub: Result<[Product : [Sale]], Error>,
+        stub: Result<ProductsSalesInfo, Error>,
         authErrorHandler: @escaping () -> Void = {}
     ) -> AuthenticationErrorDecorator {
         return AuthenticationErrorDecorator(

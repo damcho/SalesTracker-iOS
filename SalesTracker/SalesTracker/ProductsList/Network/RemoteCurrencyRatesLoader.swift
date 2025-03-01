@@ -13,7 +13,9 @@ struct RemoteCurrencyRatesLoader {
     let httpCLient: SalesTrackerHTTPClient
     let url: URL
     let mapper: RemoteCurrencyRatesMapper
-    
+}
+
+extension RemoteCurrencyRatesLoader: RemoteCurrencyRatesLoadable {
     func loadCurrencyRates() async throws -> CurrencyConverter {
         try await CurrencyConverter(
             currencyConvertions: mapper(httpCLient.get(from: url))

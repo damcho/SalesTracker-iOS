@@ -23,11 +23,15 @@ struct ProductListAcceptanceTests {
     }
     
     @Test func orders_products_by_products_name_asc() async throws {
-        let shuffledProducts = [
-            Product(id: UUID(), name: "product B"): [someSale],
-            Product(id: UUID(), name: "product A"): [someSale],
-            Product(id: UUID(), name: "product C"): [someSale]
-        ]
+        let shuffledProducts = ProductsSalesInfo(
+            productsSalesMap:   [
+                Product(id: UUID(), name: "product B"): [someSale],
+                Product(id: UUID(), name: "product A"): [someSale],
+                Product(id: UUID(), name: "product C"): [someSale]
+            ],
+            currencyConverter: anyCurrencyCOnverter
+        )
+      
         let sut = makeSUT(stub: .success(shuffledProducts))
 
         let productSalesViews = try await sut.onRefresh()
@@ -56,18 +60,18 @@ extension ProductListAcceptanceTests {
         #expect(productsInfoArray == expectedResult)
     }
     
-    func makeSUT(stub: Result<[Product : [Sale]], Error>) -> ProductListView {
+    func makeSUT(stub: Result<ProductsSalesInfo, Error>) -> ProductListView {
         ProductsListComposer.compose(
             with: ProductSalesLoadableStub(stub: stub),
-            productSelection: { _, _ in  },
+            productSelection: { _, _, _ in  },
             authErrorHandler: {}
         )
     }
 }
 
 struct ProductSalesLoadableStub: ProductSalesLoadable {
-    let stub: Result<[Product : [Sale]], Error>
-    func loadProductsAndSales() async throws -> [Product : [Sale]] {
+    let stub: Result<ProductsSalesInfo, Error>
+    func loadProductsAndSales() async throws -> ProductsSalesInfo {
         try stub.get()
     }
 }
@@ -80,12 +84,15 @@ var someProduct: Product {
     Product(id: UUID(uuidString: "7019D8A7-0B35-4057-B7F9-8C5471961ED0")!, name: "aname")
 }
 
-var productInfo: (info: ProductInfo, raw: [Product: [Sale]]) {
+var productInfo: (info: ProductInfo, raw: ProductsSalesInfo) {
     (
         ProductInfo(
             product: someProduct,
             salesCount: 1
         ),
-        [someProduct: [someSale]]
+        ProductsSalesInfo(
+            productsSalesMap: [someProduct: [someSale]],
+            currencyConverter: anyCurrencyCOnverter
+        )
     )
 }

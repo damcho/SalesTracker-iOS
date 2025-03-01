@@ -47,7 +47,9 @@ extension ProductSalesLoaderTests {
     func makeSUT(
         mapper: @escaping ProductSalesDictionaryMapper = {_, _ in [:] },
         productsLoadableStub: Result<[DecodableProduct], Error> = .success([]),
-        salesLoadableStub: Result<[DecodableSale], Error> = .success([])
+        salesLoadableStub: Result<[DecodableSale], Error> = .success([]),
+        currencyRatesLoadataStub: Result<CurrencyConverter, Error> = .success(anyCurrencyCOnverter)
+
     ) -> RemoteProductSalesLoader {
         return RemoteProductSalesLoader(
             mapper: mapper,
@@ -56,8 +58,26 @@ extension ProductSalesLoaderTests {
             ),
             remoteSalesLoader: RemoteSalesLoadableStub(
                 stub: salesLoadableStub
+            ),
+            currencyRatesLoader: RemoteCurrencyRatesLoaderStub(
+                stub: currencyRatesLoadataStub
             )
         )
+    }
+}
+
+var anyCurrencyCOnverter: CurrencyConverter {
+    return .init(currencyConvertions: [])
+}
+
+
+
+
+struct RemoteCurrencyRatesLoaderStub: RemoteCurrencyRatesLoadable {
+    let stub: Result<CurrencyConverter, Error>
+
+    func loadCurrencyRates() async throws -> CurrencyConverter {
+        try stub.get()
     }
 }
 
