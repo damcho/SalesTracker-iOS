@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CurrencyConvertion {
+struct CurrencyConvertion: Equatable {
     let fromCurrencyCode: String
     let toCurrencyCode: String
     let rate: Double
@@ -17,7 +17,7 @@ enum CurrencyConverterError: Error {
     case missingRate
 }
 
-struct CurrencyConverter {
+struct CurrencyConverter: Equatable, Hashable {
     var currencyConvertionsMap: [String: [String: Double]] = [:]
     init(currencyConvertions: [CurrencyConvertion]) {
         currencyConvertions.forEach { currencyConvertion in
@@ -33,6 +33,17 @@ struct CurrencyConverter {
                 currencyConvertionsMap[currencyConvertion.toCurrencyCode] = [currencyConvertion.fromCurrencyCode: 1 / currencyConvertion.rate]
             }
         }
+    }
+    
+    func currencyConvertion(fromCurrency: String, toCurrency: String) throws -> CurrencyConvertion {
+        guard let aConvertionRate = currencyConvertionsMap[fromCurrency]?[toCurrency] else {
+            throw CurrencyConverterError.missingRate
+        }
+        return CurrencyConvertion(
+            fromCurrencyCode: fromCurrency,
+            toCurrencyCode: toCurrency,
+            rate: aConvertionRate
+        )
     }
     
     func convert(amount: Double, fromCurrency: String, toCurrency: String) throws -> Double {
