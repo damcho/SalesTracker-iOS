@@ -11,6 +11,7 @@ enum Source {
     case login
     case productsList
     case salesList
+    case currencyRates
     
     func getURL(for baseURL: URL) -> URL {
         switch self {
@@ -20,6 +21,8 @@ enum Source {
             return baseURL.appendingPathComponent("products")
         case .salesList:
             return baseURL.appendingPathComponent("sales")
+        case .currencyRates:
+            return baseURL.appendingPathComponent("rates")
         }
     }
 }
