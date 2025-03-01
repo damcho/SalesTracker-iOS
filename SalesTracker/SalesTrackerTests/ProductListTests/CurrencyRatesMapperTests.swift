@@ -9,21 +9,47 @@ import Testing
 import Foundation
 @testable import SalesTracker
 
+struct DecodedCurrencyConvertion: Decodable {
+    func toCurrencyConvertion() -> CurrencyConvertion {
+        return .init(
+            fromCurrencyCode: "USD",
+            toCurrencyCode: "ARS",
+            rate: 123.45
+        )
+    }
+}
+
 enum CurrencyRatesMapper {
-    static func map(_ httpResponse: (data: Data, http: HTTPURLResponse)) throws -> [CurrencyConvertion] {
-        throw HTTPError.notFound
+    static let success = 200
+
+    static func map(_ result: (data: Data, httpResponse: HTTPURLResponse)) throws -> [CurrencyConvertion] {
+        switch result.httpResponse.statusCode {
+        case 400, 402..<499:
+            throw HTTPError.notFound
+        case success:
+            return try JSONDecoder().decode(
+                [DecodedCurrencyConvertion].self,
+                from: result.data
+            ).compactMap { decodedCurrencyConversion in
+                decodedCurrencyConversion.toCurrencyConvertion()
+            }
+        default:
+            throw HTTPError.other
+        }
     }
 }
 
 struct CurrencyRatesMapperTests: MapperSpecs {
     @Test func throws_connectivity_error_on_not_found_status_code() async throws {
         #expect(throws: HTTPError.notFound, performing: {
-            _ = try CurrencyRatesMapper.map((invalidCredentialsAuthError.http, invalidAuthHTTPResponse))
+            _ = try CurrencyRatesMapper.map((Data(), notFoundHTTPResponse))
         })
     }
     
     @Test func throws_decoding_error_on_invalid_data() async throws {
-        
+        #expect(throws: DecodingError.self, performing: {
+            _ = try CurrencyRatesMapper.map((invalidData, successfulHTTPResponse))
+        })
     }
     
     @Test func returns_mapped_data_on_successful_200_status_code() async throws {
