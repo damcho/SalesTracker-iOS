@@ -11,7 +11,6 @@ import Foundation
 @testable import SalesTracker
 
 protocol MapperSpecs {
-    func throws_authentication_error_on_401_status_code() async throws
     func throws_connectivity_error_on_not_found_status_code() async throws
     func throws_decoding_error_on_invalid_data() async throws
     func returns_mapped_data_on_successful_200_status_code() async throws
