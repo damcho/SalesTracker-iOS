@@ -11,15 +11,17 @@ struct SaleDetailViewModel {
     let sale: Sale
     let currencyConvertion: CurrencyConvertion?
     let dateFormat: Date.FormatStyle
-
+    let currencyFormat: CurrencyFormatStyleConfiguration.Presentation
     init(
         sale: Sale,
         dateFormat: Date.FormatStyle,
+        currencyFormat: CurrencyFormatStyleConfiguration.Presentation = .standard,
         currencyConvertion: CurrencyConvertion?
     ) {
         self.sale = sale
         self.currencyConvertion = currencyConvertion
         self.dateFormat = dateFormat
+        self.currencyFormat = currencyFormat
     }
 
     var saleDate: String {
@@ -29,7 +31,7 @@ struct SaleDetailViewModel {
     }
 
     var localCurrencySaleAmount: String {
-        "\(sale.amount.formatted(.currency(code: sale.currencyCode).presentation(.standard)))"
+        "\(sale.amount.formatted(.currency(code: sale.currencyCode).presentation(currencyFormat)))"
     }
 
     var convertedCurrencySaleAmount: String {
@@ -37,6 +39,6 @@ struct SaleDetailViewModel {
             return "N/A"
         }
         let convertedAmount = sale.amount * aCurrencyConvertion.rate
-        return "\(convertedAmount.formatted(.currency(code: aCurrencyConvertion.toCurrencyCode).presentation(.standard)))"
+        return "\(convertedAmount.formatted(.currency(code: aCurrencyConvertion.toCurrencyCode).presentation(currencyFormat)))"
     }
 }

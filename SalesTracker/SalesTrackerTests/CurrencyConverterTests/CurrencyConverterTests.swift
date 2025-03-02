@@ -38,7 +38,6 @@ struct CurrencyConverterTests {
         ]
 
         let sut = CurrencyConverter(currencyConvertions: initialConvertionss)
-        print(sut.currencyConvertionsMap)
         #expect(sut.currencyConvertionsMap == expectedConvertionsMap)
     }
 

@@ -32,6 +32,7 @@ struct ProductDetailTests {
                 currencyCode: "ARS"
             ),
             dateFormat: .dateTime,
+            currencyFormat: .narrow,
             currencyConvertion: CurrencyConvertion(
                 fromCurrencyCode: "ARS",
                 toCurrencyCode: "USD",
@@ -39,8 +40,8 @@ struct ProductDetailTests {
             )
         )
 
-        #expect(sut.localCurrencySaleAmount == "ARS 143,432.30")
-        #expect(sut.convertedCurrencySaleAmount == "US$143.43")
+        #expect(sut.localCurrencySaleAmount == "$143,432.30")
+        #expect(sut.convertedCurrencySaleAmount == "$143.43")
         #expect(sut.saleDate == expectedDate.string)
     }
 
