@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		8B417B512D7515E2007EC165 /* Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B417B502D7515E2007EC165 /* Empty.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		8BB1C4632D6220DE007A5E60 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -17,6 +21,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8B417B4D2D7514A7007EC165 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		8B417B502D7515E2007EC165 /* Empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Empty.swift; sourceTree = "<group>"; };
 		8BB1C4522D6220DD007A5E60 /* SalesTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SalesTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BB1C4622D6220DE007A5E60 /* SalesTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SalesTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BDF8D292D6255C5005FFF7B /* SalesTracker.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = SalesTracker.xctestplan; path = SalesTrackerTests/SalesTracker.xctestplan; sourceTree = "<group>"; };
@@ -53,6 +59,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8B417B4C2D751496007EC165 /* BuildTools */ = {
+			isa = PBXGroup;
+			children = (
+				8B417B4D2D7514A7007EC165 /* Package.swift */,
+				8B417B502D7515E2007EC165 /* Empty.swift */,
+			);
+			path = BuildTools;
+			sourceTree = "<group>";
+		};
 		8BB1C4492D6220DD007A5E60 = {
 			isa = PBXGroup;
 			children = (
@@ -60,6 +75,7 @@
 				8BB1C4542D6220DD007A5E60 /* SalesTracker */,
 				8BB1C4652D6220DE007A5E60 /* SalesTrackerTests */,
 				8BB1C4532D6220DD007A5E60 /* Products */,
+				8B417B4C2D751496007EC165 /* BuildTools */,
 			);
 			sourceTree = "<group>";
 		};
@@ -79,6 +95,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8BB1C4762D6220DE007A5E60 /* Build configuration list for PBXNativeTarget "SalesTracker" */;
 			buildPhases = (
+				8B417B4F2D7514DF007EC165 /* Swiftformat */,
 				8BB1C44E2D6220DD007A5E60 /* Sources */,
 				8BB1C44F2D6220DD007A5E60 /* Frameworks */,
 				8BB1C4502D6220DD007A5E60 /* Resources */,
@@ -176,11 +193,34 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		8B417B4F2D7514DF007EC165 /* Swiftformat */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Swiftformat;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd BuildTools\nSDKROOT=(xcrun --sdk macosx --show-sdk-path)\n#swift package update #Uncomment this line temporarily to update the version used to the latest matching your BuildTools/Package.swift file\nswift run -c release swiftformat \"$SRCROOT\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		8BB1C44E2D6220DD007A5E60 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B417B512D7515E2007EC165 /* Empty.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,6 +370,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SalesTracker/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -358,6 +399,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SalesTracker/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
