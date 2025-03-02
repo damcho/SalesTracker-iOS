@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProductListView: View {
+    let navigationBarTitle: String
     let onRefresh: () async throws -> [ProductSalesView]
     @State var productSalesViews: [ProductSalesView] = []
     var body: some View {
@@ -23,12 +24,13 @@ struct ProductListView: View {
             do {
                 productSalesViews = try await onRefresh()
             } catch { }
-        }
+        }.navigationTitle(Text(navigationBarTitle))
     }
 }
 
 #Preview {
     ProductListView(
+        navigationBarTitle: "Products",
         onRefresh: {
             [
                 ProductSalesView(

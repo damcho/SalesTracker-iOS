@@ -61,6 +61,7 @@ enum ProductsListComposer {
             }
         )
         return ProductListView(
+            navigationBarTitle: "Products",
             onRefresh: {
                 return try await productSalesAdapter.loadProductsAndSales()
             }

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LoginScreen: View {
+    let navigationTitle: String
     let errorView: ErrorView
     let usernameView: UsernameView
     let passwordView: PasswordView
@@ -17,11 +18,13 @@ struct LoginScreen: View {
     var body: some View {
         VStack {
             activityIndicatorView
+            errorView
+            Spacer()
             usernameView
             passwordView
-            errorView
             loginButtonView
-        }
+            Spacer()
+        }.navigationTitle(Text(navigationTitle))
     }
 }
 

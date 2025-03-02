@@ -75,6 +75,7 @@ enum LoginScreenComposer {
             }
         )
         return LoginScreen(
+            navigationTitle: "Login",
             errorView: ErrorView(
                 viewModel: errorViewModel
             ),
