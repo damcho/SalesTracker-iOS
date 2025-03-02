@@ -24,9 +24,10 @@ struct ProductDetailTests {
 
     @Test
     func displays_sale_detail_info() async throws {
+        let expectedDate = aDate(for: .dateTime)
         let sut = SaleDetailViewModel(
             sale: Sale(
-                date: aDate.date,
+                date: expectedDate.date,
                 amount: 143_432.3,
                 currencyCode: "ARS"
             ),
@@ -40,7 +41,7 @@ struct ProductDetailTests {
 
         #expect(sut.localCurrencySaleAmount == "ARS 143,432.30")
         #expect(sut.convertedCurrencySaleAmount == "US$143.43")
-        #expect(sut.saleDate == aDate.string)
+        #expect(sut.saleDate == expectedDate.string)
     }
 
     @Test
@@ -93,7 +94,7 @@ struct ProductDetailTests {
     }
 }
 
-var aDate: (date: Date, string: String) {
+func aDate(for format: Date.FormatStyle) -> (date: Date, string: String) {
     var dateComponents = DateComponents()
     dateComponents.year = 2030
     dateComponents.month = 1
@@ -104,7 +105,7 @@ var aDate: (date: Date, string: String) {
 
     return (
         Calendar(identifier: .gregorian).date(from: dateComponents)!,
-        "1/1/2030, 3:00 PM"
+        Calendar(identifier: .gregorian).date(from: dateComponents)!.formatted(format)
     )
 }
 
