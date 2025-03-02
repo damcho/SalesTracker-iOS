@@ -16,6 +16,8 @@ struct ErrorDisplayableAuthenticattorDecorator {
     let errorDisplayable: ErrorDisplayable
 }
 
+// MARK: Authenticable
+
 extension ErrorDisplayableAuthenticattorDecorator: Authenticable {
     func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
         do {

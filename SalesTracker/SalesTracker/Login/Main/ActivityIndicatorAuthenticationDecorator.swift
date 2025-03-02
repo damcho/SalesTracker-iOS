@@ -12,6 +12,8 @@ struct ActivityIndicatorAuthenticationDecorator {
     let activityIndicatorDisplayable: ActivityIndicatorDisplayable
 }
 
+// MARK: Authenticable
+
 extension ActivityIndicatorAuthenticationDecorator: Authenticable {
     func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
         activityIndicatorDisplayable.displayActivityIndicator()

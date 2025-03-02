@@ -5,13 +5,13 @@
 //  Created by Damian Modernell on 23/2/25.
 //
 
-import Testing
-@testable import SalesTracker
 import Foundation
+@testable import SalesTracker
+import Testing
 
 struct ProductInfoMapperTests {
-    
-    @Test func maps_products_and_sales_to_product_sales_dictionary() async throws {
+    @Test
+    func maps_products_and_sales_to_product_sales_dictionary() async throws {
         let decodedProductUUID = UUID()
         let anotherDecodedProductUUID = UUID()
         let productsList = [
@@ -22,17 +22,18 @@ struct ProductInfoMapperTests {
             aDecodedSale(for: decodedProductUUID),
             aDecodedSale(for: anotherDecodedProductUUID)
         ]
-        
+
         let result = ProductInfoMapper.map(productsList, salesList)
         #expect(
             result == [
                 aDecodedProduct(id: decodedProductUUID).domain: try! [salesList[0].toSale()],
-                aDecodedProduct(id: anotherDecodedProductUUID).domain: try! [salesList[1].toSale()],
+                aDecodedProduct(id: anotherDecodedProductUUID).domain: try! [salesList[1].toSale()]
             ]
         )
     }
-    
-    @Test func ignores_sale_that_does_not_match_any_product() async throws {
+
+    @Test
+    func ignores_sale_that_does_not_match_any_product() async throws {
         let decodedProductUUID = UUID()
         let anotherDecodedProductUUID = UUID()
         let productsList = [
@@ -43,7 +44,7 @@ struct ProductInfoMapperTests {
             aDecodedSale(for: decodedProductUUID),
             aDecodedSale(for: invalidProductID)
         ]
-        
+
         let result = ProductInfoMapper.map(productsList, salesList)
         #expect(
             result == [

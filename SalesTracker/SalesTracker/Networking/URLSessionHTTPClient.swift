@@ -11,35 +11,42 @@ protocol HTTPClientTask {
 }
 
 final class URLSessionHTTPClient {
-	private let session: URLSession
-	
-	public init(session: URLSession) {
-		self.session = session
-	}
-	
-	private struct UnexpectedValuesRepresentation: Error {}
-	
-	private struct URLSessionTaskWrapper: HTTPClientTask {
-		let wrapped: URLSessionTask
-		
-		func cancel() {
-			wrapped.cancel()
-		}
-	}
-	
-	func get(from url: URL, headers: [HTTPHeader] = [], completion: @escaping (HTTPResult) -> Void) -> HTTPClientTask {
+    private let session: URLSession
+
+    public init(session: URLSession) {
+        self.session = session
+    }
+
+    private struct UnexpectedValuesRepresentation: Error {}
+
+    private struct URLSessionTaskWrapper: HTTPClientTask {
+        let wrapped: URLSessionTask
+
+        func cancel() {
+            wrapped.cancel()
+        }
+    }
+
+    func get(from url: URL, headers: [HTTPHeader] = [], completion: @escaping (HTTPResult) -> Void) -> HTTPClientTask {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        headers.forEach { header in
+        for header in headers {
             request.addValue(header.value, forHTTPHeaderField: header.key)
         }
         return perform(request, for: completion)
-	}
-    
-    func post<T: Encodable>(_ url: URL, _ body: T, headers: [HTTPHeader] = [], completion: @escaping (HTTPResult) -> Void) -> HTTPClientTask {
+    }
+
+    func post(
+        _ url: URL,
+        _ body: some Encodable,
+        headers: [HTTPHeader] = [],
+        completion: @escaping (HTTPResult) -> Void
+    )
+        -> HTTPClientTask
+    {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        headers.forEach { header in
+        for header in headers {
             request.addValue(header.value, forHTTPHeaderField: header.key)
         }
         let data = try? JSONEncoder().encode(body)
@@ -51,12 +58,11 @@ final class URLSessionHTTPClient {
 
 private extension URLSessionHTTPClient {
     func perform(_ request: URLRequest, for completion: @escaping (HTTPResult) -> Void) -> HTTPClientTask {
-      
         let task = session.dataTask(with: request) { data, response, error in
             completion(Result {
-                if let error = error {
+                if let error {
                     throw error
-                } else if let data = data, let response = response as? HTTPURLResponse {
+                } else if let data, let response = response as? HTTPURLResponse {
                     return (data, response)
                 } else {
                     throw UnexpectedValuesRepresentation()

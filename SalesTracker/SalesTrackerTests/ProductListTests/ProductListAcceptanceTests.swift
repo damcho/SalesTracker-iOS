@@ -5,13 +5,14 @@
 //  Created by Damian Modernell on 26/2/25.
 //
 
-import Testing
 import Foundation
+import Testing
 
 @testable import SalesTracker
 
-struct ProductListAcceptanceTests {    
-    @Test func creates_product_sales_views_on_successful_load() async throws {
+struct ProductListAcceptanceTests {
+    @Test
+    func creates_product_sales_views_on_successful_load() async throws {
         let sut = makeSUT(stub: .success(productInfo.raw))
 
         let productSalesViews = try await sut.onRefresh()
@@ -21,21 +22,21 @@ struct ProductListAcceptanceTests {
             expectedResult: [productInfo.info]
         )
     }
-    
-    @Test func orders_products_by_products_name_asc() async throws {
+
+    @Test
+    func orders_products_by_products_name_asc() async throws {
         let shuffledProducts = ProductsSalesInfo(
-            productsSalesMap:   [
+            productsSalesMap: [
                 Product(id: UUID(), name: "product B"): [someSale],
                 Product(id: UUID(), name: "product A"): [someSale],
                 Product(id: UUID(), name: "product C"): [someSale]
             ],
             currencyConverter: anyCurrencyCOnverter
         )
-      
+
         let sut = makeSUT(stub: .success(shuffledProducts))
 
         let productSalesViews = try await sut.onRefresh()
-
 
         assertProductSalesViewModelsOrder(
             for: productSalesViews,
@@ -49,21 +50,21 @@ extension ProductListAcceptanceTests {
         let productsNames = views.map { view in
             view.viewModel.productName
         }
-        
+
         #expect(productsNames == expectedResult)
     }
-    
+
     func assertProductSalesViewModels(for views: [ProductSalesView], expectedResult: [ProductInfo]) {
         let productsInfoArray = views.map { view in
             view.viewModel.productInfo
         }
         #expect(productsInfoArray == expectedResult)
     }
-    
+
     func makeSUT(stub: Result<ProductsSalesInfo, Error>) -> ProductListView {
         ProductsListComposer.compose(
             with: ProductSalesLoadableStub(stub: stub),
-            productSelection: { _, _, _ in  },
+            productSelection: { _, _, _ in },
             authErrorHandler: {}
         )
     }

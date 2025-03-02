@@ -10,12 +10,12 @@ import Foundation
 struct SaleDetailViewModel {
     let sale: Sale
     let currencyConvertion: CurrencyConvertion?
-    
+
     init(sale: Sale, currencyConvertion: CurrencyConvertion?) {
         self.sale = sale
         self.currencyConvertion = currencyConvertion
     }
-    
+
     var saleDate: String {
         sale.date.formatted(
             Date.FormatStyle()
@@ -27,11 +27,11 @@ struct SaleDetailViewModel {
                 .locale(Locale(identifier: "en_US"))
         )
     }
-    
+
     var localCurrencySaleAmount: String {
         "\(sale.amount.formatted(.currency(code: sale.currencyCode).presentation(.standard)))"
     }
-    
+
     var convertedCurrencySaleAmount: String {
         guard let aCurrencyConvertion = currencyConvertion else {
             return "N/A"

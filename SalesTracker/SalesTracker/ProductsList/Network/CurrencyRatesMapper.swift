@@ -11,9 +11,9 @@ struct DecodedCurrencyConvertion: Decodable {
     let from: String
     let to: String
     let rate: Double
-    
+
     func toCurrencyConvertion() -> CurrencyConvertion {
-        return .init(
+        .init(
             fromCurrencyCode: from,
             toCurrencyCode: to,
             rate: rate
@@ -26,7 +26,7 @@ enum CurrencyRatesMapper {
 
     static func map(_ result: (data: Data, httpResponse: HTTPURLResponse)) throws -> [CurrencyConvertion] {
         switch result.httpResponse.statusCode {
-        case 400, 402..<499:
+        case 400, 402 ..< 499:
             throw HTTPError.notFound
         case success:
             return try JSONDecoder().decode(

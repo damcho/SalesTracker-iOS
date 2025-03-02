@@ -5,20 +5,21 @@
 //  Created by Damian Modernell on 27/2/25.
 //
 
-import Testing
 @testable import SalesTracker
+import Testing
 
 struct ProductsListLoadableAuthenticationErrorDecoratorTests {
-    
-    @Test func forwards_error_on_loader_error() async throws {
+    @Test
+    func forwards_error_on_loader_error() async throws {
         let sut = makeSUT(stub: .failure(anyError))
-        
+
         await #expect(throws: anyError, performing: {
             try await sut.loadProductsAndSales()
         })
     }
-    
-    @Test func calls_auth_error_closure_on_auth_error() async throws {
+
+    @Test
+    func calls_auth_error_closure_on_auth_error() async throws {
         var errorHandlerCallCount = 0
         let sut = makeSUT(
             stub: .failure(authError),
@@ -26,15 +27,16 @@ struct ProductsListLoadableAuthenticationErrorDecoratorTests {
                 errorHandlerCallCount += 1
             }
         )
-        
+
         await #expect(throws: authError, performing: {
             _ = try await sut.loadProductsAndSales()
         })
-        
+
         #expect(errorHandlerCallCount == 1)
     }
-    
-    @Test func does_not_call_auth_error_closure_on_other_error() async throws {
+
+    @Test
+    func does_not_call_auth_error_closure_on_other_error() async throws {
         var errorHandlerCallCount = 0
         let sut = makeSUT(
             stub: .failure(anyError),
@@ -42,15 +44,16 @@ struct ProductsListLoadableAuthenticationErrorDecoratorTests {
                 errorHandlerCallCount += 1
             }
         )
-        
+
         await #expect(throws: anyError, performing: {
             _ = try await sut.loadProductsAndSales()
         })
-        
+
         #expect(errorHandlerCallCount == 0)
     }
-    
-    @Test func forwards_result_on_successful_load() async throws {
+
+    @Test
+    func forwards_result_on_successful_load() async throws {
         var errorHandlerCallCount = 0
         let expectedResult = ProductsSalesInfo(
             productsSalesMap: [someProduct: [someSale]],
@@ -62,7 +65,7 @@ struct ProductsListLoadableAuthenticationErrorDecoratorTests {
                 errorHandlerCallCount += 1
             }
         )
-        
+
         let result = try await sut.loadProductsAndSales()
 
         #expect(result == expectedResult)
@@ -74,8 +77,10 @@ extension ProductsListLoadableAuthenticationErrorDecoratorTests {
     func makeSUT(
         stub: Result<ProductsSalesInfo, Error>,
         authErrorHandler: @escaping () -> Void = {}
-    ) -> AuthenticationErrorDecorator {
-        return AuthenticationErrorDecorator(
+    )
+        -> AuthenticationErrorDecorator
+    {
+        AuthenticationErrorDecorator(
             authErrorHandler: authErrorHandler,
             decoratee: ProductSalesLoadableStub(
                 stub: stub

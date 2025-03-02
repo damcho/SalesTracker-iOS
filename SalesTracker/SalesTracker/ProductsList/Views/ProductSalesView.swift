@@ -7,12 +7,10 @@
 
 import SwiftUI
 
-
-
 struct ProductSalesView: View, Identifiable {
     var id: UUID { viewModel.productInfo.product.id }
     let viewModel: ProductSalesViewModel
-    
+
     var body: some View {
         HStack(spacing: 10, content: {
             Text(viewModel.productName).lineLimit(2)
@@ -36,7 +34,7 @@ struct ProductSalesView: View, Identifiable {
                 ),
                 salesCount: 3
             ),
-            selectedProductAction: {_ in print("Tapped")}
+            selectedProductAction: { _ in print("Tapped") }
         )
     )
 }

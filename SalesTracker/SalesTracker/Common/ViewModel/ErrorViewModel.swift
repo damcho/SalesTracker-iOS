@@ -11,6 +11,8 @@ final class ErrorViewModel: ObservableObject {
     @Published var errorMessage: String = ""
 }
 
+// MARK: ErrorDisplayable
+
 extension ErrorViewModel: ErrorDisplayable {
     func display(_ error: any Error) {
         errorMessage = error.localizedDescription

@@ -15,6 +15,8 @@ struct RemoteProductsLoader {
     let mapper: RemoteProductsListMapper
 }
 
+// MARK: RemoteProductsLoadable
+
 extension RemoteProductsLoader: RemoteProductsLoadable {
     func loadProducts() async throws -> [DecodableProduct] {
         try await mapper(httpClient.get(from: url))

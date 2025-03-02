@@ -20,6 +20,8 @@ struct TokenStoreAuthenticableDecorator {
     let store: TokenStore
 }
 
+// MARK: Authenticable
+
 extension TokenStoreAuthenticableDecorator: Authenticable {
     func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
         let result = try await decoratee.authenticate(with: credentials)

@@ -11,11 +11,13 @@ final class ActivityIndicatorViewModel: ObservableObject {
     @Published var shouldDisplayAcTivityIndicator: Bool = false
 }
 
+// MARK: ActivityIndicatorDisplayable
+
 extension ActivityIndicatorViewModel: ActivityIndicatorDisplayable {
     func displayActivityIndicator() {
         shouldDisplayAcTivityIndicator = true
     }
-    
+
     func hideActivityIndicator() {
         shouldDisplayAcTivityIndicator = false
     }

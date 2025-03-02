@@ -11,7 +11,9 @@ enum LoginScreenComposer {
     static func composeLogin(
         with enabler: some LoginEnabler,
         authAction: @escaping Authenticator
-    ) -> LoginScreenViewModel {
+    )
+        -> LoginScreenViewModel
+    {
         let loginScreenViewModel = LoginScreenViewModel(
             loginEnabler: WeakRefVirtualProxy(enabler),
             authenticator: authAction
@@ -19,11 +21,13 @@ enum LoginScreenComposer {
         enabler.loginAction = loginScreenViewModel.didTapLogin
         return loginScreenViewModel
     }
-    
+
     static func composeActivityIndicator(
         for authenticable: Authenticable,
         activityIndicatorDisplayable: ActivityIndicatorDisplayable
-    ) -> Authenticable {
+    )
+        -> Authenticable
+    {
         ActivityIndicatorAuthenticationDecorator(
             decoratee: authenticable,
             activityIndicatorDisplayable: MainThreadDispatcher(
@@ -31,11 +35,13 @@ enum LoginScreenComposer {
             )
         )
     }
-    
+
     static func composeErrorDisplayable(
         decoratee: Authenticable,
         with errorDisplayable: ErrorDisplayable
-    ) -> Authenticable {
+    )
+        -> Authenticable
+    {
         ErrorDisplayableAuthenticattorDecorator(
             decoratee: decoratee,
             errorDisplayable: MainThreadDispatcher(
@@ -43,7 +49,7 @@ enum LoginScreenComposer {
             )
         )
     }
-    
+
     static func composeLoginScreen(successfulAuthAction: @escaping (String) -> Void) -> LoginScreen {
         let activityIndicatorViewModel = ActivityIndicatorViewModel()
         let loginButtonViewModel = LoginButtonViewModel()
@@ -62,7 +68,7 @@ enum LoginScreenComposer {
             ),
             activityIndicatorDisplayable: activityIndicatorViewModel
         )
-        
+
         let loginScreenViewModel = composeLogin(
             with: loginButtonViewModel,
             authAction: { credentials in

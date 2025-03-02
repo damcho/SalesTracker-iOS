@@ -16,8 +16,14 @@ extension URLSessionHTTPClient: SalesTrackerHTTPClient {
         }
         return try result.get()
     }
-    
-    func post<T>(url: URL, body: T, headers: [HTTPHeader]) async throws -> (data: Data, httpResponse: HTTPURLResponse) where T : Encodable {
+
+    func post(
+        url: URL,
+        body: some Encodable,
+        headers: [HTTPHeader]
+    ) async throws
+        -> (data: Data, httpResponse: HTTPURLResponse)
+    {
         let result = await withCheckedContinuation { continuation in
             _ = post(url, body, headers: headers) { result in
                 continuation.resume(returning: result)

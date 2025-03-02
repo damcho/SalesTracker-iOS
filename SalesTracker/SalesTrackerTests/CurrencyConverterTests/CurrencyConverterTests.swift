@@ -5,11 +5,12 @@
 //  Created by Damian Modernell on 28/2/25.
 //
 
-import Testing
 @testable import SalesTracker
-struct CurrencyConverterTests {
+import Testing
 
-    @Test func creates_all_convertion_rates_couples_on_init() async throws {
+struct CurrencyConverterTests {
+    @Test
+    func creates_all_convertion_rates_couples_on_init() async throws {
         let initialConvertionss = [
             CurrencyConvertion(
                 fromCurrencyCode: "USD",
@@ -22,7 +23,7 @@ struct CurrencyConverterTests {
                 rate: 1000
             )
         ]
-        
+
         let expectedConvertionsMap: [String: [String: Double]] = [
             "USD": [
                 "AUD": 1.1,
@@ -40,8 +41,9 @@ struct CurrencyConverterTests {
         print(sut.currencyConvertionsMap)
         #expect(sut.currencyConvertionsMap == expectedConvertionsMap)
     }
-    
-    @Test func throws_on_missing_convertion_rate() async throws {
+
+    @Test
+    func throws_on_missing_convertion_rate() async throws {
         let initialConvertionss = [
             CurrencyConvertion(
                 fromCurrencyCode: "USD",
@@ -54,15 +56,16 @@ struct CurrencyConverterTests {
                 rate: 1000
             )
         ]
-        
+
         let sut = CurrencyConverter(currencyConvertions: initialConvertionss)
 
         #expect(throws: CurrencyConverterError.missingRate, performing: {
             try sut.convert(amount: 123.4, fromCurrency: "EUR", toCurrency: "USD")
         })
     }
-    
-    @Test func converts_currency_successfully() async throws {
+
+    @Test
+    func converts_currency_successfully() async throws {
         let initialConvertionss = [
             CurrencyConvertion(
                 fromCurrencyCode: "USD",
@@ -75,15 +78,16 @@ struct CurrencyConverterTests {
                 rate: 1000
             )
         ]
-        
+
         let sut = CurrencyConverter(currencyConvertions: initialConvertionss)
 
         let convertedAmount = try sut.convert(amount: 10, fromCurrency: "USD", toCurrency: "ARS")
 
         #expect(convertedAmount == 10000)
     }
-    
-    @Test func returns_currency_convertion_successfully() async throws {
+
+    @Test
+    func returns_currency_convertion_successfully() async throws {
         let initialConvertionss = [
             CurrencyConvertion(
                 fromCurrencyCode: "USD",
@@ -96,14 +100,18 @@ struct CurrencyConverterTests {
                 rate: 1000
             )
         ]
-        
+
         let sut = CurrencyConverter(currencyConvertions: initialConvertionss)
 
-        #expect(try sut.currencyConvertion(fromCurrency: "USD", toCurrency: "AUD") == CurrencyConvertion(fromCurrencyCode: "USD", toCurrencyCode: "AUD", rate: 1.1))
-
+        #expect(
+            try sut
+                .currencyConvertion(fromCurrency: "USD", toCurrency: "AUD") ==
+                CurrencyConvertion(fromCurrencyCode: "USD", toCurrencyCode: "AUD", rate: 1.1)
+        )
     }
-    
-    @Test func throws_on_missing_currency_rate() async throws {
+
+    @Test
+    func throws_on_missing_currency_rate() async throws {
         let missigCurrency = "EUR"
         let initialConvertionss = [
             CurrencyConvertion(
@@ -117,7 +125,7 @@ struct CurrencyConverterTests {
                 rate: 1000
             )
         ]
-        
+
         let sut = CurrencyConverter(currencyConvertions: initialConvertionss)
 
         #expect(throws: CurrencyConverterError.missingRate, performing: {
@@ -127,6 +135,5 @@ struct CurrencyConverterTests {
 }
 
 extension CurrencyConverterTests {
-    func assert(_ expectedConvertionsMap: [String: [String: Double]], for conversionsMap: [String: [String: Double]]) {
-    }
+    func assert(_: [String: [String: Double]], for _: [String: [String: Double]]) {}
 }

@@ -20,31 +20,33 @@ final class LoginScreenViewModel {
             shouldEnableLogin()
         }
     }
+
     var password: String = "" {
         didSet {
             shouldEnableLogin()
         }
     }
+
     let LoginEnabler: LoginEnabler
     let authenticate: Authenticator
-    
+
     init(loginEnabler: LoginEnabler, authenticator: @escaping Authenticator) {
         self.LoginEnabler = loginEnabler
         self.authenticate = authenticator
     }
-    
+
     func didEnterUsername(_ newUsername: String) {
         username = newUsername
     }
-    
+
     func didEnterPassword(_ newPassword: String) {
         password = newPassword
     }
-    
+
     func shouldEnableLogin() {
         LoginEnabler.enable(!username.isEmpty && !password.isEmpty)
     }
-    
+
     func didTapLogin() {
         authenticate(
             LoginCredentials(

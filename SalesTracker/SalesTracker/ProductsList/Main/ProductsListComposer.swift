@@ -15,7 +15,7 @@ enum ProductsListComposer {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ"
         return dateFormatter
     }
-    
+
     static func composeProductSalesLoader(with authToken: String) -> RemoteProductSalesLoader {
         RemoteProductSalesLoader(
             mapper: ProductInfoMapper.map,
@@ -44,12 +44,14 @@ enum ProductsListComposer {
             )
         )
     }
-    
+
     static func compose(
         with productsLoadable: ProductSalesLoadable,
         productSelection: @escaping ProductSelectionHandler,
         authErrorHandler: @escaping () -> Void
-    ) -> ProductListView {
+    )
+        -> ProductListView
+    {
         let productSalesAdapter = ProductSalesLoaderAdapter(
             productSalesLoader: AuthenticationErrorDecorator(
                 authErrorHandler: authErrorHandler,
@@ -63,16 +65,18 @@ enum ProductsListComposer {
         return ProductListView(
             navigationBarTitle: "Products",
             onRefresh: {
-                return try await productSalesAdapter.loadProductsAndSales()
+                try await productSalesAdapter.loadProductsAndSales()
             }
         )
     }
-    
+
     static func compose(
         accessToken: String,
         productSelection: @escaping ProductSelectionHandler,
         authErrorHandler: @escaping () -> Void
-    ) -> ProductListView {
+    )
+        -> ProductListView
+    {
         compose(
             with: composeProductSalesLoader(
                 with: accessToken

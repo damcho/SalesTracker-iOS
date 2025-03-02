@@ -1,5 +1,5 @@
 //
-//  passwordView.swift
+//  PasswordView.swift
 //  SalesTracker
 //
 //  Created by Damian Modernell on 16/2/25.
@@ -25,7 +25,7 @@ struct PasswordView: View {
 #Preview {
     PasswordView(
         viewModel: TextfieldViewModel(
-            didChangeCallback: {_ in }
+            didChangeCallback: { _ in }
         )
     )
 }

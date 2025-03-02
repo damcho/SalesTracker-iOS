@@ -26,6 +26,8 @@ struct RemoteAuthenticatorHandler {
     let mapper: AuthMapper
 }
 
+// MARK: Authenticable
+
 extension RemoteAuthenticatorHandler: Authenticable {
     func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
         do {

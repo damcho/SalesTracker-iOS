@@ -11,13 +11,13 @@ struct UsernameView: View {
     @StateObject var viewModel: TextfieldViewModel
     var body: some View {
         TextField(
-                "User name",
-                text: $viewModel.textfieldLabel
-            )
-            .textFieldStyle(.roundedBorder)
-            .textInputAutocapitalization(.never)
-            .disableAutocorrection(true)
-            .padding()
+            "User name",
+            text: $viewModel.textfieldLabel
+        )
+        .textFieldStyle(.roundedBorder)
+        .textInputAutocapitalization(.never)
+        .disableAutocorrection(true)
+        .padding()
     }
 }
 

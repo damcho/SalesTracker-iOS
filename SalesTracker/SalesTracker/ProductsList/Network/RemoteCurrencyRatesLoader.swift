@@ -15,6 +15,8 @@ struct RemoteCurrencyRatesLoader {
     let mapper: RemoteCurrencyRatesMapper
 }
 
+// MARK: RemoteCurrencyRatesLoadable
+
 extension RemoteCurrencyRatesLoader: RemoteCurrencyRatesLoadable {
     func loadCurrencyRates() async throws -> CurrencyConverter {
         try await CurrencyConverter(

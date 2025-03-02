@@ -5,12 +5,12 @@
 //  Created by Damian Modernell on 17/2/25.
 //
 
-import Testing
 @testable import SalesTracker
+import Testing
 
 struct LoginButtonViewModelTests {
-
-    @Test func performs_action_on_login_action_called() async throws {
+    @Test
+    func performs_action_on_login_action_called() async throws {
         var loginActionCallsCount = 0
         let sut = LoginButtonViewModel()
         sut.loginAction = {
@@ -19,7 +19,7 @@ struct LoginButtonViewModelTests {
         #expect(loginActionCallsCount == 0)
 
         sut.didTapLoginAction()
-        
+
         #expect(loginActionCallsCount == 1)
     }
 }

@@ -13,11 +13,14 @@ final class TextfieldViewModel {
             didChangeTextfieldLabel(textfieldLabel)
         }
     }
+
     let didChangeTextfieldLabel: (String) -> Void
-    
+
     init(didChangeCallback: @escaping (String) -> Void) {
         self.didChangeTextfieldLabel = didChangeCallback
     }
 }
+
+// MARK: ObservableObject
 
 extension TextfieldViewModel: ObservableObject {}

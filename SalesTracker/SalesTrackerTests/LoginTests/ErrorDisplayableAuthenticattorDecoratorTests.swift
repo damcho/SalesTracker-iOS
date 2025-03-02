@@ -6,47 +6,52 @@
 //
 
 import Foundation
-import Testing
 @testable import SalesTracker
+import Testing
 
 struct ErrorDisplayableAuthenticattorDecoratorTests {
-    @Test func throws_on_authentication_error() async throws {
+    @Test
+    func throws_on_authentication_error() async throws {
         let (sut, _) = makeSUT(decorateeStub: .failure(authError))
-        
+
         await #expect(throws: authError) {
             try await sut.authenticate(with: anyLoginCredentials)
         }
     }
-    
-    @Test func forwards_result_on_authentication_success() async throws {
+
+    @Test
+    func forwards_result_on_authentication_success() async throws {
         let (sut, _) = makeSUT(decorateeStub: .success(anyAuthenticationResult))
-        
+
         let result = try await sut.authenticate(with: anyLoginCredentials)
 
         #expect(result == anyAuthenticationResult)
     }
-    
+
     @MainActor
-    @Test func dispatches_error_on_authentication_error() async throws {
+    @Test
+    func dispatches_error_on_authentication_error() async throws {
         let (sut, errorDisplayableSpy) = makeSUT(decorateeStub: .failure(authError))
 
         await #expect(throws: authError) {
             _ = try await sut.authenticate(with: anyLoginCredentials)
         }
-        
+
         #expect(errorDisplayableSpy.errorDisplayMessages == [authError])
     }
 
-    @Test func does_not_dispatch_error_on_authentication_success() async throws {
+    @Test
+    func does_not_dispatch_error_on_authentication_success() async throws {
         let (sut, errorDisplayableSpy) = makeSUT(decorateeStub: .success(anyAuthenticationResult))
-        
+
         _ = try await sut.authenticate(with: anyLoginCredentials)
 
         #expect(errorDisplayableSpy.errorDisplayMessages == [])
     }
-    
+
     @MainActor
-    @Test func displays_error_on_main_thread() async throws {
+    @Test
+    func displays_error_on_main_thread() async throws {
         let (sut, errorDisplayableSpy) = makeSUT(decorateeStub: .failure(authError))
 
         let authTask = performActionInBackgroundThread {
@@ -54,7 +59,7 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
                 _ = try await sut.authenticate(with: anyLoginCredentials)
             }
         }
-       
+
         try await authTask.value
 
         #expect(errorDisplayableSpy.isMainThread)
@@ -64,7 +69,9 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
 extension ErrorDisplayableAuthenticattorDecoratorTests {
     func makeSUT(
         decorateeStub: Result<AuthenticationResult, Error>
-    ) -> (Authenticable, ErrorDisplayableSpy) {
+    )
+        -> (Authenticable, ErrorDisplayableSpy)
+    {
         let errorDisplayableSpy = ErrorDisplayableSpy()
         let sut = LoginScreenComposer.composeErrorDisplayable(
             decoratee: AuthenticableStub(stub: decorateeStub),

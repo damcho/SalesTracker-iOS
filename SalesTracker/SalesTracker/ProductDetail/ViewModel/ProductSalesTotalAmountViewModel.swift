@@ -12,8 +12,8 @@ struct ProductSalesTotalAmountViewModel {
     let salesCount: Int
     let product: Product
     let currencyCode: String
-    
+
     var productSalesLabelText: String {
-        return "(\(totalSalesAmount.formatted(.currency(code: currencyCode).presentation(.narrow)))) from \(salesCount) sales"
+        "(\(totalSalesAmount.formatted(.currency(code: currencyCode).presentation(.narrow)))) from \(salesCount) sales"
     }
 }

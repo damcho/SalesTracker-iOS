@@ -13,9 +13,9 @@ struct LoginButtonView: View {
         Button("Login") {
             loginButtonViewModel.didTapLoginAction()
         }
-            .disabled(
-                !loginButtonViewModel.shouldEnableLoginButton
-            )
+        .disabled(
+            !loginButtonViewModel.shouldEnableLoginButton
+        )
         .buttonStyle(.bordered)
         .controlSize(.large)
         .padding()

@@ -15,7 +15,7 @@ struct ProductSalesLoaderAdapter {
     let productSalesLoader: ProductSalesLoadable
     let onSelectedProduct: ProductSelectionHandler
     let productsOrder: (ProductSalesView, ProductSalesView) -> Bool
-    
+
     func loadProductsAndSales() async throws -> [ProductSalesView] {
         let productSalesInfo = try await productSalesLoader.loadProductsAndSales()
         return productSalesInfo.productsSalesMap.map { product, sales in
@@ -27,9 +27,9 @@ struct ProductSalesLoaderAdapter {
                     ),
                     selectedProductAction: { product in
                         onSelectedProduct(product, sales, productSalesInfo.currencyConverter)
-                    })
+                    }
+                )
             )
         }.sorted(by: productsOrder)
     }
 }
-    

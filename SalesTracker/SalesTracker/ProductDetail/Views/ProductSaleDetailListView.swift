@@ -10,12 +10,12 @@ import SwiftUI
 struct ProductSaleDetailListView: View {
     @State var saleDetailViews: [SaleDetailView]
     let headerSection: ProductSalesTotalAmountView
-    
+
     var body: some View {
         VStack {
             headerSection
             List {
-                ForEach(saleDetailViews){ saleDetailView in
+                ForEach(saleDetailViews) { saleDetailView in
                     saleDetailView
                 }
             }
@@ -30,7 +30,7 @@ struct ProductSaleDetailListView: View {
                 viewModel: SaleDetailViewModel(
                     sale: Sale(
                         date: .now,
-                        amount: 134543.23,
+                        amount: 134_543.23,
                         currencyCode: "ARS"
                     ),
                     currencyConvertion: CurrencyConvertion(
@@ -43,7 +43,7 @@ struct ProductSaleDetailListView: View {
         ],
         headerSection: ProductSalesTotalAmountView(
             viewModel: ProductSalesTotalAmountViewModel(
-                totalSalesAmount: 134434,
+                totalSalesAmount: 134_434,
                 salesCount: 23,
                 product: Product(id: UUID(), name: "Product A"),
                 currencyCode: "ARS"

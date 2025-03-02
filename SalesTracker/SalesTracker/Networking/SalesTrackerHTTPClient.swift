@@ -24,7 +24,7 @@ protocol SalesTrackerHTTPClient {
         body: T,
         headers: [HTTPHeader]
     ) async throws -> (data: Data, httpResponse: HTTPURLResponse)
-    
+
     func get(
         from url: URL,
         headers: [HTTPHeader]
@@ -34,14 +34,18 @@ protocol SalesTrackerHTTPClient {
 extension SalesTrackerHTTPClient {
     func get(
         from url: URL
-    ) async throws -> (data: Data, httpResponse: HTTPURLResponse) {
+    ) async throws
+        -> (data: Data, httpResponse: HTTPURLResponse)
+    {
         try await get(from: url, headers: [])
     }
-    
-    func post<T: Encodable>(
+
+    func post(
         url: URL,
-        body: T
-    ) async throws -> (data: Data, httpResponse: HTTPURLResponse) {
+        body: some Encodable
+    ) async throws
+        -> (data: Data, httpResponse: HTTPURLResponse)
+    {
         try await post(url: url, body: body, headers: [])
     }
 }

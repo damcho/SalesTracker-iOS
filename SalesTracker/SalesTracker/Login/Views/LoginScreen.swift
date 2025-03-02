@@ -14,7 +14,7 @@ struct LoginScreen: View {
     let passwordView: PasswordView
     let activityIndicatorView: ActivityIndicatorView
     let loginButtonView: LoginButtonView
-    
+
     var body: some View {
         VStack {
             activityIndicatorView
@@ -29,5 +29,5 @@ struct LoginScreen: View {
 }
 
 #Preview {
-    LoginScreenComposer.composeLoginScreen(successfulAuthAction: {_ in })
+    LoginScreenComposer.composeLoginScreen(successfulAuthAction: { _ in })
 }

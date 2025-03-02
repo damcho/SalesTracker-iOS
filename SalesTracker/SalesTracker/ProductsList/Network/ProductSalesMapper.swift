@@ -16,7 +16,7 @@ struct DecodableSale: Decodable, Equatable {
     let amount: String
     let currency_code: String
     let date: Date
-    
+
     func toSale() throws -> Sale {
         guard let anAmount = Double(amount) else {
             throw ProductSalesMapperError.decoding
@@ -33,7 +33,7 @@ struct ProductsSalesMapper {
     let unauthorized = 401
     let success = 200
     let dateFormatter: DateFormatter
-    
+
     func map(_ result: (data: Data, httpResponse: HTTPURLResponse)) throws -> [DecodableSale] {
         switch result.httpResponse.statusCode {
         case unauthorized:
@@ -42,7 +42,7 @@ struct ProductsSalesMapper {
                 from: result.data
             )
             throw LoginError.authentication(errorData.message)
-        case 400, 402..<499:
+        case 400, 402 ..< 499:
             throw HTTPError.notFound
         case success:
             let decoder = JSONDecoder()

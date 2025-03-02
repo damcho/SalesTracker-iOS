@@ -5,53 +5,56 @@
 //  Created by Damian Modernell on 23/2/25.
 //
 
-import Testing
 @testable import SalesTracker
+import Testing
 
 struct ProductSalesLoaderTests {
-
-    @Test func throws_on_load_products_error() async throws {
+    @Test
+    func throws_on_load_products_error() async throws {
         let sut = makeSUT(
             productsLoadableStub: .failure(anyError)
         )
-        
+
         await #expect(throws: anyError, performing: {
             try await sut.loadProductsAndSales()
         })
     }
-    
-    @Test func throws_on_load_sales_error() async throws {
+
+    @Test
+    func throws_on_load_sales_error() async throws {
         let sut = makeSUT(
             salesLoadableStub: .failure(anyError)
         )
-        
+
         await #expect(throws: anyError, performing: {
             try await sut.loadProductsAndSales()
         })
     }
-    
-    @Test func maps_on_products_and_sales_load_success() async throws {
+
+    @Test
+    func maps_on_products_and_sales_load_success() async throws {
         var mappedResultsCallCount = 0
-        let sut = makeSUT(mapper: {_ ,_ in
+        let sut = makeSUT(mapper: { _, _ in
             mappedResultsCallCount += 1
             return [:]
         })
-      
+
         _ = try await sut.loadProductsAndSales()
-        
+
         #expect(mappedResultsCallCount == 1)
     }
 }
 
 extension ProductSalesLoaderTests {
     func makeSUT(
-        mapper: @escaping ProductSalesDictionaryMapper = {_, _ in [:] },
+        mapper: @escaping ProductSalesDictionaryMapper = { _, _ in [:] },
         productsLoadableStub: Result<[DecodableProduct], Error> = .success([]),
         salesLoadableStub: Result<[DecodableSale], Error> = .success([]),
         currencyRatesLoadataStub: Result<CurrencyConverter, Error> = .success(anyCurrencyCOnverter)
-
-    ) -> RemoteProductSalesLoader {
-        return RemoteProductSalesLoader(
+    )
+        -> RemoteProductSalesLoader
+    {
+        RemoteProductSalesLoader(
             mapper: mapper,
             productsLoader: RemoteProductsLoadableStub(
                 stub: productsLoadableStub
@@ -67,11 +70,8 @@ extension ProductSalesLoaderTests {
 }
 
 var anyCurrencyCOnverter: CurrencyConverter {
-    return .init(currencyConvertions: [])
+    .init(currencyConvertions: [])
 }
-
-
-
 
 struct RemoteCurrencyRatesLoaderStub: RemoteCurrencyRatesLoadable {
     let stub: Result<CurrencyConverter, Error>

@@ -5,39 +5,41 @@
 //  Created by Damian Modernell on 1/3/25.
 //
 
-import Testing
-@testable import SalesTracker
 import Foundation
+@testable import SalesTracker
+import Testing
 
 struct RemoteCurrencyRatesLoaderTests {
-
-    @Test func throws_on_currency_rates_load_error() async throws {
+    @Test
+    func throws_on_currency_rates_load_error() async throws {
         let sut = makeSUT(httpCLientStub: .failure(anyError))
-        
+
         await #expect(throws: anyError, performing: {
             try await sut.loadCurrencyRates()
         })
     }
-    
-    @Test func returns_mapped_currency_rates_on_load_success() async throws {
+
+    @Test
+    func returns_mapped_currency_rates_on_load_success() async throws {
         let sut = makeSUT(
             httpCLientStub: .success((currencyRate.http, successfulHTTPResponse)),
-            mapper: {_ in
+            mapper: { _ in
                 [currencyRate.decoded]
             }
         )
 
         #expect(try await sut.loadCurrencyRates() == currencyRate.domain)
     }
-
 }
 
 extension RemoteCurrencyRatesLoaderTests {
     func makeSUT(
         httpCLientStub: HTTPResult,
-        mapper: @escaping RemoteCurrencyRatesMapper = {_ in throw anyError }
-    ) -> RemoteCurrencyRatesLoader {
-        return RemoteCurrencyRatesLoader(
+        mapper: @escaping RemoteCurrencyRatesMapper = { _ in throw anyError }
+    )
+        -> RemoteCurrencyRatesLoader
+    {
+        RemoteCurrencyRatesLoader(
             httpCLient: HTTPClientStub(stub: httpCLientStub),
             url: anyURL,
             mapper: mapper

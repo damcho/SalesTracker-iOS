@@ -9,9 +9,9 @@ import SwiftUI
 
 struct SaleDetailView: View, Identifiable {
     var id: UUID { UUID() }
-    
+
     let viewModel: SaleDetailViewModel
-    
+
     var body: some View {
         VStack {
             HStack {
@@ -32,7 +32,7 @@ struct SaleDetailView: View, Identifiable {
         viewModel: SaleDetailViewModel(
             sale: Sale(
                 date: .now,
-                amount: 133432.34,
+                amount: 133_432.34,
                 currencyCode: "ARS"
             ),
             currencyConvertion: CurrencyConvertion(

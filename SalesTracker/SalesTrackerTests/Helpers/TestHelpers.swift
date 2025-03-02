@@ -80,8 +80,10 @@ var anyAuthenticationResult: AuthenticationResult {
 @discardableResult
 func performActionInBackgroundThread(
     _ action: @escaping () async throws -> Void
-) -> Task<Void, Error> {
-    return Task {
+)
+    -> Task<Void, Error>
+{
+    Task {
         try await action()
     }
 }

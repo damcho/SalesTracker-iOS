@@ -13,17 +13,17 @@ struct ProductListView: View {
     @State var productSalesViews: [ProductSalesView] = []
     var body: some View {
         List {
-            ForEach(productSalesViews){ productSalesView in
+            ForEach(productSalesViews) { productSalesView in
                 productSalesView
             }
         }.refreshable {
             do {
                 productSalesViews = try await onRefresh()
-            } catch { }
+            } catch {}
         }.task {
             do {
                 productSalesViews = try await onRefresh()
-            } catch { }
+            } catch {}
         }.navigationTitle(Text(navigationBarTitle))
     }
 }
@@ -37,11 +37,12 @@ struct ProductListView: View {
                     viewModel: ProductSalesViewModel(
                         productInfo: ProductInfo(
                             product: .init(
-                                id:  UUID(),
-                                name: "aname"),
+                                id: UUID(),
+                                name: "aname"
+                            ),
                             salesCount: 3
                         ),
-                        selectedProductAction: {_ in }
+                        selectedProductAction: { _ in }
                     )
                 )
             ]

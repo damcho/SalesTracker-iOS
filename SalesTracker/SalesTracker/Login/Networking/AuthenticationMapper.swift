@@ -13,7 +13,7 @@ struct DecodableHTTPErrorMessage: Decodable {
 
 struct DecodableAuthenticationResult: Decodable {
     let access_token: String
-    
+
     func toAuthenticationResult() -> AuthenticationResult {
         .init(authToken: access_token)
     }
@@ -30,7 +30,7 @@ enum AuthenticationMapper {
                 from: data
             )
             throw LoginError.authentication(errorData.message)
-        case 400, 402..<499:
+        case 400, 402 ..< 499:
             throw LoginError.connectivity
         case success:
             return try JSONDecoder().decode(DecodableAuthenticationResult.self, from: data).toAuthenticationResult()

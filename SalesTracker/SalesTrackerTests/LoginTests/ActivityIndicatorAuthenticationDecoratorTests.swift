@@ -5,46 +5,49 @@
 //  Created by Damian Modernell on 16/2/25.
 //
 
-import Testing
 import Foundation
+import Testing
 
 @testable import SalesTracker
 
 struct ActivityIndicatorAuthenticationDecoratorTests {
-    
-    @Test func throws_on_authentication_failure() async throws {
+    @Test
+    func throws_on_authentication_failure() async throws {
         let (sut, _) = makeSUT(
             decorateeStub: .failure(authError)
         )
-        
+
         await #expect(throws: authError) {
             try await sut.authenticate(with: anyLoginCredentials)
         }
     }
-    
+
     @MainActor
-    @Test func displays_and_hides_activity_indicator_on_authentication_success() async throws {
+    @Test
+    func displays_and_hides_activity_indicator_on_authentication_success() async throws {
         let (sut, activityIndicatorDisplayableSpy) = makeSUT()
 
         _ = try await sut.authenticate(with: anyLoginCredentials)
 
-        #expect(activityIndicatorDisplayableSpy.activityIndicatorMessages == [true , false])
+        #expect(activityIndicatorDisplayableSpy.activityIndicatorMessages == [true, false])
     }
-    
+
     @MainActor
-    @Test func displays_and_hides_activity_indicator_on_authentication_failure() async throws {
+    @Test
+    func displays_and_hides_activity_indicator_on_authentication_failure() async throws {
         let (sut, activityIndicatorDisplayableSpy) = makeSUT(
             decorateeStub: .failure(authError)
         )
-        
+
         await #expect(throws: authError) {
             try await sut.authenticate(with: anyLoginCredentials)
         }
-        
-        #expect(activityIndicatorDisplayableSpy.activityIndicatorMessages == [true , false])
+
+        #expect(activityIndicatorDisplayableSpy.activityIndicatorMessages == [true, false])
     }
-    
-    @Test func forwards_result_on_authentication_completion() async throws {
+
+    @Test
+    func forwards_result_on_authentication_completion() async throws {
         let expectedResult = anyAuthenticationResult
         let (sut, _) = makeSUT(
             decorateeStub: .success(expectedResult)
@@ -54,13 +57,14 @@ struct ActivityIndicatorAuthenticationDecoratorTests {
 
         #expect(result == expectedResult)
     }
-    
+
     @MainActor
-    @Test func displays_activity_indicator_in_main_thread() async throws {
+    @Test
+    func displays_activity_indicator_in_main_thread() async throws {
         let (sut, spy) = makeSUT(
             decorateeStub: .success(anyAuthenticationResult)
         )
-      
+
         let task = performActionInBackgroundThread {
             _ = try await sut.authenticate(with: anyLoginCredentials)
         }
@@ -73,7 +77,9 @@ struct ActivityIndicatorAuthenticationDecoratorTests {
 extension ActivityIndicatorAuthenticationDecoratorTests {
     func makeSUT(
         decorateeStub: Result<AuthenticationResult, Error> = .success(anyAuthenticationResult)
-    ) -> (Authenticable, activityIndicatorDisplayableSpy) {
+    )
+        -> (Authenticable, activityIndicatorDisplayableSpy)
+    {
         let stub = AuthenticableStub(stub: decorateeStub)
         let activityIndicatorSpy = activityIndicatorDisplayableSpy()
         return (
@@ -93,7 +99,7 @@ final class activityIndicatorDisplayableSpy: ActivityIndicatorDisplayable {
         activityIndicatorMessages.append(true)
         isMainThread = Thread.isMainThread
     }
-    
+
     func hideActivityIndicator() {
         activityIndicatorMessages.append(false)
         isMainThread = Thread.isMainThread
@@ -102,7 +108,7 @@ final class activityIndicatorDisplayableSpy: ActivityIndicatorDisplayable {
 
 struct AuthenticableStub: Authenticable {
     let stub: Result<AuthenticationResult, Error>
-    func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
+    func authenticate(with _: LoginCredentials) async throws -> AuthenticationResult {
         try stub.get()
     }
 }

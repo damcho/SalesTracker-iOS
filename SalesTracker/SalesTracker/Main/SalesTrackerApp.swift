@@ -11,21 +11,21 @@ import SwiftUI
 struct SalesTrackerApp: App {
     static let httpClient = URLSessionHTTPClient(session: .shared)
     static let keychain = KeychainStore()
-    
+
     @StateObject var navigation = NavigationFLow(tokenLoadable: keychain)
-    
+
     var body: some Scene {
         WindowGroup {
             NavigationStack(
                 path: $navigation.navigationPath,
                 root: {
                     navigation.resolveInitialScreen()
-                   .navigationDestination(
-                        for: Screen.self,
-                        destination: { screen in
-                            AnyView(navigation.destinations(for: screen))
-                        }
-                    )
+                        .navigationDestination(
+                            for: Screen.self,
+                            destination: { screen in
+                                AnyView(navigation.destinations(for: screen))
+                            }
+                        )
                 }
             )
         }
