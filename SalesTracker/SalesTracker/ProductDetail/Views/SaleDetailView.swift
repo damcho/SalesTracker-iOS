@@ -15,15 +15,15 @@ struct SaleDetailView: View, Identifiable {
     var body: some View {
         VStack {
             HStack {
-                Text(viewModel.localCurrencySaleAmount)
+                Text(viewModel.localCurrencySaleAmount).font(.system(.headline))
                 Spacer()
-                Text(viewModel.convertedCurrencySaleAmount)
+                Text(viewModel.convertedCurrencySaleAmount).font(.system(.headline))
             }
             HStack {
-                Text(viewModel.saleDate)
+                Text(viewModel.saleDate).font(.system(.caption))
                 Spacer()
             }
-        }.padding()
+        }
     }
 }
 
