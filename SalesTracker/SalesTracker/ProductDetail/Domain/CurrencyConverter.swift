@@ -49,11 +49,4 @@ struct CurrencyConverter: Equatable, Hashable {
             rate: aConvertionRate
         )
     }
-
-    func convert(amount: Double, fromCurrency: String, toCurrency: String) throws -> Double {
-        guard let arate = currencyConvertionsMap[fromCurrency]?[toCurrency] else {
-            throw CurrencyConverterError.missingRate
-        }
-        return amount * arate
-    }
 }

@@ -43,50 +43,6 @@ struct CurrencyConverterTests {
     }
 
     @Test
-    func throws_on_missing_convertion_rate() async throws {
-        let initialConvertionss = [
-            CurrencyConvertion(
-                fromCurrencyCode: "USD",
-                toCurrencyCode: "AUD",
-                rate: 1.1
-            ),
-            CurrencyConvertion(
-                fromCurrencyCode: "USD",
-                toCurrencyCode: "ARS",
-                rate: 1000
-            )
-        ]
-
-        let sut = CurrencyConverter(currencyConvertions: initialConvertionss)
-
-        #expect(throws: CurrencyConverterError.missingRate, performing: {
-            try sut.convert(amount: 123.4, fromCurrency: "EUR", toCurrency: "USD")
-        })
-    }
-
-    @Test
-    func converts_currency_successfully() async throws {
-        let initialConvertionss = [
-            CurrencyConvertion(
-                fromCurrencyCode: "USD",
-                toCurrencyCode: "AUD",
-                rate: 1.1
-            ),
-            CurrencyConvertion(
-                fromCurrencyCode: "USD",
-                toCurrencyCode: "ARS",
-                rate: 1000
-            )
-        ]
-
-        let sut = CurrencyConverter(currencyConvertions: initialConvertionss)
-
-        let convertedAmount = try sut.convert(amount: 10, fromCurrency: "USD", toCurrency: "ARS")
-
-        #expect(convertedAmount == 10000)
-    }
-
-    @Test
     func returns_currency_convertion_successfully() async throws {
         let initialConvertionss = [
             CurrencyConvertion(
