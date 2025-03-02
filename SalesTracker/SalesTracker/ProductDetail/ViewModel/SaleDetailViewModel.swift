@@ -10,21 +10,21 @@ import Foundation
 struct SaleDetailViewModel {
     let sale: Sale
     let currencyConvertion: CurrencyConvertion?
+    let dateFormat: Date.FormatStyle
 
-    init(sale: Sale, currencyConvertion: CurrencyConvertion?) {
+    init(
+        sale: Sale,
+        dateFormat: Date.FormatStyle,
+        currencyConvertion: CurrencyConvertion?
+    ) {
         self.sale = sale
         self.currencyConvertion = currencyConvertion
+        self.dateFormat = dateFormat
     }
 
     var saleDate: String {
         sale.date.formatted(
-            Date.FormatStyle()
-                .year(.defaultDigits)
-                .month(.abbreviated)
-                .day(.defaultDigits)
-                .hour(.defaultDigits(amPM: .abbreviated))
-                .minute(.omitted)
-                .locale(Locale(identifier: "en_US"))
+            dateFormat
         )
     }
 

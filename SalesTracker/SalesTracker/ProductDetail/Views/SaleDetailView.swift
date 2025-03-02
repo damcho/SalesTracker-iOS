@@ -35,6 +35,7 @@ struct SaleDetailView: View, Identifiable {
                 amount: 133_432.34,
                 currencyCode: "ARS"
             ),
+            dateFormat: .dateTime,
             currencyConvertion: CurrencyConvertion(
                 fromCurrencyCode: "ARS",
                 toCurrencyCode: "USD",

@@ -8,6 +8,14 @@
 import Foundation
 
 enum ProductDetailComposer {
+    static let dateFormatter = Date.FormatStyle()
+        .year(.defaultDigits)
+        .month(.abbreviated)
+        .day(.defaultDigits)
+        .hour(.defaultDigits(amPM: .abbreviated))
+        .minute(.omitted)
+        .locale(Locale(identifier: "en_US"))
+
     static let globalCurrencyCode: String = "USD"
 
     static func totalSalesAmountCalculator(
@@ -49,6 +57,7 @@ enum ProductDetailComposer {
             SaleDetailView(
                 viewModel: SaleDetailViewModel(
                     sale: sale,
+                    dateFormat: dateFormatter,
                     currencyConvertion: try? currencyConverter.currencyConvertion(
                         fromCurrency: sale.currencyCode,
                         toCurrency: globalCurrencyCode

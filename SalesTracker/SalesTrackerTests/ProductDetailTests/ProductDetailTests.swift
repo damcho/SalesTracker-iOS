@@ -30,6 +30,7 @@ struct ProductDetailTests {
                 amount: 143_432.3,
                 currencyCode: "ARS"
             ),
+            dateFormat: .dateTime,
             currencyConvertion: CurrencyConvertion(
                 fromCurrencyCode: "ARS",
                 toCurrencyCode: "USD",
@@ -103,7 +104,7 @@ var aDate: (date: Date, string: String) {
 
     return (
         Calendar(identifier: .gregorian).date(from: dateComponents)!,
-        "Jan 1, 2030 at 3 PM"
+        "1/1/2030, 3:00 PM"
     )
 }
 

@@ -33,6 +33,7 @@ struct ProductSaleDetailListView: View {
                         amount: 134_543.23,
                         currencyCode: "ARS"
                     ),
+                    dateFormat: .dateTime,
                     currencyConvertion: CurrencyConvertion(
                         fromCurrencyCode: "ARS",
                         toCurrencyCode: "USD",
