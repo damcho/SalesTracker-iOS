@@ -39,8 +39,53 @@ struct ProductDetailTests {
         #expect(sut.localCurrencySaleAmount == "ARS 143,432.30")
         #expect(sut.convertedCurrencySaleAmount == "US$143.43")
         #expect(sut.saleDate == aDate.string)
-        print(sut.saleDate)
-        print(aDate.string)
+    }
+    
+    @Test func total_sales_amount_calculator() async throws {
+        let sales = [
+            sale(amount: 10, currencyCode: "EUR"),
+            sale(amount: 1000, currencyCode: "ARS")
+        ]
+        let currencyConverter = CurrencyConverter(
+            currencyConvertions: [
+                CurrencyConvertion(
+                    fromCurrencyCode: "EUR", toCurrencyCode: "USD", rate: 1.1
+                ),
+                CurrencyConvertion(
+                    fromCurrencyCode: "ARS", toCurrencyCode: "USD", rate: 1 / 1000
+                )
+            ]
+        )
+        
+        let totalSalesAmount = ProductDetailComposer.totalSalesAmountCalculator(
+            currencyConverter: currencyConverter,
+            sales: sales,
+            currencyDestinationCode: "USD"
+        )
+        
+        #expect(totalSalesAmount == 12.0)
+    }
+    
+    @Test func ignores_sale_amount_on_missing_currency_convertion_rate() async throws {
+        let sales = [
+            sale(amount: 10, currencyCode: "EUR"),
+            sale(amount: 1000, currencyCode: "ARS")
+        ]
+        let currencyConverter = CurrencyConverter(
+            currencyConvertions: [
+                CurrencyConvertion(
+                    fromCurrencyCode: "EUR", toCurrencyCode: "USD", rate: 1.1
+                )
+            ]
+        )
+        
+        let totalSalesAmount = ProductDetailComposer.totalSalesAmountCalculator(
+            currencyConverter: currencyConverter,
+            sales: sales,
+            currencyDestinationCode: "USD"
+        )
+        
+        #expect(totalSalesAmount == 11)
     }
 }
 
@@ -57,4 +102,8 @@ var aDate: (date: Date, string: String) {
         Calendar(identifier: .gregorian).date(from: dateComponents)!,
         "Jan 1, 2030 at 3 PM"
     )
+}
+
+func sale(amount: Double, currencyCode: String) -> Sale {
+    Sale(date: .now, amount: amount, currencyCode: currencyCode)
 }

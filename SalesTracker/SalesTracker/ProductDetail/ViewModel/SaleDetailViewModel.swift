@@ -9,7 +9,12 @@ import Foundation
 
 struct SaleDetailViewModel {
     let sale: Sale
-    let currencyConvertion: CurrencyConvertion
+    let currencyConvertion: CurrencyConvertion?
+    
+    init(sale: Sale, currencyConvertion: CurrencyConvertion?) {
+        self.sale = sale
+        self.currencyConvertion = currencyConvertion
+    }
     
     var saleDate: String {
         sale.date.formatted(
@@ -28,8 +33,10 @@ struct SaleDetailViewModel {
     }
     
     var convertedCurrencySaleAmount: String {
-        let convertedAmount = sale.amount * currencyConvertion.rate
-        return "\(convertedAmount.formatted(.currency(code: currencyConvertion.toCurrencyCode).presentation(.standard)))"
-
+        guard let aCurrencyConvertion = currencyConvertion else {
+            return "N/A"
+        }
+        let convertedAmount = sale.amount * aCurrencyConvertion.rate
+        return "\(convertedAmount.formatted(.currency(code: aCurrencyConvertion.toCurrencyCode).presentation(.standard)))"
     }
 }

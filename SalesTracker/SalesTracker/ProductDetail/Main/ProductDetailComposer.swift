@@ -8,7 +8,23 @@
 import Foundation
 
 enum ProductDetailComposer {
+    
     static let globalCurrencyCode: String = "USD"
+    
+    static func totalSalesAmountCalculator(
+        currencyConverter: CurrencyConverter,
+        sales: [Sale],
+        currencyDestinationCode: String
+    ) -> Double {
+        sales.reduce(0, { partialResult, sale in
+            let convertionRate = try? currencyConverter.currencyConvertion(
+                fromCurrency: sale.currencyCode,
+                toCurrency: currencyDestinationCode
+            ).rate
+            return partialResult + sale.amount * (convertionRate ?? 0)
+        })
+    }
+    
     static func compose(
         with product: Product,
         sales: [Sale],
@@ -16,12 +32,11 @@ enum ProductDetailComposer {
     ) -> ProductSaleDetailListView {
         let headerSection = ProductSalesTotalAmountView(
             viewModel: ProductSalesTotalAmountViewModel(
-                totalSalesAmount: sales.reduce(0, { partialResult, sale in
-                    try! partialResult + sale.amount * currencyConverter.currencyConvertion(
-                        fromCurrency: sale.currencyCode,
-                        toCurrency: globalCurrencyCode
-                    ).rate
-                }),
+                totalSalesAmount: totalSalesAmountCalculator(
+                    currencyConverter: currencyConverter,
+                    sales: sales,
+                    currencyDestinationCode: globalCurrencyCode
+                ),
                 salesCount: sales.count,
                 product: product,
                 currencyCode: globalCurrencyCode
@@ -31,7 +46,7 @@ enum ProductDetailComposer {
             SaleDetailView(
                 viewModel: SaleDetailViewModel(
                     sale: sale,
-                    currencyConvertion: try! currencyConverter.currencyConvertion(
+                    currencyConvertion: try? currencyConverter.currencyConvertion(
                         fromCurrency: sale.currencyCode,
                         toCurrency: globalCurrencyCode
                     )
