@@ -11,21 +11,23 @@ import Testing
 
 struct ErrorViewModelTests {
     @Test
-    func displays_generic_message_on_non_localized_error() async throws {
-        let sut = ErrorViewModel()
-
-        sut.display(anyError)
-
-        #expect(sut.errorMessage == "An error occurred.")
+    func displays_custom_error_message_on_localized_error_implemented() async throws {
+        expect(
+            LocalizedErrorImplementation.someLocalizedError.errorDescription!,
+            for: LocalizedErrorImplementation.someLocalizedError
+        )
+        expect(
+            "An error occurred.",
+            for: anyError
+        )
     }
 
-    @Test
-    func displays_custom_error_message_on_localized_error_implemented() async throws {
+    func expect(_ expectedErrorMessage: String, for error: Error) {
         let sut = ErrorViewModel()
 
-        sut.display(LocalizedErrorImplementation.someLocalizedError)
+        sut.display(error)
 
-        #expect(sut.errorMessage == LocalizedErrorImplementation.someLocalizedError.errorDescription)
+        #expect(sut.errorMessage == expectedErrorMessage)
     }
 }
 
