@@ -26,6 +26,6 @@ struct ErrorView: View {
     let errorView = ErrorView(
         viewModel: errorViewModel
     )
-    errorViewModel.errorMessage = "some error"
+    errorViewModel.display(LoginError.connectivity)
     return errorView
 }
