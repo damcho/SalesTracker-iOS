@@ -34,6 +34,28 @@ enum ProductDetailComposer {
         }
     }
 
+    static func saleViewmodels(
+        from sales: [Sale],
+        currencyConverter: CurrencyConverter,
+        dateformat: Date.FormatStyle,
+        currencyCode: String
+    )
+        -> [SaleDetailViewModel]
+    {
+        sales.map { sale in
+            SaleDetailViewModel(
+                sale: sale,
+                dateFormat: dateFormatter,
+                currencyConvertion: try? currencyConverter.currencyConvertion(
+                    fromCurrency: sale.currencyCode,
+                    toCurrency: globalCurrencyCode
+                )
+            )
+        }.sorted { viewmodel1, viewmodel2 in
+            viewmodel1.sale.date > viewmodel2.sale.date
+        }
+    }
+
     static func compose(
         with product: Product,
         sales: [Sale],
@@ -41,33 +63,25 @@ enum ProductDetailComposer {
     )
         -> ProductSaleDetailListView
     {
-        let headerSection = ProductSalesTotalAmountView(
-            viewModel: ProductSalesTotalAmountViewModel(
-                totalSalesAmount: totalSalesAmountCalculator(
-                    currencyConverter: currencyConverter,
-                    sales: sales,
-                    currencyDestinationCode: globalCurrencyCode
-                ),
-                salesCount: sales.count,
-                product: product,
+        ProductSaleDetailListView(
+            saleDetailViews: saleViewmodels(
+                from: sales,
+                currencyConverter: currencyConverter,
+                dateformat: dateFormatter,
                 currencyCode: globalCurrencyCode
-            )
-        )
-        let saleDetailViews: [SaleDetailView] = sales.map { sale in
-            SaleDetailView(
-                viewModel: SaleDetailViewModel(
-                    sale: sale,
-                    dateFormat: dateFormatter,
-                    currencyConvertion: try? currencyConverter.currencyConvertion(
-                        fromCurrency: sale.currencyCode,
-                        toCurrency: globalCurrencyCode
-                    )
+            ).map { SaleDetailView(viewModel: $0) },
+            headerSection: ProductSalesTotalAmountView(
+                viewModel: ProductSalesTotalAmountViewModel(
+                    totalSalesAmount: totalSalesAmountCalculator(
+                        currencyConverter: currencyConverter,
+                        sales: sales,
+                        currencyDestinationCode: globalCurrencyCode
+                    ),
+                    salesCount: sales.count,
+                    product: product,
+                    currencyCode: globalCurrencyCode
                 )
             )
-        }
-        return ProductSaleDetailListView(
-            saleDetailViews: saleDetailViews,
-            headerSection: headerSection
         )
     }
 }

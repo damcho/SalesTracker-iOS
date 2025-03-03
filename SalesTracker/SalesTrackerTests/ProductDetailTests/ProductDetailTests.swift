@@ -97,7 +97,7 @@ struct ProductDetailTests {
     @Test
     func orders_sales_viewmodels_by_date_asc() async throws {
         let saleJustNow = sale(date: .now)
-        let saleTenSecondsAgo = sale(date: .now.addingTimeInterval(10))
+        let saleTenSecondsAgo = sale(date: .now - 10)
 
         let expectedViewModelsOrder = [
             saleViewModel(with: saleJustNow),
@@ -117,30 +117,6 @@ struct ProductDetailTests {
 
     func assertOrder(for createdViewModels: [SaleDetailViewModel], with expectedViewModels: [SaleDetailViewModel]) {
         #expect(createdViewModels.map { $0.sale } == expectedViewModels.map { $0.sale })
-    }
-}
-
-extension ProductDetailComposer {
-    static func saleViewmodels(
-        from sales: [Sale],
-        currencyConverter: CurrencyConverter,
-        dateformat: Date.FormatStyle,
-        currencyCode: String
-    )
-        -> [SaleDetailViewModel]
-    {
-        sales.map { sale in
-            SaleDetailViewModel(
-                sale: sale,
-                dateFormat: dateFormatter,
-                currencyConvertion: try? currencyConverter.currencyConvertion(
-                    fromCurrency: sale.currencyCode,
-                    toCurrency: globalCurrencyCode
-                )
-            )
-        }.sorted { viewmodel1, viewmodel2 in
-            viewmodel1.sale.date < viewmodel2.sale.date
-        }
     }
 }
 
