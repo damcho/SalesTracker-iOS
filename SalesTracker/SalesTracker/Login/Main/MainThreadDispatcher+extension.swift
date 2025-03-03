@@ -26,6 +26,12 @@ extension MainThreadDispatcher: ActivityIndicatorDisplayable where ObjectType ==
 // MARK: - MainThreadDispatcher + ErrorDisplayable
 
 extension MainThreadDispatcher: ErrorDisplayable where ObjectType == ErrorDisplayable {
+    func removeError() {
+        Task { @MainActor in
+            decoratee.removeError()
+        }
+    }
+
     func display(_ error: any Error) {
         Task { @MainActor in
             decoratee.display(error)

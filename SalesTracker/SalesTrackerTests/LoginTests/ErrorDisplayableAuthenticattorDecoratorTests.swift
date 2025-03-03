@@ -37,7 +37,7 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
             _ = try await sut.authenticate(with: anyLoginCredentials)
         }
 
-        #expect(errorDisplayableSpy.errorDisplayMessages == [authError])
+        #expect(errorDisplayableSpy.errorDisplayMessages == [.hidesError, .displayedError])
     }
 
     @Test
@@ -64,6 +64,16 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
 
         #expect(errorDisplayableSpy.isMainThread)
     }
+
+    @MainActor
+    @Test
+    func hides_error_on_authentication_started() async throws {
+        let (sut, errorDisplayableSpy) = makeSUT(decorateeStub: .success(anyAuthenticationResult))
+
+        _ = try await sut.authenticate(with: anyLoginCredentials)
+
+        #expect(errorDisplayableSpy.errorDisplayMessages == [.hidesError])
+    }
 }
 
 extension ErrorDisplayableAuthenticattorDecoratorTests {
@@ -81,11 +91,20 @@ extension ErrorDisplayableAuthenticattorDecoratorTests {
     }
 }
 
+enum ErrorMessages {
+    case displayedError
+    case hidesError
+}
+
 final class ErrorDisplayableSpy: ErrorDisplayable {
     var isMainThread = false
-    var errorDisplayMessages: [LoginError?] = []
+    var errorDisplayMessages: [ErrorMessages] = []
     func display(_ error: any Error) {
-        errorDisplayMessages.append(error as? LoginError)
+        errorDisplayMessages.append(.displayedError)
         isMainThread = Thread.isMainThread
+    }
+
+    func removeError() {
+        errorDisplayMessages.append(.hidesError)
     }
 }

@@ -9,6 +9,7 @@ import Foundation
 
 protocol ErrorDisplayable {
     func display(_ error: Error)
+    func removeError()
 }
 
 struct ErrorDisplayableDecorator<ObjectType> {
@@ -21,6 +22,7 @@ struct ErrorDisplayableDecorator<ObjectType> {
 extension ErrorDisplayableDecorator: Authenticable where ObjectType == Authenticable {
     func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
         do {
+            errorDisplayable.removeError()
             return try await decoratee.authenticate(with: credentials)
         } catch {
             errorDisplayable.display(error)
@@ -34,6 +36,7 @@ extension ErrorDisplayableDecorator: Authenticable where ObjectType == Authentic
 extension ErrorDisplayableDecorator: ProductSalesLoadable where ObjectType == ProductSalesLoadable {
     func loadProductsAndSales() async throws -> ProductsSalesInfo {
         do {
+            errorDisplayable.removeError()
             return try await decoratee.loadProductsAndSales()
         } catch {
             errorDisplayable.display(error)
