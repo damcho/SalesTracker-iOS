@@ -1,5 +1,5 @@
 //
-//  ErrorDisplayableAuthenticattorDecorator.swift
+//  ErrorDisplayableDecorator.swift
 //  SalesTracker
 //
 //  Created by Damian Modernell on 19/2/25.
