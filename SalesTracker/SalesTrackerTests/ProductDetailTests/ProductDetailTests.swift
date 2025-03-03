@@ -62,10 +62,10 @@ struct ProductDetailTests {
             ]
         )
 
-        let totalSalesAmount = ProductDetailComposer.totalSalesAmountCalculator(
-            currencyConverter: currencyConverter,
+        let totalSalesAmount = ProductDetailComposer.calculateTotalSalesAmount(
+            from currencyConverter: currencyConverter,
             sales: sales,
-            currencyDestinationCode: "USD"
+            currencyCode: "USD"
         )
 
         #expect(totalSalesAmount == 12.0)
@@ -85,10 +85,10 @@ struct ProductDetailTests {
             ]
         )
 
-        let totalSalesAmount = ProductDetailComposer.totalSalesAmountCalculator(
-            currencyConverter: currencyConverter,
+        let totalSalesAmount = ProductDetailComposer.calculateTotalSalesAmount(
+            from currencyConverter: currencyConverter,
             sales: sales,
-            currencyDestinationCode: "USD"
+            currencyCode: "USD"
         )
 
         #expect(totalSalesAmount == 11)
