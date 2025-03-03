@@ -25,18 +25,15 @@ enum LoginError: Error, Equatable {
     case authentication(String)
 }
 
+// MARK: LocalizedError
+
 extension LoginError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .connectivity:
-            return "No internet connection"
-        case .authentication(let message):
-            return message
+            "No internet connection"
+        case let .authentication(message):
+            message
         }
     }
-}
-
-protocol ActivityIndicatorDisplayable {
-    func displayActivityIndicator()
-    func hideActivityIndicator()
 }
