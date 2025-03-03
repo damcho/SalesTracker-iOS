@@ -9,9 +9,12 @@ import SwiftUI
 
 struct ProductListView: View {
     let navigationBarTitle: String
+    let errorView: ErrorView
+
     let onRefresh: () async throws -> [ProductSalesView]
     @State var productSalesViews: [ProductSalesView] = []
     var body: some View {
+        errorView
         List {
             ForEach(productSalesViews) { productSalesView in
                 productSalesView
@@ -31,6 +34,9 @@ struct ProductListView: View {
 #Preview {
     ProductListView(
         navigationBarTitle: "Products",
+        errorView: ErrorView(
+            viewModel: ErrorViewModel()
+        ),
         onRefresh: {
             [
                 ProductSalesView(

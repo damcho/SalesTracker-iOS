@@ -42,7 +42,7 @@ enum LoginScreenComposer {
     )
         -> Authenticable
     {
-        ErrorDisplayableAuthenticattorDecorator(
+        ErrorDisplayableDecorator(
             decoratee: decoratee,
             errorDisplayable: MainThreadDispatcher(
                 decoratee: errorDisplayable
