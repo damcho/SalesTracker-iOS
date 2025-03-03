@@ -15,6 +15,10 @@ final class ErrorViewModel: ObservableObject {
 
 extension ErrorViewModel: ErrorDisplayable {
     func display(_ error: any Error) {
-        errorMessage = "An error occurred."
+        if let alocalizedError = error as? LocalizedError {
+            errorMessage = alocalizedError.localizedDescription
+        } else {
+            errorMessage = "An error occurred."
+        }
     }
 }
