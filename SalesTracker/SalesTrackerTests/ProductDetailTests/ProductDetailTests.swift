@@ -93,6 +93,63 @@ struct ProductDetailTests {
 
         #expect(totalSalesAmount == 11)
     }
+
+    @Test
+    func orders_sales_viewmodels_by_date_asc() async throws {
+        let saleJustNow = sale(date: .now)
+        let saleTenSecondsAgo = sale(date: .now.addingTimeInterval(10))
+
+        let expectedViewModelsOrder = [
+            saleViewModel(with: saleJustNow),
+            saleViewModel(with: saleTenSecondsAgo)
+        ]
+        let createdViewModels = ProductDetailComposer.saleViewmodels(
+            from: [
+                saleTenSecondsAgo,
+                saleJustNow
+            ],
+            currencyConverter: CurrencyConverter(currencyConvertions: []),
+            dateformat: .dateTime,
+            currencyCode: "USD"
+        )
+        assertOrder(for: createdViewModels, with: expectedViewModelsOrder)
+    }
+
+    func assertOrder(for createdViewModels: [SaleDetailViewModel], with expectedViewModels: [SaleDetailViewModel]) {
+        #expect(createdViewModels.map { $0.sale } == expectedViewModels.map { $0.sale })
+    }
+}
+
+extension ProductDetailComposer {
+    static func saleViewmodels(
+        from sales: [Sale],
+        currencyConverter: CurrencyConverter,
+        dateformat: Date.FormatStyle,
+        currencyCode: String
+    )
+        -> [SaleDetailViewModel]
+    {
+        sales.map { sale in
+            SaleDetailViewModel(
+                sale: sale,
+                dateFormat: dateFormatter,
+                currencyConvertion: try? currencyConverter.currencyConvertion(
+                    fromCurrency: sale.currencyCode,
+                    toCurrency: globalCurrencyCode
+                )
+            )
+        }.sorted { viewmodel1, viewmodel2 in
+            viewmodel1.sale.date < viewmodel2.sale.date
+        }
+    }
+}
+
+func saleViewModel(with sale: Sale) -> SaleDetailViewModel {
+    .init(
+        sale: sale,
+        dateFormat: .dateTime,
+        currencyConvertion: nil
+    )
 }
 
 func aDate(for format: Date.FormatStyle) -> (date: Date, string: String) {
@@ -110,6 +167,6 @@ func aDate(for format: Date.FormatStyle) -> (date: Date, string: String) {
     )
 }
 
-func sale(amount: Double, currencyCode: String) -> Sale {
-    Sale(date: .now, amount: amount, currencyCode: currencyCode)
+func sale(date: Date = .now, amount: Double = 1, currencyCode: String = "USD") -> Sale {
+    Sale(date: date, amount: amount, currencyCode: currencyCode)
 }
