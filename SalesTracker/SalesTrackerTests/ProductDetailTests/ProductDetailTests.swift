@@ -63,7 +63,7 @@ struct ProductDetailTests {
         )
 
         let totalSalesAmount = ProductDetailComposer.calculateTotalSalesAmount(
-            from currencyConverter: currencyConverter,
+            from: currencyConverter,
             sales: sales,
             currencyCode: "USD"
         )
@@ -86,7 +86,7 @@ struct ProductDetailTests {
         )
 
         let totalSalesAmount = ProductDetailComposer.calculateTotalSalesAmount(
-            from currencyConverter: currencyConverter,
+            from: currencyConverter,
             sales: sales,
             currencyCode: "USD"
         )
