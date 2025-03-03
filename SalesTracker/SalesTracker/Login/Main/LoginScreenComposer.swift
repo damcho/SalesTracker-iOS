@@ -50,7 +50,7 @@ enum LoginScreenComposer {
         )
     }
 
-    static func composeLoginScreen(successfulAuthAction: @escaping (String) -> Void) -> LoginScreen {
+    static func composeLogin() -> (LoginButtonViewModel, ActivityIndicatorViewModel, ErrorViewModel, Authenticable) {
         let activityIndicatorViewModel = ActivityIndicatorViewModel()
         let loginButtonViewModel = LoginButtonViewModel()
         let errorViewModel = ErrorViewModel()
@@ -68,7 +68,16 @@ enum LoginScreenComposer {
             ),
             activityIndicatorDisplayable: activityIndicatorViewModel
         )
+        return (loginButtonViewModel, activityIndicatorViewModel, errorViewModel, activityIndicatorAuthenticable)
+    }
 
+    static func composeLoginScreen(successfulAuthAction: @escaping (String) -> Void) -> LoginScreen {
+        let (
+            loginButtonViewModel,
+            activityIndicatorViewModel,
+            errorViewModel,
+            activityIndicatorAuthenticable
+        ) = composeLogin()
         let loginScreenViewModel = composeLogin(
             with: loginButtonViewModel,
             authAction: { credentials in
