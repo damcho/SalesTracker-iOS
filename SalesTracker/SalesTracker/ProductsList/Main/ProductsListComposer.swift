@@ -52,18 +52,26 @@ enum ProductsListComposer {
     )
         -> ProductListView
     {
+        let errorViewModel = ErrorViewModel()
         let productSalesAdapter = ProductSalesLoaderAdapter(
-            productSalesLoader: AuthenticationErrorDecorator(
-                authErrorHandler: authErrorHandler,
-                decoratee: productsLoadable
+            productSalesLoader: ErrorDisplayableDecorator(
+                decoratee: AuthenticationErrorDecorator(
+                    authErrorHandler: authErrorHandler,
+                    decoratee: productsLoadable
+                ),
+                errorDisplayable: MainThreadDispatcher(
+                    decoratee: errorViewModel
+                )
             ),
             onSelectedProduct: productSelection,
             productsOrder: { view1, view2 in
                 view1.viewModel.productName < view2.viewModel.productName
             }
         )
+
         return ProductListView(
             navigationBarTitle: "Products",
+            errorView: ErrorView(viewModel: errorViewModel),
             onRefresh: {
                 try await productSalesAdapter.loadProductsAndSales()
             }
