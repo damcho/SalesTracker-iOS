@@ -7,18 +7,12 @@
 
 import Foundation
 
-typealias RemoteProductsListMapper = ((data: Data, httpResponse: HTTPURLResponse)) throws -> [DecodableProduct]
+typealias RemoteProductsLoader = RemoteGetLoader<[DecodableProduct]>
 
-struct RemoteProductsLoader {
-    let httpClient: SalesTrackerHTTPClient
-    let url: URL
-    let mapper: RemoteProductsListMapper
-}
+// MARK: - RemoteGetLoader + RemoteProductsLoadable
 
-// MARK: RemoteProductsLoadable
-
-extension RemoteProductsLoader: RemoteProductsLoadable {
+extension RemoteGetLoader: RemoteProductsLoadable where ObjectType == [DecodableProduct] {
     func loadProducts() async throws -> [DecodableProduct] {
-        try await mapper(httpClient.get(from: url))
+        try await performGetRequest()
     }
 }

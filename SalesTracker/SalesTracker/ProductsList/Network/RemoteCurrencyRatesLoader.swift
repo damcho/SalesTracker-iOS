@@ -7,20 +7,14 @@
 
 import Foundation
 
-typealias RemoteCurrencyRatesMapper = ((data: Data, httpResponse: HTTPURLResponse)) throws -> [CurrencyConvertion]
+typealias RemoteCurrencyRatesLoader = RemoteGetLoader<[CurrencyConvertion]>
 
-struct RemoteCurrencyRatesLoader {
-    let httpCLient: SalesTrackerHTTPClient
-    let url: URL
-    let mapper: RemoteCurrencyRatesMapper
-}
+// MARK: - RemoteGetLoader + RemoteCurrencyRatesLoadable
 
-// MARK: RemoteCurrencyRatesLoadable
-
-extension RemoteCurrencyRatesLoader: RemoteCurrencyRatesLoadable {
+extension RemoteGetLoader: RemoteCurrencyRatesLoadable where ObjectType == [CurrencyConvertion] {
     func loadCurrencyRates() async throws -> CurrencyConverter {
         try await CurrencyConverter(
-            currencyConvertions: mapper(httpCLient.get(from: url))
+            currencyConvertions: performGetRequest()
         )
     }
 }

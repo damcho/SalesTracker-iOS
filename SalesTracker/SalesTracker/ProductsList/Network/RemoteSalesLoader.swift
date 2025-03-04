@@ -7,18 +7,12 @@
 
 import Foundation
 
-typealias RemoteSalesListMapper = ((data: Data, httpResponse: HTTPURLResponse)) throws -> [DecodableSale]
+typealias RemoteSalesLoader = RemoteGetLoader<[DecodableSale]>
 
-struct RemoteSalesLoader {
-    let httpClient: SalesTrackerHTTPClient
-    let url: URL
-    let mapper: RemoteSalesListMapper
-}
+// MARK: - RemoteGetLoader + RemoteSalesLoadable
 
-// MARK: RemoteSalesLoadable
-
-extension RemoteSalesLoader: RemoteSalesLoadable {
-    func loadSales() async throws -> [SalesTracker.DecodableSale] {
+extension RemoteGetLoader: RemoteSalesLoadable where ObjectType == [DecodableSale] {
+    func loadSales() async throws -> [DecodableSale] {
         try await mapper(httpClient.get(from: url))
     }
 }
