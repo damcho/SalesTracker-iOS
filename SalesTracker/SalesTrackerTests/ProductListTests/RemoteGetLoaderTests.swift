@@ -1,5 +1,5 @@
 //
-//  RemoteProductsLoaderTests.swift
+//  RemoteGetLoaderTests.swift
 //  SalesTrackerTests
 //
 //  Created by Damian Modernell on 23/2/25.
