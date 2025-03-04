@@ -15,18 +15,24 @@ protocol ErrorDisplayable {
 struct ErrorDisplayableDecorator<ObjectType> {
     let decoratee: ObjectType
     let errorDisplayable: ErrorDisplayable
+
+    func perform<R>(_ action: () async throws -> R) async throws -> R {
+        do {
+            errorDisplayable.removeError()
+            return try await action()
+        } catch {
+            errorDisplayable.display(error)
+            throw error
+        }
+    }
 }
 
 // MARK: Authenticable
 
 extension ErrorDisplayableDecorator: Authenticable where ObjectType == Authenticable {
     func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
-        do {
-            errorDisplayable.removeError()
-            return try await decoratee.authenticate(with: credentials)
-        } catch {
-            errorDisplayable.display(error)
-            throw error
+        try await perform {
+            try await decoratee.authenticate(with: credentials)
         }
     }
 }
@@ -35,12 +41,8 @@ extension ErrorDisplayableDecorator: Authenticable where ObjectType == Authentic
 
 extension ErrorDisplayableDecorator: ProductSalesLoadable where ObjectType == ProductSalesLoadable {
     func loadProductsAndSales() async throws -> ProductsSalesInfo {
-        do {
-            errorDisplayable.removeError()
-            return try await decoratee.loadProductsAndSales()
-        } catch {
-            errorDisplayable.display(error)
-            throw error
+        try await perform {
+            try await decoratee.loadProductsAndSales()
         }
     }
 }
