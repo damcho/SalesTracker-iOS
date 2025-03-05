@@ -88,7 +88,3 @@ struct CurrencyConverterTests {
         })
     }
 }
-
-extension CurrencyConverterTests {
-    func assert(_: [String: [String: Double]], for _: [String: [String: Double]]) {}
-}

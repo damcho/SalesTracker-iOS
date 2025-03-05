@@ -91,24 +91,3 @@ extension ActivityIndicatorAuthenticationDecoratorTests {
         )
     }
 }
-
-final class activityIndicatorDisplayableSpy: ActivityIndicatorDisplayable {
-    var activityIndicatorMessages: [Bool] = []
-    var isMainThread = false
-    func displayActivityIndicator() {
-        activityIndicatorMessages.append(true)
-        isMainThread = Thread.isMainThread
-    }
-
-    func hideActivityIndicator() {
-        activityIndicatorMessages.append(false)
-        isMainThread = Thread.isMainThread
-    }
-}
-
-struct AuthenticableStub: Authenticable {
-    let stub: Result<AuthenticationResult, Error>
-    func authenticate(with _: LoginCredentials) async throws -> AuthenticationResult {
-        try stub.get()
-    }
-}

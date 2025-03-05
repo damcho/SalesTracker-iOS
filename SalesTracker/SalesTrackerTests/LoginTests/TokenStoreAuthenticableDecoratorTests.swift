@@ -70,12 +70,3 @@ extension TokenStoreAuthenticableDecoratorTests {
         )
     }
 }
-
-final class TokenStoreSpy: TokenStore {
-    var stubResult: Result<Void, Error>?
-    var storeMesages: [String] = []
-    func store(_ token: String) throws {
-        storeMesages.append(token)
-        try stubResult?.get()
-    }
-}

@@ -90,21 +90,3 @@ extension ErrorDisplayableAuthenticattorDecoratorTests {
         return (sut, errorDisplayableSpy)
     }
 }
-
-enum ErrorMessages {
-    case displayedError
-    case hidesError
-}
-
-final class ErrorDisplayableSpy: ErrorDisplayable {
-    var isMainThread = false
-    var errorDisplayMessages: [ErrorMessages] = []
-    func display(_ error: any Error) {
-        errorDisplayMessages.append(.displayedError)
-        isMainThread = Thread.isMainThread
-    }
-
-    func removeError() {
-        errorDisplayMessages.append(.hidesError)
-    }
-}

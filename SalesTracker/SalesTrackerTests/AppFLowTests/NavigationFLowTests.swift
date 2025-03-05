@@ -41,12 +41,3 @@ extension NavigationFLowTests {
         )
     }
 }
-
-struct TokenLoadableStub: TokenLoadable {
-    let stub: Result<String, Error>
-    func store(_: String) throws {}
-
-    func loadAccessToken() throws -> String {
-        try stub.get()
-    }
-}
