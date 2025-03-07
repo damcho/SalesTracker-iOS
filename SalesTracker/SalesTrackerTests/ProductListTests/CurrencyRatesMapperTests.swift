@@ -37,10 +37,10 @@ struct CurrencyRatesMapperTests: MapperSpecs {
     }
 }
 
-var currencyRates: (http: Data, decoded: CurrencyConvertion) {
+var currencyRates: (http: Data, decoded: CurrencyConversion) {
     (
         #"[{"from": "USD","to": "ARS","rate": 123.45}]"#.data(using: .utf8)!,
-        CurrencyConvertion(
+        CurrencyConversion(
             fromCurrencyCode: "USD",
             toCurrencyCode: "ARS",
             rate: 123.45

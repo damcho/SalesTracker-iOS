@@ -33,7 +33,7 @@ struct ProductDetailTests {
             ),
             dateFormat: .dateTime,
             currencyFormat: .narrow,
-            currencyConvertion: CurrencyConvertion(
+            currencyconversion: CurrencyConversion(
                 fromCurrencyCode: "ARS",
                 toCurrencyCode: "USD",
                 rate: 1 / 1000
@@ -52,11 +52,11 @@ struct ProductDetailTests {
             sale(amount: 1000, currencyCode: "ARS")
         ]
         let currencyConverter = CurrencyConverter(
-            currencyConvertions: [
-                CurrencyConvertion(
+            currencyconversions: [
+                CurrencyConversion(
                     fromCurrencyCode: "EUR", toCurrencyCode: "USD", rate: 1.1
                 ),
-                CurrencyConvertion(
+                CurrencyConversion(
                     fromCurrencyCode: "ARS", toCurrencyCode: "USD", rate: 1 / 1000
                 )
             ]
@@ -72,14 +72,14 @@ struct ProductDetailTests {
     }
 
     @Test
-    func ignores_sale_amount_on_missing_currency_convertion_rate() async throws {
+    func ignores_sale_amount_on_missing_currency_conversion_rate() async throws {
         let sales = [
             sale(amount: 10, currencyCode: "EUR"),
             sale(amount: 1000, currencyCode: "ARS")
         ]
         let currencyConverter = CurrencyConverter(
-            currencyConvertions: [
-                CurrencyConvertion(
+            currencyconversions: [
+                CurrencyConversion(
                     fromCurrencyCode: "EUR", toCurrencyCode: "USD", rate: 1.1
                 )
             ]
@@ -108,7 +108,7 @@ struct ProductDetailTests {
                 saleTenSecondsAgo,
                 saleJustNow
             ],
-            currencyConverter: CurrencyConverter(currencyConvertions: []),
+            currencyConverter: CurrencyConverter(currencyconversions: []),
             dateformat: .dateTime,
             currencyCode: "USD"
         )
@@ -126,7 +126,7 @@ struct ProductDetailTests {
             ),
             dateFormat: .dateTime,
             currencyFormat: .narrow,
-            currencyConvertion: nil
+            currencyconversion: nil
         )
 
         #expect(sut.localCurrencySaleAmount == "$143,432.30")
@@ -142,7 +142,7 @@ func saleViewModel(with sale: Sale) -> SaleDetailViewModel {
     .init(
         sale: sale,
         dateFormat: .dateTime,
-        currencyConvertion: nil
+        currencyconversion: nil
     )
 }
 

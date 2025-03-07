@@ -26,11 +26,11 @@ enum ProductDetailComposer {
         -> Double
     {
         sales.reduce(0) { partialResult, sale in
-            let convertionRate = try? currencyConverter.currencyConvertion(
+            let conversionRate = try? currencyConverter.currencyConversion(
                 fromCurrency: sale.currencyCode,
                 toCurrency: currencyCode
             ).rate
-            return partialResult + sale.amount * (convertionRate ?? 0)
+            return partialResult + sale.amount * (conversionRate ?? 0)
         }
     }
 
@@ -46,7 +46,7 @@ enum ProductDetailComposer {
             SaleDetailViewModel(
                 sale: sale,
                 dateFormat: dateFormatter,
-                currencyConvertion: try? currencyConverter.currencyConvertion(
+                currencyconversion: try? currencyConverter.currencyConversion(
                     fromCurrency: sale.currencyCode,
                     toCurrency: globalCurrencyCode
                 )

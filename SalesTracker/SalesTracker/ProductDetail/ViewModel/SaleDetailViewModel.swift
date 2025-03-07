@@ -9,17 +9,17 @@ import Foundation
 
 struct SaleDetailViewModel {
     let sale: Sale
-    let currencyConvertion: CurrencyConvertion?
+    let currencyconversion: CurrencyConversion?
     let dateFormat: Date.FormatStyle
     let currencyFormat: CurrencyFormatStyleConfiguration.Presentation
     init(
         sale: Sale,
         dateFormat: Date.FormatStyle,
         currencyFormat: CurrencyFormatStyleConfiguration.Presentation = .standard,
-        currencyConvertion: CurrencyConvertion?
+        currencyconversion: CurrencyConversion?
     ) {
         self.sale = sale
-        self.currencyConvertion = currencyConvertion
+        self.currencyconversion = currencyconversion
         self.dateFormat = dateFormat
         self.currencyFormat = currencyFormat
     }
@@ -35,10 +35,10 @@ struct SaleDetailViewModel {
     }
 
     var convertedCurrencySaleAmount: String {
-        guard let aCurrencyConvertion = currencyConvertion else {
+        guard let aCurrencyconversion = currencyconversion else {
             return localCurrencySaleAmount
         }
-        let convertedAmount = sale.amount * aCurrencyConvertion.rate
-        return "\(convertedAmount.formatted(.currency(code: aCurrencyConvertion.toCurrencyCode).presentation(currencyFormat)))"
+        let convertedAmount = sale.amount * aCurrencyconversion.rate
+        return "\(convertedAmount.formatted(.currency(code: aCurrencyconversion.toCurrencyCode).presentation(currencyFormat)))"
     }
 }

@@ -39,11 +39,11 @@ extension RemoteProductSalesLoader: ProductSalesLoadable {
     func loadProductsAndSales() async throws -> ProductsSalesInfo {
         async let products = try await productsLoader.loadProducts()
         async let sales = try await remoteSalesLoader.loadSales()
-        async let currencyConvertions = try await currencyRatesLoader.loadCurrencyRates()
+        async let currencyconversions = try await currencyRatesLoader.loadCurrencyRates()
 
         return try await ProductsSalesInfo(
             productsSalesMap: mapper(products, sales),
-            currencyConverter: currencyConvertions
+            currencyConverter: currencyconversions
         )
     }
 }

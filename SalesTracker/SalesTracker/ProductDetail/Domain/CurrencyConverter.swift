@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CurrencyConvertion: Equatable {
+struct CurrencyConversion: Equatable {
     let fromCurrencyCode: String
     let toCurrencyCode: String
     let rate: Double
@@ -18,35 +18,35 @@ enum CurrencyConverterError: Error {
 }
 
 struct CurrencyConverter: Equatable, Hashable {
-    var currencyConvertionsMap: [String: [String: Double]] = [:]
-    init(currencyConvertions: [CurrencyConvertion]) {
-        for currencyConvertion in currencyConvertions {
-            if currencyConvertionsMap[currencyConvertion.fromCurrencyCode] != nil {
-                currencyConvertionsMap[currencyConvertion.fromCurrencyCode]?[currencyConvertion.toCurrencyCode] =
-                    currencyConvertion.rate
+    var currencyconversionsMap: [String: [String: Double]] = [:]
+    init(currencyconversions: [CurrencyConversion]) {
+        for currencyconversion in currencyconversions {
+            if currencyconversionsMap[currencyconversion.fromCurrencyCode] != nil {
+                currencyconversionsMap[currencyconversion.fromCurrencyCode]?[currencyconversion.toCurrencyCode] =
+                    currencyconversion.rate
             } else {
-                currencyConvertionsMap[currencyConvertion.fromCurrencyCode] =
-                    [currencyConvertion.toCurrencyCode: currencyConvertion.rate]
+                currencyconversionsMap[currencyconversion.fromCurrencyCode] =
+                    [currencyconversion.toCurrencyCode: currencyconversion.rate]
             }
 
-            if currencyConvertionsMap[currencyConvertion.toCurrencyCode] != nil {
-                currencyConvertionsMap[currencyConvertion.toCurrencyCode]?[currencyConvertion.fromCurrencyCode] = 1 /
-                    currencyConvertion.rate
+            if currencyconversionsMap[currencyconversion.toCurrencyCode] != nil {
+                currencyconversionsMap[currencyconversion.toCurrencyCode]?[currencyconversion.fromCurrencyCode] = 1 /
+                    currencyconversion.rate
             } else {
-                currencyConvertionsMap[currencyConvertion.toCurrencyCode] =
-                    [currencyConvertion.fromCurrencyCode: 1 / currencyConvertion.rate]
+                currencyconversionsMap[currencyconversion.toCurrencyCode] =
+                    [currencyconversion.fromCurrencyCode: 1 / currencyconversion.rate]
             }
         }
     }
 
-    func currencyConvertion(fromCurrency: String, toCurrency: String) throws -> CurrencyConvertion {
-        guard let aConvertionRate = currencyConvertionsMap[fromCurrency]?[toCurrency] else {
+    func currencyConversion(fromCurrency: String, toCurrency: String) throws -> CurrencyConversion {
+        guard let aconversionRate = currencyconversionsMap[fromCurrency]?[toCurrency] else {
             throw CurrencyConverterError.missingRate
         }
-        return CurrencyConvertion(
+        return CurrencyConversion(
             fromCurrencyCode: fromCurrency,
             toCurrencyCode: toCurrency,
-            rate: aConvertionRate
+            rate: aconversionRate
         )
     }
 }

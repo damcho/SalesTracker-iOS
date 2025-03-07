@@ -7,14 +7,14 @@
 
 import Foundation
 
-typealias RemoteCurrencyRatesLoader = RemoteGetLoader<[CurrencyConvertion]>
+typealias RemoteCurrencyRatesLoader = RemoteGetLoader<[CurrencyConversion]>
 
 // MARK: - RemoteGetLoader + RemoteCurrencyRatesLoadable
 
-extension RemoteGetLoader: RemoteCurrencyRatesLoadable where ObjectType == [CurrencyConvertion] {
+extension RemoteGetLoader: RemoteCurrencyRatesLoadable where ObjectType == [CurrencyConversion] {
     func loadCurrencyRates() async throws -> CurrencyConverter {
         try await CurrencyConverter(
-            currencyConvertions: performGetRequest()
+            currencyconversions: performGetRequest()
         )
     }
 }

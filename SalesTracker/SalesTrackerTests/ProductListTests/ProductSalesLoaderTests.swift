@@ -70,7 +70,7 @@ extension ProductSalesLoaderTests {
 }
 
 var anyCurrencyCOnverter: CurrencyConverter {
-    .init(currencyConvertions: [])
+    .init(currencyconversions: [])
 }
 
 struct RemoteCurrencyRatesLoaderStub: RemoteCurrencyRatesLoadable {
