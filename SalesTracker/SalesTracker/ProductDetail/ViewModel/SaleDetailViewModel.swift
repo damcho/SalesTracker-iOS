@@ -36,7 +36,7 @@ struct SaleDetailViewModel {
 
     var convertedCurrencySaleAmount: String {
         guard let aCurrencyConvertion = currencyConvertion else {
-            return "N/A"
+            return localCurrencySaleAmount
         }
         let convertedAmount = sale.amount * aCurrencyConvertion.rate
         return "\(convertedAmount.formatted(.currency(code: aCurrencyConvertion.toCurrencyCode).presentation(currencyFormat)))"

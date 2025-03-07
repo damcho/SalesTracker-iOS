@@ -115,6 +115,24 @@ struct ProductDetailTests {
         assertOrder(for: createdViewModels, with: expectedViewModelsOrder)
     }
 
+    @Test
+    func displays_local_currency_on_missing_conversion_rate() async throws {
+        let expectedDate = aDate(for: .dateTime)
+        let sut = SaleDetailViewModel(
+            sale: Sale(
+                date: expectedDate.date,
+                amount: 143_432.3,
+                currencyCode: "ARS"
+            ),
+            dateFormat: .dateTime,
+            currencyFormat: .narrow,
+            currencyConvertion: nil
+        )
+
+        #expect(sut.localCurrencySaleAmount == "$143,432.30")
+        #expect(sut.convertedCurrencySaleAmount == "$143,432.30")
+    }
+
     func assertOrder(for createdViewModels: [SaleDetailViewModel], with expectedViewModels: [SaleDetailViewModel]) {
         #expect(createdViewModels.map { $0.sale } == expectedViewModels.map { $0.sale })
     }
