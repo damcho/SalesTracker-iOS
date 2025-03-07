@@ -10,7 +10,7 @@ import Testing
 
 struct CurrencyConverterTests {
     @Test
-    func creates_all_conversion_rates_couples_on_init() async throws {
+    func maps_conversion_rates_on_init() async throws {
         let initialconversionss = [
             CurrencyConversion(
                 fromCurrencyCode: "USD",
@@ -28,12 +28,6 @@ struct CurrencyConverterTests {
             "USD": [
                 "AUD": 1.1,
                 "ARS": 1000
-            ],
-            "AUD": [
-                "USD": 1 / 1.1
-            ],
-            "ARS": [
-                "USD": 1 / 1000
             ]
         ]
 

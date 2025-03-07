@@ -28,14 +28,6 @@ struct CurrencyConverter: Equatable, Hashable {
                 currencyconversionsMap[currencyconversion.fromCurrencyCode] =
                     [currencyconversion.toCurrencyCode: currencyconversion.rate]
             }
-
-            if currencyconversionsMap[currencyconversion.toCurrencyCode] != nil {
-                currencyconversionsMap[currencyconversion.toCurrencyCode]?[currencyconversion.fromCurrencyCode] = 1 /
-                    currencyconversion.rate
-            } else {
-                currencyconversionsMap[currencyconversion.toCurrencyCode] =
-                    [currencyconversion.fromCurrencyCode: 1 / currencyconversion.rate]
-            }
         }
     }
 
