@@ -8,6 +8,7 @@ import Foundation
 
 enum Source {
     static let baseURL: URL = .init(string: "https://ile-b2p4.essentialdeveloper.com")!
+    static let currencyRatesMiddlewareBaseUrl: URL = .init(string: "https://salestracker-middleware-api.onrender.com")!
     case login
     case productsList
     case salesList

@@ -39,7 +39,7 @@ enum ProductsListComposer {
             ),
             currencyRatesLoader: RemoteCurrencyRatesLoader(
                 httpClient: SalesTrackerApp.httpClient,
-                url: Source.currencyRates.getURL(for: Source.baseURL),
+                url: Source.currencyRates.getURL(for: Source.currencyRatesMiddlewareBaseUrl),
                 mapper: CurrencyRatesMapper.map
             )
         )
