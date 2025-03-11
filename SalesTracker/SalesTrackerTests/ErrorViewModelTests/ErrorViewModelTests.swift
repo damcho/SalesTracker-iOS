@@ -22,6 +22,15 @@ struct ErrorViewModelTests {
         )
     }
 
+    @Test
+    func displays_empty_string_on_remove_error_called() async throws {
+        let sut = ErrorViewModel()
+
+        sut.removeError()
+
+        #expect(sut.errorMessage == "")
+    }
+
     func expect(_ expectedErrorMessage: String, for error: Error) {
         let sut = ErrorViewModel()
 

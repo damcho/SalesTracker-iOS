@@ -14,7 +14,9 @@ final class ErrorViewModel: ObservableObject {
 // MARK: ErrorDisplayable
 
 extension ErrorViewModel: ErrorDisplayable {
-    func removeError() {}
+    func removeError() {
+        errorMessage = ""
+    }
 
     func display(_ error: any Error) {
         if let alocalizedError = error as? LocalizedError {
