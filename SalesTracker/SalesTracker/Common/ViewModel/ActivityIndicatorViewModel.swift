@@ -7,11 +7,13 @@
 
 import Foundation
 
+@MainActor
 protocol ActivityIndicatorDisplayable {
     func displayActivityIndicator()
     func hideActivityIndicator()
 }
 
+@MainActor
 final class ActivityIndicatorViewModel: ObservableObject {
     @Published var shouldDisplayAcTivityIndicator: Bool = false
 }

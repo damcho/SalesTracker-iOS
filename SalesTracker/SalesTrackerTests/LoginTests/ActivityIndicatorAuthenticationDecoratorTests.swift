@@ -13,7 +13,7 @@ import Testing
 struct ActivityIndicatorAuthenticationDecoratorTests {
     @Test
     func throws_on_authentication_failure() async throws {
-        let (sut, _) = makeSUT(
+        let (sut, _) = await makeSUT(
             decorateeStub: .failure(authError)
         )
 
@@ -49,7 +49,7 @@ struct ActivityIndicatorAuthenticationDecoratorTests {
     @Test
     func forwards_result_on_authentication_completion() async throws {
         let expectedResult = successfulAuthenticationResult
-        let (sut, _) = makeSUT(
+        let (sut, _) = await makeSUT(
             decorateeStub: .success(expectedResult)
         )
 
@@ -75,6 +75,7 @@ struct ActivityIndicatorAuthenticationDecoratorTests {
 }
 
 extension ActivityIndicatorAuthenticationDecoratorTests {
+    @MainActor
     func makeSUT(
         decorateeStub: Result<AuthenticationResult, Error> = .success(successfulAuthenticationResult)
     )
