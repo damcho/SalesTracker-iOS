@@ -13,13 +13,19 @@ struct ProductListView: View {
 
     let onRefresh: () async throws -> [ProductSalesView]
     @State var productSalesViews: [ProductSalesView] = []
+
     var body: some View {
-        errorView
         List {
-            ForEach(productSalesViews) { productSalesView in
-                productSalesView
+            Section {
+                ForEach(productSalesViews) { productSalesView in
+                    productSalesView
+                }
+            } header: {
+                errorView
             }
-        }.refreshable {
+        }
+        .navigationTitle(Text(navigationBarTitle))
+        .refreshable {
             do {
                 productSalesViews = try await onRefresh()
             } catch {}
@@ -27,7 +33,7 @@ struct ProductListView: View {
             do {
                 productSalesViews = try await onRefresh()
             } catch {}
-        }.navigationTitle(Text(navigationBarTitle))
+        }
     }
 }
 
