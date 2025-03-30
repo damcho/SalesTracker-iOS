@@ -30,9 +30,7 @@ enum LoginScreenComposer {
     {
         ActivityIndicatorAuthenticationDecorator(
             decoratee: authenticable,
-            activityIndicatorDisplayable: MainThreadDispatcher(
-                decoratee: activityIndicatorDisplayable
-            )
+            activityIndicatorDisplayable: activityIndicatorDisplayable
         )
     }
 
