@@ -13,7 +13,7 @@ import Testing
 struct ProductListAcceptanceTests {
     @Test
     func creates_product_sales_views_on_successful_load() async throws {
-        let sut = makeSUT(stub: .success(productInfo.raw))
+        let sut = await makeSUT(stub: .success(productInfo.raw))
 
         let productSalesViews = try await sut.onRefresh()
 
@@ -34,7 +34,7 @@ struct ProductListAcceptanceTests {
             currencyConverter: anyCurrencyCOnverter
         )
 
-        let sut = makeSUT(stub: .success(shuffledProducts))
+        let sut = await makeSUT(stub: .success(shuffledProducts))
 
         let productSalesViews = try await sut.onRefresh()
 
@@ -61,6 +61,7 @@ extension ProductListAcceptanceTests {
         #expect(productsInfoArray == expectedResult)
     }
 
+    @MainActor
     func makeSUT(stub: Result<ProductsSalesInfo, Error>) -> ProductListView {
         ProductsListComposer.compose(
             with: ProductSalesLoadableStub(stub: stub),

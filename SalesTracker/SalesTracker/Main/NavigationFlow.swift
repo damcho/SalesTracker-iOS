@@ -41,6 +41,7 @@ class NavigationFLow: ObservableObject {
         }
     }
 
+    @MainActor
     func resolveInitialScreen() -> LoginScreen {
         LoginScreenComposer.composeLoginScreen(
             successfulAuthAction: { accesstoken in
@@ -49,6 +50,7 @@ class NavigationFLow: ObservableObject {
         )
     }
 
+    @MainActor
     func destinations(for screen: Screen) -> any View {
         switch screen {
         case .login:

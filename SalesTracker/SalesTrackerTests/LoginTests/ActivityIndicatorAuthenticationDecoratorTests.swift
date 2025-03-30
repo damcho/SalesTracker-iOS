@@ -48,7 +48,7 @@ struct ActivityIndicatorAuthenticationDecoratorTests {
 
     @Test
     func forwards_result_on_authentication_completion() async throws {
-        let expectedResult = anyAuthenticationResult
+        let expectedResult = successfulAuthenticationResult
         let (sut, _) = makeSUT(
             decorateeStub: .success(expectedResult)
         )
@@ -62,7 +62,7 @@ struct ActivityIndicatorAuthenticationDecoratorTests {
     @Test
     func displays_activity_indicator_in_main_thread() async throws {
         let (sut, spy) = makeSUT(
-            decorateeStub: .success(anyAuthenticationResult)
+            decorateeStub: .success(successfulAuthenticationResult)
         )
 
         let task = performActionInBackgroundThread {
@@ -76,7 +76,7 @@ struct ActivityIndicatorAuthenticationDecoratorTests {
 
 extension ActivityIndicatorAuthenticationDecoratorTests {
     func makeSUT(
-        decorateeStub: Result<AuthenticationResult, Error> = .success(anyAuthenticationResult)
+        decorateeStub: Result<AuthenticationResult, Error> = .success(successfulAuthenticationResult)
     )
         -> (Authenticable, activityIndicatorDisplayableSpy)
     {

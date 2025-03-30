@@ -11,7 +11,7 @@ import Testing
 struct ErrorDisplayableDecoratorTests {
     @Test
     func displays_error_and_throws_on_action_failure() async throws {
-        let (sut, errorDisplayableSpy) = makeSUT()
+        let (sut, errorDisplayableSpy) = await makeSUT()
 
         await #expect(throws: anyError, performing: {
             try await sut.perform {
@@ -19,22 +19,23 @@ struct ErrorDisplayableDecoratorTests {
             }
         })
 
-        #expect(errorDisplayableSpy.errorDisplayMessages == [.hidesError, .displayedError])
+        #expect(await errorDisplayableSpy.errorDisplayMessages == [.hidesError, .displayedError])
     }
 
     @Test
     func hides_error_on_successfulAction() async throws {
-        let (sut, errorDisplayableSpy) = makeSUT()
+        let (sut, errorDisplayableSpy) = await makeSUT()
 
         _ = try await sut.perform {
             "some string"
         }
 
-        #expect(errorDisplayableSpy.errorDisplayMessages == [.hidesError])
+        #expect(await errorDisplayableSpy.errorDisplayMessages == [.hidesError])
     }
 }
 
 extension ErrorDisplayableDecoratorTests {
+    @MainActor
     func makeSUT()
         -> (ErrorDisplayableDecorator<Encodable>, ErrorDisplayableSpy)
     {

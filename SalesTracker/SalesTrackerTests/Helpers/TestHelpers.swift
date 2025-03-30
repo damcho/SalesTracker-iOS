@@ -73,7 +73,7 @@ var anyError: NSError {
     NSError(domain: "", code: 0)
 }
 
-var anyAuthenticationResult: AuthenticationResult {
+var successfulAuthenticationResult: AuthenticationResult {
     AuthenticationResult(authToken: "")
 }
 
