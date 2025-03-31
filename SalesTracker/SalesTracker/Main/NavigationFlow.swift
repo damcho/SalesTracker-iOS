@@ -14,6 +14,7 @@ enum Screen: Hashable {
     case productDetail(Product, CurrencyConverter)
 }
 
+@MainActor
 class NavigationFLow: ObservableObject {
     @Published var navigationPath: NavigationPath
 
@@ -30,18 +31,13 @@ class NavigationFLow: ObservableObject {
     }
 
     func push(_ screen: Screen) {
-        Task { @MainActor in
-            navigationPath.append(screen)
-        }
+        navigationPath.append(screen)
     }
 
     func popToRoot() {
-        Task { @MainActor in
-            navigationPath.removeLast(navigationPath.count)
-        }
+        navigationPath.removeLast(navigationPath.count)
     }
 
-    @MainActor
     func resolveInitialScreen() -> LoginScreen {
         LoginScreenComposer.composeLoginScreen(
             successfulAuthAction: { accesstoken in
@@ -50,7 +46,6 @@ class NavigationFLow: ObservableObject {
         )
     }
 
-    @MainActor
     func destinations(for screen: Screen) -> any View {
         switch screen {
         case .login:
