@@ -30,7 +30,8 @@ struct ProductSalesView: View, Identifiable {
             productInfo: ProductInfo(
                 product: .init(
                     id: UUID(),
-                    name: "a name"
+                    name: "a name",
+                    sales: []
                 ),
                 salesCount: 3
             ),

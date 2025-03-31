@@ -10,10 +10,6 @@ import Foundation
 struct DecodableProduct: Decodable, Equatable {
     let id: UUID
     let name: String
-
-    func toProduct() -> Product {
-        Product(id: id, name: name)
-    }
 }
 
 enum ProductsListMapper {

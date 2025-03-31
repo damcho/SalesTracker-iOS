@@ -50,7 +50,8 @@ struct ProductListView: View {
                         productInfo: ProductInfo(
                             product: .init(
                                 id: UUID(),
-                                name: "aname"
+                                name: "aname",
+                                sales: []
                             ),
                             salesCount: 3
                         ),

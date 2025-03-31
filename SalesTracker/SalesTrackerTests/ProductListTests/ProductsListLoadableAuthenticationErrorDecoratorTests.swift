@@ -56,7 +56,7 @@ struct ProductsListLoadableAuthenticationErrorDecoratorTests {
     func forwards_result_on_successful_load() async throws {
         var errorHandlerCallCount = 0
         let expectedResult = ProductsSalesInfo(
-            productsSalesMap: [someProduct: [someSale]],
+            products: [aProduct.domain],
             currencyConverter: anyCurrencyCOnverter
         )
         let sut = makeSUT(

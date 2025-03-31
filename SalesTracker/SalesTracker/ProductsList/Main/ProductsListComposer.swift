@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias ProductSelectionHandler = (Product, [Sale], CurrencyConverter) -> Void
+typealias ProductSelectionHandler = (Product, CurrencyConverter) -> Void
 
 enum ProductsListComposer {
     static var dateFormatter: DateFormatter {

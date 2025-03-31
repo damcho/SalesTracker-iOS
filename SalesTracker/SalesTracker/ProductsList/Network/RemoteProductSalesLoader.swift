@@ -8,11 +8,11 @@
 import Foundation
 
 struct ProductsSalesInfo: Equatable {
-    let productsSalesMap: [Product: [Sale]]
+    let products: [Product]
     let currencyConverter: CurrencyConverter
 }
 
-typealias ProductSalesDictionaryMapper = ([DecodableProduct], [DecodableSale]) throws -> [Product: [Sale]]
+typealias ProductSalesDictionaryMapper = ([DecodableProduct], [DecodableSale]) throws -> [Product]
 
 protocol RemoteSalesLoadable {
     func loadSales() async throws -> [DecodableSale]
@@ -42,7 +42,7 @@ extension RemoteProductSalesLoader: ProductSalesLoadable {
         async let currencyconversions = try await currencyRatesLoader.loadCurrencyRates()
 
         return try await ProductsSalesInfo(
-            productsSalesMap: mapper(products, sales),
+            products: mapper(products, sales),
             currencyConverter: currencyconversions
         )
     }

@@ -26,10 +26,10 @@ struct ProductListAcceptanceTests {
     @Test
     func orders_products_by_products_name_asc() async throws {
         let shuffledProducts = ProductsSalesInfo(
-            productsSalesMap: [
-                Product(id: UUID(), name: "product B"): [someSale],
-                Product(id: UUID(), name: "product A"): [someSale],
-                Product(id: UUID(), name: "product C"): [someSale]
+            products: [
+                Product(id: UUID(), name: "product B", sales: [someSale]),
+                Product(id: UUID(), name: "product A", sales: [someSale]),
+                Product(id: UUID(), name: "product C", sales: [someSale])
             ],
             currencyConverter: anyCurrencyCOnverter
         )
@@ -65,7 +65,7 @@ extension ProductListAcceptanceTests {
     func makeSUT(stub: Result<ProductsSalesInfo, Error>) -> ProductListView {
         ProductsListComposer.compose(
             with: ProductSalesLoadableStub(stub: stub),
-            productSelection: { _, _, _ in },
+            productSelection: { _, _ in },
             authErrorHandler: {}
         )
     }
@@ -83,17 +83,17 @@ var someSale: Sale {
 }
 
 var someProduct: Product {
-    Product(id: UUID(uuidString: "7019D8A7-0B35-4057-B7F9-8C5471961ED0")!, name: "aname")
+    Product(id: UUID(uuidString: "7019D8A7-0B35-4057-B7F9-8C5471961ED0")!, name: "aname", sales: [])
 }
 
 var productInfo: (info: ProductInfo, raw: ProductsSalesInfo) {
     (
         ProductInfo(
             product: someProduct,
-            salesCount: 1
+            salesCount: 0
         ),
         ProductsSalesInfo(
-            productsSalesMap: [someProduct: [someSale]],
+            products: [someProduct],
             currencyConverter: anyCurrencyCOnverter
         )
     )

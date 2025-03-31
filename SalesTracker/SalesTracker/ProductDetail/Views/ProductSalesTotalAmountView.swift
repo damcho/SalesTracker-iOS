@@ -23,7 +23,8 @@ struct ProductSalesTotalAmountView: View {
             salesCount: 3,
             product: Product(
                 id: UUID(),
-                name: "Product A"
+                name: "Product A",
+                sales: []
             ),
             currencyCode: "USD"
         )

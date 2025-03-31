@@ -18,15 +18,15 @@ struct ProductSalesLoaderAdapter {
 
     func loadProductsAndSales() async throws -> [ProductSalesView] {
         let productSalesInfo = try await productSalesLoader.loadProductsAndSales()
-        return productSalesInfo.productsSalesMap.map { product, sales in
+        return productSalesInfo.products.map { product in
             ProductSalesView(
                 viewModel: ProductSalesViewModel(
                     productInfo: ProductInfo(
                         product: product,
-                        salesCount: sales.count
+                        salesCount: product.sales.count
                     ),
                     selectedProductAction: { product in
-                        onSelectedProduct(product, sales, productSalesInfo.currencyConverter)
+                        onSelectedProduct(product, productSalesInfo.currencyConverter)
                     }
                 )
             )

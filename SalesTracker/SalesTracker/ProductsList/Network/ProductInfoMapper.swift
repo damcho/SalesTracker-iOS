@@ -8,20 +8,18 @@
 import Foundation
 
 enum ProductInfoMapper {
-    static func map(_ products: [DecodableProduct], _ sales: [DecodableSale]) -> [Product: [Sale]] {
-        var productsDictionary: [UUID: Product] = [:]
-        var productsSalesDictionary: [Product: [Sale]] = [:]
+    static func map(_ decodedproducts: [DecodableProduct], _ sales: [DecodableSale]) throws -> [Product] {
+        var products: [Product] = []
+        for decodedProduct in decodedproducts {
+            try products.append(Product(
+                id: decodedProduct.id,
+                name: decodedProduct.name,
+                sales: sales.filter { decodableSale in
+                    decodableSale.product_id == decodedProduct.id
+                }.map { decodableSale in try decodableSale.toSale() }
+            ))
+        }
 
-        for decodedProduct in products {
-            let aProduct = Product(id: decodedProduct.id, name: decodedProduct.name)
-            productsDictionary[decodedProduct.id] = aProduct
-            productsSalesDictionary[aProduct] = []
-        }
-        for decodedSale in sales {
-            if let aProduct = productsDictionary[decodedSale.product_id] {
-                try? productsSalesDictionary[aProduct]?.append(decodedSale.toSale())
-            }
-        }
-        return productsSalesDictionary
+        return products
     }
 }

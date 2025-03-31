@@ -46,7 +46,11 @@ struct ProductSaleDetailListView: View {
             viewModel: ProductSalesTotalAmountViewModel(
                 totalSalesAmount: 134_434,
                 salesCount: 23,
-                product: Product(id: UUID(), name: "Product A"),
+                product: Product(
+                    id: UUID(),
+                    name: "Product A",
+                    sales: []
+                ),
                 currencyCode: "ARS"
             )
         )

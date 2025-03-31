@@ -58,7 +58,8 @@ var anyProductInfo: ProductInfo {
     return ProductInfo(
         product: .init(
             id: pdoructID,
-            name: "aname"
+            name: "aname",
+            sales: []
         ),
         salesCount: 3
     )

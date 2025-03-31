@@ -58,14 +58,13 @@ enum ProductDetailComposer {
 
     static func compose(
         with product: Product,
-        sales: [Sale],
         currencyConverter: CurrencyConverter
     )
         -> ProductSaleDetailListView
     {
         ProductSaleDetailListView(
             saleDetailViews: saleViewmodels(
-                from: sales,
+                from: product.sales,
                 currencyConverter: currencyConverter,
                 dateformat: dateFormatter,
                 currencyCode: globalCurrencyCode
@@ -74,10 +73,10 @@ enum ProductDetailComposer {
                 viewModel: ProductSalesTotalAmountViewModel(
                     totalSalesAmount: calculateTotalSalesAmount(
                         from: currencyConverter,
-                        sales: sales,
+                        sales: product.sales,
                         currencyCode: globalCurrencyCode
                     ),
-                    salesCount: sales.count,
+                    salesCount: product.sales.count,
                     product: product,
                     currencyCode: globalCurrencyCode
                 )
