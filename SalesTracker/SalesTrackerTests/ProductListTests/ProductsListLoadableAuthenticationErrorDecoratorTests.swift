@@ -55,7 +55,7 @@ struct ProductsListLoadableAuthenticationErrorDecoratorTests {
     @Test
     func forwards_result_on_successful_load() async throws {
         var errorHandlerCallCount = 0
-        let expectedResult = ProductsSalesInfo(
+        let expectedResult = (
             products: [aProduct.domain],
             currencyConverter: anyCurrencyCOnverter
         )
@@ -75,7 +75,7 @@ struct ProductsListLoadableAuthenticationErrorDecoratorTests {
 
 extension ProductsListLoadableAuthenticationErrorDecoratorTests {
     func makeSUT(
-        stub: Result<ProductsSalesInfo, Error>,
+        stub: Result<([Product], CurrencyConverter), Error>,
         authErrorHandler: @escaping () -> Void = {}
     )
         -> AuthenticationErrorDecorator

@@ -41,7 +41,7 @@ extension ErrorDisplayableDecorator: Authenticable where ObjectType == Authentic
 // MARK: ProductSalesLoadable
 
 extension ErrorDisplayableDecorator: ProductSalesLoadable where ObjectType == ProductSalesLoadable {
-    func loadProductsAndSales() async throws -> ProductsSalesInfo {
+    func loadProductsAndSales() async throws -> (products: [Product], currencyConverter: CurrencyConverter) {
         try await perform {
             try await decoratee.loadProductsAndSales()
         }

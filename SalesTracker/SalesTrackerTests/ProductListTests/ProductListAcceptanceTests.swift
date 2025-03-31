@@ -25,7 +25,7 @@ struct ProductListAcceptanceTests {
 
     @Test
     func orders_products_by_products_name_asc() async throws {
-        let shuffledProducts = ProductsSalesInfo(
+        let shuffledProducts = (
             products: [
                 Product(id: UUID(), name: "product B", sales: [someSale]),
                 Product(id: UUID(), name: "product A", sales: [someSale]),
@@ -62,7 +62,7 @@ extension ProductListAcceptanceTests {
     }
 
     @MainActor
-    func makeSUT(stub: Result<ProductsSalesInfo, Error>) -> ProductListView {
+    func makeSUT(stub: Result<([Product], CurrencyConverter), Error>) -> ProductListView {
         ProductsListComposer.compose(
             with: ProductSalesLoadableStub(stub: stub),
             productSelection: { _, _ in },
@@ -72,8 +72,8 @@ extension ProductListAcceptanceTests {
 }
 
 struct ProductSalesLoadableStub: ProductSalesLoadable {
-    let stub: Result<ProductsSalesInfo, Error>
-    func loadProductsAndSales() async throws -> ProductsSalesInfo {
+    let stub: Result<([Product], CurrencyConverter), Error>
+    func loadProductsAndSales() async throws -> (products: [Product], currencyConverter: CurrencyConverter) {
         try stub.get()
     }
 }
@@ -86,10 +86,10 @@ var someProduct: Product {
     Product(id: UUID(uuidString: "7019D8A7-0B35-4057-B7F9-8C5471961ED0")!, name: "aname", sales: [])
 }
 
-var productInfo: (info: Product, raw: ProductsSalesInfo) {
+var productInfo: (info: Product, raw: ([Product], CurrencyConverter)) {
     (
         someProduct,
-        ProductsSalesInfo(
+        (
             products: [someProduct],
             currencyConverter: anyCurrencyCOnverter
         )
