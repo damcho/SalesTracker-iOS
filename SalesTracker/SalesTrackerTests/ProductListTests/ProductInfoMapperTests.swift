@@ -26,7 +26,7 @@ struct ProductInfoMapperTests {
         let result = try ProductInfoMapper.map([product1.decoded, product2.decoded], [sale1, sale2])
         print(result)
         #expect(
-            try result == [
+            result == [
                 product1.domain,
                 product2.domain
             ]
@@ -49,11 +49,10 @@ struct ProductInfoMapperTests {
 
         let result = try ProductInfoMapper.map([product1.decoded, product2.decoded], [sale1, sale2])
         #expect(
-            try
-                result == [
-                    product1.domain,
-                    product2.domain
-                ]
+            result == [
+                product1.domain,
+                product2.domain
+            ]
         )
     }
 }
