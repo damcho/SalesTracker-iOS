@@ -24,43 +24,31 @@ struct ProductSalesViewModelTests {
 
     @Test
     func displays_product_name() async throws {
-        let aProduct = anyProductInfo
-        let sut = makeSUT(productInfo: aProduct)
+        let aProduct = someProduct
+        let sut = makeSUT(product: aProduct)
 
-        #expect(sut.productName == aProduct.product.name)
+        #expect(sut.productName == aProduct.name)
     }
 
     @Test
     func displays_product_sales_count() async throws {
-        let aProduct = anyProductInfo
-        let sut = makeSUT(productInfo: aProduct)
+        let aProduct = someProduct
+        let sut = makeSUT(product: aProduct)
 
-        #expect(sut.salesAmount == ProductSalesViewModel.ProductSalesRepresentation.sales(aProduct.salesCount).value)
+        #expect(sut.salesAmount == ProductSalesViewModel.ProductSalesRepresentation.sales(aProduct.sales.count).value)
     }
 }
 
 extension ProductSalesViewModelTests {
     func makeSUT(
-        productInfo: ProductInfo = anyProductInfo,
+        product: Product = someProduct,
         didSelectProductAction: @escaping SelectedProductAction = { _ in }
     )
         -> ProductSalesViewModel
     {
         ProductSalesViewModel(
-            productInfo: productInfo,
+            product: product,
             selectedProductAction: didSelectProductAction
         )
     }
-}
-
-var anyProductInfo: ProductInfo {
-    let pdoructID = UUID()
-    return ProductInfo(
-        product: .init(
-            id: pdoructID,
-            name: "aname",
-            sales: []
-        ),
-        salesCount: 3
-    )
 }

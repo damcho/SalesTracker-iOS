@@ -21,22 +21,22 @@ struct ProductSalesViewModel {
         }
     }
 
-    let productInfo: ProductInfo
+    let product: Product
     let selectionAction: SelectedProductAction
     var productName: String {
-        productInfo.product.name
+        product.name
     }
 
     var salesAmount: String {
-        ProductSalesRepresentation.sales(productInfo.salesCount).value
+        ProductSalesRepresentation.sales(product.sales.count).value
     }
 
-    init(productInfo: ProductInfo, selectedProductAction: @escaping SelectedProductAction) {
-        self.productInfo = productInfo
+    init(product: Product, selectedProductAction: @escaping SelectedProductAction) {
+        self.product = product
         self.selectionAction = selectedProductAction
     }
 
     func didSelectProduct() {
-        selectionAction(productInfo.product)
+        selectionAction(product)
     }
 }

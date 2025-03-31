@@ -47,13 +47,10 @@ struct ProductListView: View {
             [
                 ProductSalesView(
                     viewModel: ProductSalesViewModel(
-                        productInfo: ProductInfo(
-                            product: .init(
-                                id: UUID(),
-                                name: "aname",
-                                sales: []
-                            ),
-                            salesCount: 3
+                        product: .init(
+                            id: UUID(),
+                            name: "aname",
+                            sales: []
                         ),
                         selectedProductAction: { _ in }
                     )

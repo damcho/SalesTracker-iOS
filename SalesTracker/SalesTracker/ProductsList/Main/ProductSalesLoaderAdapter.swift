@@ -21,10 +21,7 @@ struct ProductSalesLoaderAdapter {
         return productSalesInfo.products.map { product in
             ProductSalesView(
                 viewModel: ProductSalesViewModel(
-                    productInfo: ProductInfo(
-                        product: product,
-                        salesCount: product.sales.count
-                    ),
+                    product: product,
                     selectedProductAction: { product in
                         onSelectedProduct(product, productSalesInfo.currencyConverter)
                     }

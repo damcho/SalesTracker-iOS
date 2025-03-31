@@ -54,9 +54,9 @@ extension ProductListAcceptanceTests {
         #expect(productsNames == expectedResult)
     }
 
-    func assertProductSalesViewModels(for views: [ProductSalesView], expectedResult: [ProductInfo]) {
+    func assertProductSalesViewModels(for views: [ProductSalesView], expectedResult: [Product]) {
         let productsInfoArray = views.map { view in
-            view.viewModel.productInfo
+            view.viewModel.product
         }
         #expect(productsInfoArray == expectedResult)
     }
@@ -86,12 +86,9 @@ var someProduct: Product {
     Product(id: UUID(uuidString: "7019D8A7-0B35-4057-B7F9-8C5471961ED0")!, name: "aname", sales: [])
 }
 
-var productInfo: (info: ProductInfo, raw: ProductsSalesInfo) {
+var productInfo: (info: Product, raw: ProductsSalesInfo) {
     (
-        ProductInfo(
-            product: someProduct,
-            salesCount: 0
-        ),
+        someProduct,
         ProductsSalesInfo(
             products: [someProduct],
             currencyConverter: anyCurrencyCOnverter

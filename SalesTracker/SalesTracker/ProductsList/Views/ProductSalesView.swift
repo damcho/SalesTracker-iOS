@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProductSalesView: View, Identifiable {
-    var id: UUID { viewModel.productInfo.product.id }
+    var id: UUID { viewModel.product.id }
     let viewModel: ProductSalesViewModel
 
     var body: some View {
@@ -28,13 +28,10 @@ struct ProductSalesView: View, Identifiable {
 #Preview {
     ProductSalesView(
         viewModel: ProductSalesViewModel(
-            productInfo: ProductInfo(
-                product: .init(
-                    id: UUID(),
-                    name: "a name",
-                    sales: []
-                ),
-                salesCount: 3
+            product: .init(
+                id: UUID(),
+                name: "aname",
+                sales: []
             ),
             selectedProductAction: { _ in print("Tapped") }
         )
