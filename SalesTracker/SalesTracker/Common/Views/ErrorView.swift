@@ -11,6 +11,7 @@ struct ErrorView: View {
     @StateObject var viewModel: ErrorViewModel
     var body: some View {
         Text(viewModel.errorMessage)
+            .secondaryListText()
             .foregroundStyle(.red)
     }
 }

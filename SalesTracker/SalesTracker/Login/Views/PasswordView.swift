@@ -15,6 +15,7 @@ struct PasswordView: View {
             "Password",
             text: $viewModel.textfieldLabel
         )
+        .font(.system(.title))
         .textFieldStyle(.roundedBorder)
         .textInputAutocapitalization(.never)
         .disableAutocorrection(true)

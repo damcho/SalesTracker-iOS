@@ -13,9 +13,10 @@ struct ProductSalesView: View, Identifiable {
 
     var body: some View {
         HStack(spacing: 10, content: {
-            Text(viewModel.productName).lineLimit(2)
+            Text(viewModel.productName).lineLimit(2).primaryListText()
             Spacer()
             Text(viewModel.salesAmount)
+                .primaryListText()
         })
         .background()
         .onTapGesture {

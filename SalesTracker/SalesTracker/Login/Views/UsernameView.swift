@@ -14,6 +14,7 @@ struct UsernameView: View {
             "User name",
             text: $viewModel.textfieldLabel
         )
+        .font(.system(.title))
         .textFieldStyle(.roundedBorder)
         .textInputAutocapitalization(.never)
         .disableAutocorrection(true)

@@ -11,8 +11,9 @@ struct ProductSalesTotalAmountView: View {
     let viewModel: ProductSalesTotalAmountViewModel
 
     var body: some View {
-        Text(viewModel.product.name).font(.system(.title))
-        Text(viewModel.productSalesLabelText).font(.system(.title2))
+        Text(viewModel.product.name)
+            .primaryListText()
+        Text(viewModel.productSalesLabelText).secondaryListText()
     }
 }
 
