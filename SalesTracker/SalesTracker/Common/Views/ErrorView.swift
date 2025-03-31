@@ -14,7 +14,7 @@ struct ErrorView: View {
             EmptyView()
         } else {
             Text(viewModel.errorMessage)
-                .secondaryListText()
+                .primaryListText()
                 .foregroundStyle(.red)
         }
     }
