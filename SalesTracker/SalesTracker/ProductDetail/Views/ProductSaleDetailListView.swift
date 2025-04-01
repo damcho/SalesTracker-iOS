@@ -15,8 +15,12 @@ struct ProductSaleDetailListView: View {
         VStack {
             headerSection
             List {
-                ForEach(saleDetailViews) { saleDetailView in
-                    saleDetailView
+                Section {
+                    ForEach(saleDetailViews) { saleDetailView in
+                        saleDetailView
+                    }
+                } header: {
+                    Text("Sales Detail")
                 }
             }
         }
