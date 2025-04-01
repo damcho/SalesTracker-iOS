@@ -11,7 +11,6 @@ import SwiftUI
 enum Screen: Hashable {
     case login
     case productsList(String)
-    case productDetail(Product)
 }
 
 @MainActor
@@ -65,18 +64,11 @@ class NavigationFLow: ObservableObject {
         case let .productsList(accessToken):
             let productsList = ProductsListComposer.compose(
                 accessToken: accessToken,
-                productSelection: { product in
-                    self.push(.productDetail(product))
-                },
                 authErrorHandler: { [weak self] in
                     self?.popToRoot()
                 }
             )
             return productsList.navigationBarBackButtonHidden(true)
-        case let .productDetail(product):
-            return ProductDetailComposer.compose(
-                with: product
-            )
         }
     }
 }

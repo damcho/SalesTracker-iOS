@@ -52,8 +52,7 @@ struct ProductListView: View {
                             name: "aname",
                             sales: [],
                             currencyConverter: CurrencyConverter(currencyconversions: [])
-                        ),
-                        selectedProductAction: { _ in }
+                        )
                     )
                 )
             ]

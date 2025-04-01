@@ -48,7 +48,6 @@ enum ProductsListComposer {
     @MainActor
     static func compose(
         with productsLoadable: ProductSalesLoadable,
-        productSelection: @escaping ProductSelectionHandler,
         authErrorHandler: @escaping () -> Void
     )
         -> ProductListView
@@ -62,7 +61,6 @@ enum ProductsListComposer {
                 ),
                 errorDisplayable: errorViewModel
             ),
-            onSelectedProduct: productSelection,
             productsOrder: { view1, view2 in
                 view1.viewModel.productName < view2.viewModel.productName
             }
@@ -80,7 +78,6 @@ enum ProductsListComposer {
     @MainActor
     static func compose(
         accessToken: String,
-        productSelection: @escaping ProductSelectionHandler,
         authErrorHandler: @escaping () -> Void
     )
         -> ProductListView
@@ -89,7 +86,6 @@ enum ProductsListComposer {
             with: composeProductSalesLoader(
                 with: accessToken
             ),
-            productSelection: productSelection,
             authErrorHandler: authErrorHandler
         )
     }

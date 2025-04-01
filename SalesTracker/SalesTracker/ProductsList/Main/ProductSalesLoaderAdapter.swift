@@ -13,7 +13,6 @@ protocol ProductSalesLoadable {
 
 struct ProductSalesLoaderAdapter {
     let productSalesLoader: ProductSalesLoadable
-    let onSelectedProduct: ProductSelectionHandler
     let productsOrder: (ProductSalesView, ProductSalesView) -> Bool
 
     func loadProductsAndSales() async throws -> [ProductSalesView] {
@@ -21,10 +20,7 @@ struct ProductSalesLoaderAdapter {
         return products.map { product in
             ProductSalesView(
                 viewModel: ProductSalesViewModel(
-                    product: product,
-                    selectedProductAction: { product in
-                        onSelectedProduct(product)
-                    }
+                    product: product
                 )
             )
         }.sorted(by: productsOrder)

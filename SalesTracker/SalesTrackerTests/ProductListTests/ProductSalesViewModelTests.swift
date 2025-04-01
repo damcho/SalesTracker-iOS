@@ -11,18 +11,6 @@ import Testing
 
 struct ProductSalesViewModelTests {
     @Test
-    func executes_action_on_tap() async throws {
-        var selectedProductCallCount = 0
-        let sut = makeSUT { _ in
-            selectedProductCallCount += 1
-        }
-
-        sut.didSelectProduct()
-
-        #expect(selectedProductCallCount == 1)
-    }
-
-    @Test
     func displays_product_name() async throws {
         let aProduct = someProduct()
         let sut = makeSUT(product: aProduct)
@@ -47,8 +35,7 @@ extension ProductSalesViewModelTests {
         -> ProductSalesViewModel
     {
         ProductSalesViewModel(
-            product: product,
-            selectedProductAction: didSelectProductAction
+            product: product
         )
     }
 }

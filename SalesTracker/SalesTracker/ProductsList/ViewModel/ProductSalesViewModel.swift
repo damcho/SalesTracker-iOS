@@ -22,7 +22,6 @@ struct ProductSalesViewModel {
     }
 
     let product: Product
-    let selectionAction: SelectedProductAction
     var productName: String {
         product.name
     }
@@ -31,12 +30,7 @@ struct ProductSalesViewModel {
         ProductSalesRepresentation.sales(product.sales.count).value
     }
 
-    init(product: Product, selectedProductAction: @escaping SelectedProductAction) {
+    init(product: Product) {
         self.product = product
-        self.selectionAction = selectedProductAction
-    }
-
-    func didSelectProduct() {
-        selectionAction(product)
     }
 }

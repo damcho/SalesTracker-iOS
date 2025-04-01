@@ -37,8 +37,7 @@ struct ProductSalesView: View, Identifiable {
                 name: "aname",
                 sales: [],
                 currencyConverter: CurrencyConverter(currencyconversions: [])
-            ),
-            selectedProductAction: { _ in print("Tapped") }
+            )
         )
     )
 }
