@@ -31,10 +31,22 @@ class NavigationFLow: ObservableObject {
     }
 
     func push(_ screen: Screen) {
+        guard Thread.isMainThread else {
+            Task { @MainActor in
+                navigationPath.append(screen)
+            }
+            return
+        }
         navigationPath.append(screen)
     }
 
     func popToRoot() {
+        guard Thread.isMainThread else {
+            Task { @MainActor in
+                navigationPath.removeLast(navigationPath.count)
+            }
+            return
+        }
         navigationPath.removeLast(navigationPath.count)
     }
 
