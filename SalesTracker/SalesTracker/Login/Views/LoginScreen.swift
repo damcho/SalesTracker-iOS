@@ -23,8 +23,8 @@ struct LoginScreen: View {
             }
             .frame(height: 60)
             .foregroundStyle(.white)
-
             Spacer()
+            Text("Login").font(.system(.title))
             usernameView
             passwordView
             loginButtonView
