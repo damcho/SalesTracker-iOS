@@ -11,7 +11,7 @@ struct UsernameView: View {
     @StateObject var viewModel: TextfieldViewModel
     var body: some View {
         TextField(
-            "User name",
+            "Username",
             text: $viewModel.textfieldLabel
         )
         .font(.system(.title))
