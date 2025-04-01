@@ -19,14 +19,13 @@ enum ProductDetailComposer {
     static let globalCurrencyCode: String = "USD"
 
     static func calculateTotalSalesAmount(
-        from currencyConverter: CurrencyConverter,
-        sales: [Sale],
+        product: Product,
         currencyCode: String
     )
         -> Double
     {
-        sales.reduce(0) { partialResult, sale in
-            let conversionRate = try? currencyConverter.currencyConversion(
+        product.sales.reduce(0) { partialResult, sale in
+            let conversionRate = try? product.currencyConverter.currencyConversion(
                 fromCurrency: sale.currencyCode,
                 toCurrency: currencyCode
             ).rate
@@ -35,18 +34,17 @@ enum ProductDetailComposer {
     }
 
     static func saleViewmodels(
-        from sales: [Sale],
-        currencyConverter: CurrencyConverter,
+        from product: Product,
         dateformat: Date.FormatStyle,
         currencyCode: String
     )
         -> [SaleDetailViewModel]
     {
-        sales.map { sale in
+        product.sales.map { sale in
             SaleDetailViewModel(
                 sale: sale,
                 dateFormat: dateFormatter,
-                currencyconversion: try? currencyConverter.currencyConversion(
+                currencyconversion: try? product.currencyConverter.currencyConversion(
                     fromCurrency: sale.currencyCode,
                     toCurrency: globalCurrencyCode
                 )
@@ -57,23 +55,20 @@ enum ProductDetailComposer {
     }
 
     static func compose(
-        with product: Product,
-        currencyConverter: CurrencyConverter
+        with product: Product
     )
         -> ProductSaleDetailListView
     {
         ProductSaleDetailListView(
             saleDetailViews: saleViewmodels(
-                from: product.sales,
-                currencyConverter: currencyConverter,
+                from: product,
                 dateformat: dateFormatter,
                 currencyCode: globalCurrencyCode
             ).map { SaleDetailView(viewModel: $0) },
             headerSection: ProductSalesTotalAmountView(
                 viewModel: ProductSalesTotalAmountViewModel(
                     totalSalesAmount: calculateTotalSalesAmount(
-                        from: currencyConverter,
-                        sales: product.sales,
+                        product: product,
                         currencyCode: globalCurrencyCode
                     ),
                     salesCount: product.sales.count,

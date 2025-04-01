@@ -15,7 +15,7 @@ struct ProductDetailTests {
         let sut = ProductSalesTotalAmountViewModel(
             totalSalesAmount: 143_432.3,
             salesCount: 3,
-            product: someProduct,
+            product: someProduct(),
             currencyCode: "USD"
         )
 
@@ -63,8 +63,7 @@ struct ProductDetailTests {
         )
 
         let totalSalesAmount = ProductDetailComposer.calculateTotalSalesAmount(
-            from: currencyConverter,
-            sales: sales,
+            product: Product(id: UUID(), name: "aname", sales: sales, currencyConverter: currencyConverter),
             currencyCode: "USD"
         )
 
@@ -86,8 +85,7 @@ struct ProductDetailTests {
         )
 
         let totalSalesAmount = ProductDetailComposer.calculateTotalSalesAmount(
-            from: currencyConverter,
-            sales: sales,
+            product: someProduct(sales: sales, converter: currencyConverter),
             currencyCode: "USD"
         )
 
@@ -104,11 +102,10 @@ struct ProductDetailTests {
             saleViewModel(with: saleTenSecondsAgo)
         ]
         let createdViewModels = ProductDetailComposer.saleViewmodels(
-            from: [
+            from: someProduct(sales: [
                 saleTenSecondsAgo,
                 saleJustNow
-            ],
-            currencyConverter: CurrencyConverter(currencyconversions: []),
+            ]),
             dateformat: .dateTime,
             currencyCode: "USD"
         )

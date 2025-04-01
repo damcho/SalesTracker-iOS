@@ -61,7 +61,8 @@ var aProduct: (http: Data, decoded: DecodableProduct, domain: Product) {
         Product(
             id: UUID(uuidString: "7019D8A7-0B35-4057-B7F9-8C5471961ED0")!,
             name: "some productname",
-            sales: []
+            sales: [],
+            currencyConverter: CurrencyConverter(currencyconversions: [])
         )
     )
 }

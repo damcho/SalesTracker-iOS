@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias ProductSelectionHandler = (Product, CurrencyConverter) -> Void
+typealias ProductSelectionHandler = (Product) -> Void
 
 enum ProductsListComposer {
     static var dateFormatter: DateFormatter {
@@ -18,7 +18,7 @@ enum ProductsListComposer {
 
     static func composeProductSalesLoader(with authToken: String) -> RemoteProductSalesLoader {
         RemoteProductSalesLoader(
-            mapper: ProductInfoMapper.map,
+            mapper: ProductMapper.map,
             productsLoader: RemoteProductsLoader(
                 httpClient: HTTPHeaderDecorator(
                     decoratee: SalesTrackerApp.httpClient,

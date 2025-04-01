@@ -13,26 +13,23 @@ import Testing
 struct ProductListAcceptanceTests {
     @Test
     func creates_product_sales_views_on_successful_load() async throws {
-        let sut = await makeSUT(stub: .success(productInfo.raw))
+        let sut = await makeSUT(stub: .success([someProduct()]))
 
         let productSalesViews = try await sut.onRefresh()
 
         assertProductSalesViewModels(
             for: productSalesViews,
-            expectedResult: [productInfo.info]
+            expectedResult: [someProduct()]
         )
     }
 
     @Test
     func orders_products_by_products_name_asc() async throws {
-        let shuffledProducts = (
-            products: [
-                Product(id: UUID(), name: "product B", sales: [someSale]),
-                Product(id: UUID(), name: "product A", sales: [someSale]),
-                Product(id: UUID(), name: "product C", sales: [someSale])
-            ],
-            currencyConverter: anyCurrencyCOnverter
-        )
+        let shuffledProducts = [
+            Product(id: UUID(), name: "product B", sales: [someSale], currencyConverter: anyCurrencyCOnverter),
+            Product(id: UUID(), name: "product A", sales: [someSale], currencyConverter: anyCurrencyCOnverter),
+            Product(id: UUID(), name: "product C", sales: [someSale], currencyConverter: anyCurrencyCOnverter)
+        ]
 
         let sut = await makeSUT(stub: .success(shuffledProducts))
 
@@ -62,18 +59,18 @@ extension ProductListAcceptanceTests {
     }
 
     @MainActor
-    func makeSUT(stub: Result<([Product], CurrencyConverter), Error>) -> ProductListView {
+    func makeSUT(stub: Result<[Product], Error>) -> ProductListView {
         ProductsListComposer.compose(
             with: ProductSalesLoadableStub(stub: stub),
-            productSelection: { _, _ in },
+            productSelection: { _ in },
             authErrorHandler: {}
         )
     }
 }
 
 struct ProductSalesLoadableStub: ProductSalesLoadable {
-    let stub: Result<([Product], CurrencyConverter), Error>
-    func loadProductsAndSales() async throws -> (products: [Product], currencyConverter: CurrencyConverter) {
+    let stub: Result<[Product], Error>
+    func loadProductsAndSales() async throws -> [Product] {
         try stub.get()
     }
 }
@@ -82,16 +79,16 @@ var someSale: Sale {
     Sale(date: .now, amount: 12.3, currencyCode: "USD")
 }
 
-var someProduct: Product {
-    Product(id: UUID(uuidString: "7019D8A7-0B35-4057-B7F9-8C5471961ED0")!, name: "aname", sales: [])
-}
-
-var productInfo: (info: Product, raw: ([Product], CurrencyConverter)) {
-    (
-        someProduct,
-        (
-            products: [someProduct],
-            currencyConverter: anyCurrencyCOnverter
-        )
+func someProduct(
+    sales: [Sale] = [],
+    converter: CurrencyConverter = CurrencyConverter(currencyconversions: [])
+)
+    -> Product
+{
+    Product(
+        id: UUID(uuidString: "7019D8A7-0B35-4057-B7F9-8C5471961ED0")!,
+        name: "aname",
+        sales: sales,
+        currencyConverter: converter
     )
 }

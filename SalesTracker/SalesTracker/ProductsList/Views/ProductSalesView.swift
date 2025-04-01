@@ -12,16 +12,20 @@ struct ProductSalesView: View, Identifiable {
     let viewModel: ProductSalesViewModel
 
     var body: some View {
-        HStack(spacing: 10, content: {
-            Text(viewModel.productName).lineLimit(2).primaryListText()
-            Spacer()
-            Text(viewModel.salesAmount)
-                .primaryListText()
-        })
-        .contentShape(Rectangle())
-        .onTapGesture {
-            viewModel.didSelectProduct()
+        NavigationLink {
+            ProductDetailComposer.compose(
+                with: viewModel.product
+            )
+            Text("hello world")
+        } label: {
+            HStack(spacing: 10, content: {
+                Text(viewModel.productName).lineLimit(2).primaryListText()
+                Spacer()
+                Text(viewModel.salesAmount)
+                    .primaryListText()
+            })
         }
+        .contentShape(Rectangle())
     }
 }
 
@@ -31,7 +35,8 @@ struct ProductSalesView: View, Identifiable {
             product: .init(
                 id: UUID(),
                 name: "aname",
-                sales: []
+                sales: [],
+                currencyConverter: CurrencyConverter(currencyconversions: [])
             ),
             selectedProductAction: { _ in print("Tapped") }
         )

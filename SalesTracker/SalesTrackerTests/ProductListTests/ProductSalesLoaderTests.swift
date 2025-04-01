@@ -34,7 +34,7 @@ struct ProductSalesLoaderTests {
     @Test
     func maps_on_products_and_sales_load_success() async throws {
         var mappedResultsCallCount = 0
-        let sut = makeSUT(mapper: { _, _ in
+        let sut = makeSUT(mapper: { _, _, _ in
             mappedResultsCallCount += 1
             return []
         })
@@ -47,7 +47,7 @@ struct ProductSalesLoaderTests {
 
 extension ProductSalesLoaderTests {
     func makeSUT(
-        mapper: @escaping ProductSalesDictionaryMapper = { _, _ in [] },
+        mapper: @escaping ProductsMapper = { _, _, _ in [] },
         productsLoadableStub: Result<[DecodableProduct], Error> = .success([]),
         salesLoadableStub: Result<[DecodableSale], Error> = .success([]),
         currencyRatesLoadataStub: Result<CurrencyConverter, Error> = .success(anyCurrencyCOnverter)

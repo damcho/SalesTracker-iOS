@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ProductSalesLoadable {
-    func loadProductsAndSales() async throws -> (products: [Product], currencyConverter: CurrencyConverter)
+    func loadProductsAndSales() async throws -> [Product]
 }
 
 struct ProductSalesLoaderAdapter {
@@ -17,13 +17,13 @@ struct ProductSalesLoaderAdapter {
     let productsOrder: (ProductSalesView, ProductSalesView) -> Bool
 
     func loadProductsAndSales() async throws -> [ProductSalesView] {
-        let (products, currencyConverter) = try await productSalesLoader.loadProductsAndSales()
+        let products = try await productSalesLoader.loadProductsAndSales()
         return products.map { product in
             ProductSalesView(
                 viewModel: ProductSalesViewModel(
                     product: product,
                     selectedProductAction: { product in
-                        onSelectedProduct(product, currencyConverter)
+                        onSelectedProduct(product)
                     }
                 )
             )

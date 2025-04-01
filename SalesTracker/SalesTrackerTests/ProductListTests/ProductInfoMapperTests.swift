@@ -23,7 +23,11 @@ struct ProductInfoMapperTests {
             sales: [sale2.toSale()]
         )
 
-        let result = try ProductInfoMapper.map([product1.decoded, product2.decoded], [sale1, sale2])
+        let result = try ProductMapper.map(
+            [product1.decoded, product2.decoded],
+            [sale1, sale2],
+            CurrencyConverter(currencyconversions: [])
+        )
         print(result)
         #expect(
             result == [
@@ -47,7 +51,11 @@ struct ProductInfoMapperTests {
             sales: []
         )
 
-        let result = try ProductInfoMapper.map([product1.decoded, product2.decoded], [sale1, sale2])
+        let result = try ProductMapper.map(
+            [product1.decoded, product2.decoded],
+            [sale1, sale2],
+            CurrencyConverter(currencyconversions: [])
+        )
         #expect(
             result == [
                 product1.domain,
@@ -63,7 +71,12 @@ var invalidProductID: UUID {
 
 func aDecodedProduct(id: UUID, sales: [Sale] = []) -> (domain: Product, decoded: DecodableProduct) {
     (
-        Product(id: id, name: "some productname", sales: sales),
+        Product(
+            id: id,
+            name: "some productname",
+            sales: sales,
+            currencyConverter: CurrencyConverter(currencyconversions: [])
+        ),
         DecodableProduct(
             id: id,
             name: "some productname"

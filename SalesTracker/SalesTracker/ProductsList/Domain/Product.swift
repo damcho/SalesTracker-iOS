@@ -11,4 +11,5 @@ struct Product: Equatable, Hashable {
     let id: UUID
     let name: String
     let sales: [Sale]
+    let currencyConverter: CurrencyConverter
 }

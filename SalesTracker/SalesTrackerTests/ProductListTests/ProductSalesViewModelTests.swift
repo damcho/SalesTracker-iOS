@@ -24,7 +24,7 @@ struct ProductSalesViewModelTests {
 
     @Test
     func displays_product_name() async throws {
-        let aProduct = someProduct
+        let aProduct = someProduct()
         let sut = makeSUT(product: aProduct)
 
         #expect(sut.productName == aProduct.name)
@@ -32,7 +32,7 @@ struct ProductSalesViewModelTests {
 
     @Test
     func displays_product_sales_count() async throws {
-        let aProduct = someProduct
+        let aProduct = someProduct()
         let sut = makeSUT(product: aProduct)
 
         #expect(sut.salesAmount == ProductSalesViewModel.ProductSalesRepresentation.sales(aProduct.sales.count).value)
@@ -41,7 +41,7 @@ struct ProductSalesViewModelTests {
 
 extension ProductSalesViewModelTests {
     func makeSUT(
-        product: Product = someProduct,
+        product: Product = someProduct(),
         didSelectProductAction: @escaping SelectedProductAction = { _ in }
     )
         -> ProductSalesViewModel

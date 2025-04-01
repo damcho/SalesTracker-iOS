@@ -50,7 +50,8 @@ struct ProductListView: View {
                         product: .init(
                             id: UUID(),
                             name: "aname",
-                            sales: []
+                            sales: [],
+                            currencyConverter: CurrencyConverter(currencyconversions: [])
                         ),
                         selectedProductAction: { _ in }
                     )

@@ -8,7 +8,7 @@
 // MARK: ProductSalesLoadable
 
 extension ErrorDisplayableDecorator: ProductSalesLoadable where ObjectType == ProductSalesLoadable {
-    func loadProductsAndSales() async throws -> (products: [Product], currencyConverter: CurrencyConverter) {
+    func loadProductsAndSales() async throws -> [Product] {
         try await perform {
             try await decoratee.loadProductsAndSales()
         }
