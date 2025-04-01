@@ -8,7 +8,7 @@
 import Foundation
 
 final class TextfieldViewModel {
-    var textfieldLabel: String = "" {
+    @Published var textfieldLabel: String = "" {
         didSet {
             didChangeTextfieldLabel(textfieldLabel)
         }
