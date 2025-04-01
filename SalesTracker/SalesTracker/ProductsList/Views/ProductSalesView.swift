@@ -18,7 +18,7 @@ struct ProductSalesView: View, Identifiable {
             Text(viewModel.salesAmount)
                 .primaryListText()
         })
-        .background()
+        .contentShape(Rectangle())
         .onTapGesture {
             viewModel.didSelectProduct()
         }
