@@ -19,6 +19,9 @@ struct UsernameView: View {
         .textInputAutocapitalization(.never)
         .disableAutocorrection(true)
         .padding()
+        .onAppear {
+            viewModel.onAppear()
+        }
     }
 }
 

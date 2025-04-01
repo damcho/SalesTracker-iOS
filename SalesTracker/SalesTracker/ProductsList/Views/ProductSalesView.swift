@@ -16,7 +16,6 @@ struct ProductSalesView: View, Identifiable {
             ProductDetailComposer.compose(
                 with: viewModel.product
             )
-            Text("hello world")
         } label: {
             HStack(spacing: 10, content: {
                 Text(viewModel.productName).lineLimit(2).primaryListText()

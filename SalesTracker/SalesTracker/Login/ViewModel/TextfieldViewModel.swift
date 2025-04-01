@@ -19,6 +19,10 @@ final class TextfieldViewModel {
     init(didChangeCallback: @escaping (String) -> Void) {
         self.didChangeTextfieldLabel = didChangeCallback
     }
+
+    func onAppear() {
+        textfieldLabel = ""
+    }
 }
 
 // MARK: ObservableObject
