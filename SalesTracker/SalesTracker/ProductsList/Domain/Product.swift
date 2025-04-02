@@ -7,11 +7,9 @@
 
 import Foundation
 
-struct Product: Equatable, Hashable {
+struct Product {
     let id: UUID
     let name: String
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
+    let sales: [Sale]
+    let currencyConverter: CurrencyConverter
 }

@@ -30,9 +30,7 @@ enum LoginScreenComposer {
     {
         ActivityIndicatorAuthenticationDecorator(
             decoratee: authenticable,
-            activityIndicatorDisplayable: MainThreadDispatcher(
-                decoratee: activityIndicatorDisplayable
-            )
+            activityIndicatorDisplayable: activityIndicatorDisplayable
         )
     }
 
@@ -44,12 +42,11 @@ enum LoginScreenComposer {
     {
         ErrorDisplayableDecorator(
             decoratee: decoratee,
-            errorDisplayable: MainThreadDispatcher(
-                decoratee: errorDisplayable
-            )
+            errorDisplayable: errorDisplayable
         )
     }
 
+    @MainActor
     static func composeLogin() -> (LoginButtonViewModel, ActivityIndicatorViewModel, ErrorViewModel, Authenticable) {
         let activityIndicatorViewModel = ActivityIndicatorViewModel()
         let loginButtonViewModel = LoginButtonViewModel()
@@ -71,6 +68,7 @@ enum LoginScreenComposer {
         return (loginButtonViewModel, activityIndicatorViewModel, errorViewModel, activityIndicatorAuthenticable)
     }
 
+    @MainActor
     static func composeLoginScreen(successfulAuthAction: @escaping (String) -> Void) -> LoginScreen {
         let (
             loginButtonViewModel,
@@ -90,7 +88,7 @@ enum LoginScreenComposer {
             }
         )
         return LoginScreen(
-            navigationTitle: "Login",
+            navigationTitle: "Sales Tracker",
             errorView: ErrorView(
                 viewModel: errorViewModel
             ),

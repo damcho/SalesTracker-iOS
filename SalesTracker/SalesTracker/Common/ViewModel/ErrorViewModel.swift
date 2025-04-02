@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 final class ErrorViewModel: ObservableObject {
     @Published var errorMessage: String = ""
 }

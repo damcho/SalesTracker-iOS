@@ -11,9 +11,9 @@ import SwiftUI
 enum Screen: Hashable {
     case login
     case productsList(String)
-    case productDetail(Product, [Sale], CurrencyConverter)
 }
 
+@MainActor
 class NavigationFLow: ObservableObject {
     @Published var navigationPath: NavigationPath
 
@@ -30,15 +30,23 @@ class NavigationFLow: ObservableObject {
     }
 
     func push(_ screen: Screen) {
-        Task { @MainActor in
-            navigationPath.append(screen)
+        guard Thread.isMainThread else {
+            Task { @MainActor in
+                navigationPath.append(screen)
+            }
+            return
         }
+        navigationPath.append(screen)
     }
 
     func popToRoot() {
-        Task { @MainActor in
-            navigationPath.removeLast(navigationPath.count)
+        guard Thread.isMainThread else {
+            Task { @MainActor in
+                navigationPath.removeLast(navigationPath.count)
+            }
+            return
         }
+        navigationPath.removeLast(navigationPath.count)
     }
 
     func resolveInitialScreen() -> LoginScreen {
@@ -56,20 +64,11 @@ class NavigationFLow: ObservableObject {
         case let .productsList(accessToken):
             let productsList = ProductsListComposer.compose(
                 accessToken: accessToken,
-                productSelection: { product, sales, currencyConverter in
-                    self.push(.productDetail(product, sales, currencyConverter))
-                },
                 authErrorHandler: { [weak self] in
                     self?.popToRoot()
                 }
             )
             return productsList.navigationBarBackButtonHidden(true)
-        case let .productDetail(product, sales, currencyConverter):
-            return ProductDetailComposer.compose(
-                with: product,
-                sales: sales,
-                currencyConverter: currencyConverter
-            )
         }
     }
 }

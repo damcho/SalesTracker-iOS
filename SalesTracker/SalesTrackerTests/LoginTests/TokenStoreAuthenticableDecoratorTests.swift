@@ -20,17 +20,17 @@ struct TokenStoreAuthenticableDecoratorTests {
 
     @Test
     func forwards_result() async throws {
-        let (sut, _) = makeSUT(stub: .success(anyAuthenticationResult))
+        let (sut, _) = makeSUT(stub: .success(successfulAuthenticationResult))
 
         let result = try await sut.authenticate(with: anyLoginCredentials)
 
-        #expect(result == anyAuthenticationResult)
+        #expect(result == successfulAuthenticationResult)
     }
 
     @Test
     func throws_on_token_store_error() async throws {
         let (sut, tokenStoreSpy) = makeSUT(
-            stub: .success(anyAuthenticationResult)
+            stub: .success(successfulAuthenticationResult)
         )
         tokenStoreSpy.stubResult = .failure(anyError)
 
@@ -43,14 +43,14 @@ struct TokenStoreAuthenticableDecoratorTests {
     @Test
     func stores_token_on_authentication_success() async throws {
         let (sut, tokenStoreSpy) = makeSUT(
-            stub: .success(anyAuthenticationResult)
+            stub: .success(successfulAuthenticationResult)
         )
         tokenStoreSpy.stubResult = .success(())
 
         let result = try await sut.authenticate(with: anyLoginCredentials)
 
         #expect(tokenStoreSpy.storeMesages == [result.authToken])
-        #expect(result == anyAuthenticationResult)
+        #expect(result == successfulAuthenticationResult)
     }
 }
 

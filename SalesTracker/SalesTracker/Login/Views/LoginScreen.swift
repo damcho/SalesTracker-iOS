@@ -17,9 +17,15 @@ struct LoginScreen: View {
 
     var body: some View {
         VStack {
-            activityIndicatorView
-            errorView
+            Rectangle()
+                .fill(Color.clear)
+                .overlay {
+                    activityIndicatorView
+                    errorView
+                }
+                .frame(height: 60)
             Spacer()
+            Text("Login").font(.system(.title))
             usernameView
             passwordView
             loginButtonView

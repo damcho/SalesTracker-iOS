@@ -11,23 +11,28 @@ import Testing
 
 struct ProductInfoMapperTests {
     @Test
-    func maps_products_and_sales_to_product_sales_dictionary() async throws {
+    func maps_products_and_sales_to_products() async throws {
         let decodedProductUUID = UUID()
         let anotherDecodedProductUUID = UUID()
-        let productsList = [
-            aDecodedProduct(id: decodedProductUUID).decoded,
-            aDecodedProduct(id: anotherDecodedProductUUID).decoded
-        ]
-        let salesList: [DecodableSale] = [
-            aDecodedSale(for: decodedProductUUID),
-            aDecodedSale(for: anotherDecodedProductUUID)
-        ]
+        let sale1 = aDecodedSale(for: decodedProductUUID)
+        let sale2 = aDecodedSale(for: anotherDecodedProductUUID)
 
-        let result = ProductInfoMapper.map(productsList, salesList)
+        let product1 = try aDecodedProduct(id: decodedProductUUID, sales: [sale1.toSale()])
+        let product2 = try aDecodedProduct(
+            id: anotherDecodedProductUUID,
+            sales: [sale2.toSale()]
+        )
+
+        let result = try ProductMapper.map(
+            [product1.decoded, product2.decoded],
+            [sale1, sale2],
+            CurrencyConverter(currencyconversions: [])
+        )
+        print(result)
         #expect(
             result == [
-                aDecodedProduct(id: decodedProductUUID).domain: try! [salesList[0].toSale()],
-                aDecodedProduct(id: anotherDecodedProductUUID).domain: try! [salesList[1].toSale()]
+                product1.domain,
+                product2.domain
             ]
         )
     }
@@ -36,20 +41,25 @@ struct ProductInfoMapperTests {
     func ignores_sale_that_does_not_match_any_product() async throws {
         let decodedProductUUID = UUID()
         let anotherDecodedProductUUID = UUID()
-        let productsList = [
-            aDecodedProduct(id: decodedProductUUID).decoded,
-            aDecodedProduct(id: anotherDecodedProductUUID).decoded
-        ]
-        let salesList: [DecodableSale] = [
-            aDecodedSale(for: decodedProductUUID),
-            aDecodedSale(for: invalidProductID)
-        ]
 
-        let result = ProductInfoMapper.map(productsList, salesList)
+        let sale1 = aDecodedSale(for: decodedProductUUID)
+        let sale2 = aDecodedSale(for: invalidProductID)
+
+        let product1 = try aDecodedProduct(id: decodedProductUUID, sales: [sale1.toSale()])
+        let product2 = aDecodedProduct(
+            id: anotherDecodedProductUUID,
+            sales: []
+        )
+
+        let result = try ProductMapper.map(
+            [product1.decoded, product2.decoded],
+            [sale1, sale2],
+            CurrencyConverter(currencyconversions: [])
+        )
         #expect(
             result == [
-                aDecodedProduct(id: decodedProductUUID).domain: try! [salesList[0].toSale()],
-                aDecodedProduct(id: anotherDecodedProductUUID).domain: []
+                product1.domain,
+                product2.domain
             ]
         )
     }
@@ -59,9 +69,14 @@ var invalidProductID: UUID {
     UUID()
 }
 
-func aDecodedProduct(id: UUID) -> (domain: Product, decoded: DecodableProduct) {
+func aDecodedProduct(id: UUID, sales: [Sale] = []) -> (domain: Product, decoded: DecodableProduct) {
     (
-        Product(id: id, name: "some productname"),
+        Product(
+            id: id,
+            name: "some productname",
+            sales: sales,
+            currencyConverter: CurrencyConverter(currencyconversions: [])
+        ),
         DecodableProduct(
             id: id,
             name: "some productname"

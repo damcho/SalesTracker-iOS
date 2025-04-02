@@ -12,11 +12,11 @@ import Testing
 struct ErrorViewModelTests {
     @Test
     func displays_custom_error_message_on_localized_error_implemented() async throws {
-        expect(
+        await expect(
             LocalizedErrorImplementation.someLocalizedError.errorDescription!,
             for: LocalizedErrorImplementation.someLocalizedError
         )
-        expect(
+        await expect(
             "An error occurred.",
             for: anyError
         )
@@ -24,19 +24,19 @@ struct ErrorViewModelTests {
 
     @Test
     func displays_empty_string_on_remove_error_called() async throws {
-        let sut = ErrorViewModel()
+        let sut = await ErrorViewModel()
 
-        sut.removeError()
+        await sut.removeError()
 
-        #expect(sut.errorMessage == "")
+        #expect(await sut.errorMessage == "")
     }
 
-    func expect(_ expectedErrorMessage: String, for error: Error) {
-        let sut = ErrorViewModel()
+    func expect(_ expectedErrorMessage: String, for error: Error) async {
+        let sut = await ErrorViewModel()
 
-        sut.display(error)
+        await sut.display(error)
 
-        #expect(sut.errorMessage == expectedErrorMessage)
+        #expect(await sut.errorMessage == expectedErrorMessage)
     }
 }
 

@@ -39,7 +39,7 @@ struct RemoteAuthenticatorHandlerTests {
             httpStub: .success((validToken.data, successfulHTTPResponse)),
             mapper: { _, _ in
                 mapResponseCount += 1
-                return anyAuthenticationResult
+                return successfulAuthenticationResult
             }
         )
 
@@ -52,7 +52,7 @@ extension RemoteAuthenticatorHandlerTests {
     func makeSUT(
         httpStub: HTTPResult,
         mapper: @escaping AuthMapper = { _, _ in
-            anyAuthenticationResult
+            successfulAuthenticationResult
         }
     )
         -> RemoteAuthenticatorHandler

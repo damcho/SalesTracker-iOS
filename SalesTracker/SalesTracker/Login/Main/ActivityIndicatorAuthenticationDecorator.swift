@@ -16,13 +16,13 @@ struct ActivityIndicatorAuthenticationDecorator {
 
 extension ActivityIndicatorAuthenticationDecorator: Authenticable {
     func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult {
-        activityIndicatorDisplayable.displayActivityIndicator()
+        await activityIndicatorDisplayable.displayActivityIndicator()
         var result: AuthenticationResult!
         do {
             result = try await decoratee.authenticate(with: credentials)
-            activityIndicatorDisplayable.hideActivityIndicator()
+            await activityIndicatorDisplayable.hideActivityIndicator()
         } catch {
-            activityIndicatorDisplayable.hideActivityIndicator()
+            await activityIndicatorDisplayable.hideActivityIndicator()
             throw error
         }
         return result

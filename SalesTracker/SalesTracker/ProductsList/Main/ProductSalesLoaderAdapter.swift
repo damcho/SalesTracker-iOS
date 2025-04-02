@@ -8,26 +8,19 @@
 import Foundation
 
 protocol ProductSalesLoadable {
-    func loadProductsAndSales() async throws -> ProductsSalesInfo
+    func loadProductsAndSales() async throws -> [Product]
 }
 
 struct ProductSalesLoaderAdapter {
     let productSalesLoader: ProductSalesLoadable
-    let onSelectedProduct: ProductSelectionHandler
     let productsOrder: (ProductSalesView, ProductSalesView) -> Bool
 
     func loadProductsAndSales() async throws -> [ProductSalesView] {
-        let productSalesInfo = try await productSalesLoader.loadProductsAndSales()
-        return productSalesInfo.productsSalesMap.map { product, sales in
+        let products = try await productSalesLoader.loadProductsAndSales()
+        return products.map { product in
             ProductSalesView(
                 viewModel: ProductSalesViewModel(
-                    productInfo: ProductInfo(
-                        product: product,
-                        salesCount: sales.count
-                    ),
-                    selectedProductAction: { product in
-                        onSelectedProduct(product, sales, productSalesInfo.currencyConverter)
-                    }
+                    product: product
                 )
             )
         }.sorted(by: productsOrder)

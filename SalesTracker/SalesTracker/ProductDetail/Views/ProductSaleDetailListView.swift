@@ -15,8 +15,12 @@ struct ProductSaleDetailListView: View {
         VStack {
             headerSection
             List {
-                ForEach(saleDetailViews) { saleDetailView in
-                    saleDetailView
+                Section {
+                    ForEach(saleDetailViews) { saleDetailView in
+                        saleDetailView
+                    }
+                } header: {
+                    Text("Sales Detail")
                 }
             }
         }
@@ -44,9 +48,12 @@ struct ProductSaleDetailListView: View {
         ],
         headerSection: ProductSalesTotalAmountView(
             viewModel: ProductSalesTotalAmountViewModel(
-                totalSalesAmount: 134_434,
-                salesCount: 23,
-                product: Product(id: UUID(), name: "Product A"),
+                product: Product(
+                    id: UUID(),
+                    name: "Product A",
+                    sales: [],
+                    currencyConverter: CurrencyConverter(currencyconversions: [])
+                ),
                 currencyCode: "ARS"
             )
         )

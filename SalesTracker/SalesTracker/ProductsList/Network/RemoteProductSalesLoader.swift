@@ -7,12 +7,7 @@
 
 import Foundation
 
-struct ProductsSalesInfo: Equatable {
-    let productsSalesMap: [Product: [Sale]]
-    let currencyConverter: CurrencyConverter
-}
-
-typealias ProductSalesDictionaryMapper = ([DecodableProduct], [DecodableSale]) throws -> [Product: [Sale]]
+typealias ProductsMapper = ([DecodableProduct], [DecodableSale], CurrencyConverter) throws -> [Product]
 
 protocol RemoteSalesLoadable {
     func loadSales() async throws -> [DecodableSale]
@@ -27,7 +22,7 @@ protocol RemoteCurrencyRatesLoadable {
 }
 
 struct RemoteProductSalesLoader {
-    let mapper: ProductSalesDictionaryMapper
+    let mapper: ProductsMapper
     let productsLoader: RemoteProductsLoadable
     let remoteSalesLoader: RemoteSalesLoadable
     let currencyRatesLoader: RemoteCurrencyRatesLoadable
@@ -36,14 +31,11 @@ struct RemoteProductSalesLoader {
 // MARK: ProductSalesLoadable
 
 extension RemoteProductSalesLoader: ProductSalesLoadable {
-    func loadProductsAndSales() async throws -> ProductsSalesInfo {
+    func loadProductsAndSales() async throws -> [Product] {
         async let products = try await productsLoader.loadProducts()
         async let sales = try await remoteSalesLoader.loadSales()
-        async let currencyconversions = try await currencyRatesLoader.loadCurrencyRates()
+        async let currencyConverter = try await currencyRatesLoader.loadCurrencyRates()
 
-        return try await ProductsSalesInfo(
-            productsSalesMap: mapper(products, sales),
-            currencyConverter: currencyconversions
-        )
+        return try await mapper(products, sales, currencyConverter)
     }
 }

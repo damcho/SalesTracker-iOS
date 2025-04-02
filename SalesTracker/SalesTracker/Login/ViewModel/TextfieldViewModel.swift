@@ -8,7 +8,7 @@
 import Foundation
 
 final class TextfieldViewModel {
-    var textfieldLabel: String = "" {
+    @Published var textfieldLabel: String = "" {
         didSet {
             didChangeTextfieldLabel(textfieldLabel)
         }
@@ -18,6 +18,10 @@ final class TextfieldViewModel {
 
     init(didChangeCallback: @escaping (String) -> Void) {
         self.didChangeTextfieldLabel = didChangeCallback
+    }
+
+    func onAppear() {
+        textfieldLabel = ""
     }
 }
 

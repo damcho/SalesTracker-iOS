@@ -17,7 +17,7 @@ enum CurrencyConverterError: Error {
     case missingRate
 }
 
-struct CurrencyConverter: Equatable, Hashable {
+final class CurrencyConverter {
     var currencyconversionsMap: [String: [String: Double]] = [:]
     init(currencyconversions: [CurrencyConversion]) {
         for currencyconversion in currencyconversions {

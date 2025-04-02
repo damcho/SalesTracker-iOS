@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias ProductSelectionHandler = (Product, [Sale], CurrencyConverter) -> Void
+typealias ProductSelectionHandler = (Product) -> Void
 
 enum ProductsListComposer {
     static var dateFormatter: DateFormatter {
@@ -18,7 +18,7 @@ enum ProductsListComposer {
 
     static func composeProductSalesLoader(with authToken: String) -> RemoteProductSalesLoader {
         RemoteProductSalesLoader(
-            mapper: ProductInfoMapper.map,
+            mapper: ProductMapper.map,
             productsLoader: RemoteProductsLoader(
                 httpClient: HTTPHeaderDecorator(
                     decoratee: SalesTrackerApp.httpClient,
@@ -45,9 +45,9 @@ enum ProductsListComposer {
         )
     }
 
+    @MainActor
     static func compose(
         with productsLoadable: ProductSalesLoadable,
-        productSelection: @escaping ProductSelectionHandler,
         authErrorHandler: @escaping () -> Void
     )
         -> ProductListView
@@ -59,11 +59,8 @@ enum ProductsListComposer {
                     authErrorHandler: authErrorHandler,
                     decoratee: productsLoadable
                 ),
-                errorDisplayable: MainThreadDispatcher(
-                    decoratee: errorViewModel
-                )
+                errorDisplayable: errorViewModel
             ),
-            onSelectedProduct: productSelection,
             productsOrder: { view1, view2 in
                 view1.viewModel.productName < view2.viewModel.productName
             }
@@ -78,9 +75,9 @@ enum ProductsListComposer {
         )
     }
 
+    @MainActor
     static func compose(
         accessToken: String,
-        productSelection: @escaping ProductSelectionHandler,
         authErrorHandler: @escaping () -> Void
     )
         -> ProductListView
@@ -89,7 +86,6 @@ enum ProductsListComposer {
             with: composeProductSalesLoader(
                 with: accessToken
             ),
-            productSelection: productSelection,
             authErrorHandler: authErrorHandler
         )
     }

@@ -8,33 +8,35 @@
 import SwiftUI
 
 struct ProductSalesView: View, Identifiable {
-    var id: UUID { viewModel.productInfo.product.id }
+    var id: UUID { viewModel.product.id }
     let viewModel: ProductSalesViewModel
 
     var body: some View {
-        HStack(spacing: 10, content: {
-            Text(viewModel.productName).lineLimit(2)
-            Spacer()
-            Text(viewModel.salesAmount)
-        })
-        .background()
-        .onTapGesture {
-            viewModel.didSelectProduct()
+        NavigationLink {
+            ProductDetailComposer.compose(
+                with: viewModel.product
+            )
+        } label: {
+            HStack(spacing: 10, content: {
+                Text(viewModel.productName).lineLimit(2).primaryListText()
+                Spacer()
+                Text(viewModel.salesAmount)
+                    .primaryListText()
+            })
         }
+        .contentShape(Rectangle())
     }
 }
 
 #Preview {
     ProductSalesView(
         viewModel: ProductSalesViewModel(
-            productInfo: ProductInfo(
-                product: .init(
-                    id: UUID(),
-                    name: "a name"
-                ),
-                salesCount: 3
-            ),
-            selectedProductAction: { _ in print("Tapped") }
+            product: .init(
+                id: UUID(),
+                name: "aname",
+                sales: [],
+                currencyConverter: CurrencyConverter(currencyconversions: [])
+            )
         )
     )
 }

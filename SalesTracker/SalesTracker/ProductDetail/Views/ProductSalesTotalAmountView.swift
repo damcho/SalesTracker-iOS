@@ -11,19 +11,20 @@ struct ProductSalesTotalAmountView: View {
     let viewModel: ProductSalesTotalAmountViewModel
 
     var body: some View {
-        Text(viewModel.product.name).font(.system(.title))
-        Text(viewModel.productSalesLabelText).font(.system(.title2))
+        Text(viewModel.product.name)
+            .primaryListText()
+        Text(viewModel.productSalesLabelText).secondaryListText()
     }
 }
 
 #Preview {
     ProductSalesTotalAmountView(
         viewModel: ProductSalesTotalAmountViewModel(
-            totalSalesAmount: 10.3,
-            salesCount: 3,
             product: Product(
                 id: UUID(),
-                name: "Product A"
+                name: "Product A",
+                sales: [],
+                currencyConverter: CurrencyConverter(currencyconversions: [])
             ),
             currencyCode: "USD"
         )

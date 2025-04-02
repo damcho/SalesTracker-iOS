@@ -10,8 +10,13 @@ import SwiftUI
 struct ErrorView: View {
     @StateObject var viewModel: ErrorViewModel
     var body: some View {
-        Text(viewModel.errorMessage)
-            .foregroundStyle(.red)
+        if viewModel.errorMessage.isEmpty {
+            EmptyView()
+        } else {
+            Text(viewModel.errorMessage)
+                .primaryListText()
+                .foregroundStyle(.red)
+        }
     }
 }
 

@@ -12,7 +12,7 @@ import Testing
 struct ErrorDisplayableAuthenticattorDecoratorTests {
     @Test
     func throws_on_authentication_error() async throws {
-        let (sut, _) = makeSUT(decorateeStub: .failure(authError))
+        let (sut, _) = await makeSUT(decorateeStub: .failure(authError))
 
         await #expect(throws: authError) {
             try await sut.authenticate(with: anyLoginCredentials)
@@ -21,11 +21,11 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
 
     @Test
     func forwards_result_on_authentication_success() async throws {
-        let (sut, _) = makeSUT(decorateeStub: .success(anyAuthenticationResult))
+        let (sut, _) = await makeSUT(decorateeStub: .success(successfulAuthenticationResult))
 
         let result = try await sut.authenticate(with: anyLoginCredentials)
 
-        #expect(result == anyAuthenticationResult)
+        #expect(result == successfulAuthenticationResult)
     }
 
     @MainActor
@@ -42,11 +42,11 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
 
     @Test
     func does_not_dispatch_error_on_authentication_success() async throws {
-        let (sut, errorDisplayableSpy) = makeSUT(decorateeStub: .success(anyAuthenticationResult))
+        let (sut, errorDisplayableSpy) = await makeSUT(decorateeStub: .success(successfulAuthenticationResult))
 
         _ = try await sut.authenticate(with: anyLoginCredentials)
 
-        #expect(errorDisplayableSpy.errorDisplayMessages == [])
+        await #expect(errorDisplayableSpy.errorDisplayMessages == [.hidesError])
     }
 
     @MainActor
@@ -68,7 +68,7 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
     @MainActor
     @Test
     func hides_error_on_authentication_started() async throws {
-        let (sut, errorDisplayableSpy) = makeSUT(decorateeStub: .success(anyAuthenticationResult))
+        let (sut, errorDisplayableSpy) = makeSUT(decorateeStub: .success(successfulAuthenticationResult))
 
         _ = try await sut.authenticate(with: anyLoginCredentials)
 
@@ -77,6 +77,7 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
 }
 
 extension ErrorDisplayableAuthenticattorDecoratorTests {
+    @MainActor
     func makeSUT(
         decorateeStub: Result<AuthenticationResult, Error>
     )
