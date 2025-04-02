@@ -20,8 +20,6 @@ struct ProductSalesTotalAmountView: View {
 #Preview {
     ProductSalesTotalAmountView(
         viewModel: ProductSalesTotalAmountViewModel(
-            totalSalesAmount: 10.3,
-            salesCount: 3,
             product: Product(
                 id: UUID(),
                 name: "Product A",

@@ -18,21 +18,6 @@ enum ProductDetailComposer {
 
     static let globalCurrencyCode: String = "USD"
 
-    static func calculateTotalSalesAmount(
-        product: Product,
-        currencyCode: String
-    )
-        -> Double
-    {
-        product.sales.reduce(0) { partialResult, sale in
-            let conversionRate = try? product.currencyConverter.currencyConversion(
-                fromCurrency: sale.currencyCode,
-                toCurrency: currencyCode
-            ).rate
-            return partialResult + sale.amount * (conversionRate ?? 0)
-        }
-    }
-
     static func saleViewmodels(
         from product: Product,
         dateformat: Date.FormatStyle,
@@ -67,11 +52,6 @@ enum ProductDetailComposer {
             ).map { SaleDetailView(viewModel: $0) },
             headerSection: ProductSalesTotalAmountView(
                 viewModel: ProductSalesTotalAmountViewModel(
-                    totalSalesAmount: calculateTotalSalesAmount(
-                        product: product,
-                        currencyCode: globalCurrencyCode
-                    ),
-                    salesCount: product.sales.count,
                     product: product,
                     currencyCode: globalCurrencyCode
                 )

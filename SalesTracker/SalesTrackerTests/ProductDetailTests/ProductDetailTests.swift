@@ -13,13 +13,17 @@ struct ProductDetailTests {
     @Test
     func displays_product_total_sales_amount() async throws {
         let sut = ProductSalesTotalAmountViewModel(
-            totalSalesAmount: 143_432.3,
-            salesCount: 3,
-            product: someProduct(),
+            product: someProduct(
+                sales: [
+                    someSale(amount: 1000.0),
+                    someSale(amount: 2000.0),
+                    someSale(amount: 3000.0)
+                ]
+            ),
             currencyCode: "USD"
         )
 
-        #expect(sut.productSalesLabelText == "($143,432.30) from 3 sales")
+        #expect(sut.productSalesLabelText == "($6,000.00) from 3 sales")
     }
 
     @Test
@@ -46,31 +50,6 @@ struct ProductDetailTests {
     }
 
     @Test
-    func total_sales_amount_calculator() async throws {
-        let sales = [
-            sale(amount: 10, currencyCode: "EUR"),
-            sale(amount: 1000, currencyCode: "ARS")
-        ]
-        let currencyConverter = CurrencyConverter(
-            currencyconversions: [
-                CurrencyConversion(
-                    fromCurrencyCode: "EUR", toCurrencyCode: "USD", rate: 1.1
-                ),
-                CurrencyConversion(
-                    fromCurrencyCode: "ARS", toCurrencyCode: "USD", rate: 1 / 1000
-                )
-            ]
-        )
-
-        let totalSalesAmount = ProductDetailComposer.calculateTotalSalesAmount(
-            product: Product(id: UUID(), name: "aname", sales: sales, currencyConverter: currencyConverter),
-            currencyCode: "USD"
-        )
-
-        #expect(totalSalesAmount == 12.0)
-    }
-
-    @Test
     func ignores_sale_amount_on_missing_currency_conversion_rate() async throws {
         let sales = [
             sale(amount: 10, currencyCode: "EUR"),
@@ -84,12 +63,15 @@ struct ProductDetailTests {
             ]
         )
 
-        let totalSalesAmount = ProductDetailComposer.calculateTotalSalesAmount(
-            product: someProduct(sales: sales, converter: currencyConverter),
+        let sut = ProductSalesTotalAmountViewModel(
+            product: someProduct(
+                sales: sales,
+                converter: currencyConverter
+            ),
             currencyCode: "USD"
         )
 
-        #expect(totalSalesAmount == 11)
+        #expect(sut.totalSalesAmount == 11)
     }
 
     @Test

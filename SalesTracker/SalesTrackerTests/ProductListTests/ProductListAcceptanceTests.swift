@@ -26,9 +26,9 @@ struct ProductListAcceptanceTests {
     @Test
     func orders_products_by_products_name_asc() async throws {
         let shuffledProducts = [
-            Product(id: UUID(), name: "product B", sales: [someSale], currencyConverter: anyCurrencyCOnverter),
-            Product(id: UUID(), name: "product A", sales: [someSale], currencyConverter: anyCurrencyCOnverter),
-            Product(id: UUID(), name: "product C", sales: [someSale], currencyConverter: anyCurrencyCOnverter)
+            Product(id: UUID(), name: "product B", sales: [someSale()], currencyConverter: anyCurrencyCOnverter),
+            Product(id: UUID(), name: "product A", sales: [someSale()], currencyConverter: anyCurrencyCOnverter),
+            Product(id: UUID(), name: "product C", sales: [someSale()], currencyConverter: anyCurrencyCOnverter)
         ]
 
         let sut = await makeSUT(stub: .success(shuffledProducts))
@@ -74,8 +74,8 @@ struct ProductSalesLoadableStub: ProductSalesLoadable {
     }
 }
 
-var someSale: Sale {
-    Sale(date: .now, amount: 12.3, currencyCode: "USD")
+func someSale(amount: Double = 12.3, currencyCode: String = "USD") -> Sale {
+    Sale(date: .now, amount: amount, currencyCode: currencyCode)
 }
 
 func someProduct(

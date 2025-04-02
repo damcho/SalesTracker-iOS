@@ -48,8 +48,6 @@ struct ProductSaleDetailListView: View {
         ],
         headerSection: ProductSalesTotalAmountView(
             viewModel: ProductSalesTotalAmountViewModel(
-                totalSalesAmount: 134_434,
-                salesCount: 23,
                 product: Product(
                     id: UUID(),
                     name: "Product A",

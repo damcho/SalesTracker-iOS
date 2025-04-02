@@ -29,8 +29,4 @@ struct ProductSalesViewModel {
     var salesAmount: String {
         ProductSalesRepresentation.sales(product.sales.count).value
     }
-
-    init(product: Product) {
-        self.product = product
-    }
 }
