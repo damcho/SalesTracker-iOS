@@ -91,3 +91,9 @@ func someProduct(
         currencyConverter: converter
     )
 }
+
+extension Product: @retroactive Equatable {
+    public static func == (lhs: Product, rhs: Product) -> Bool {
+        lhs.id == rhs.id
+    }
+}

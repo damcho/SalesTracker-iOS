@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Product: Equatable, Hashable {
+struct Product {
     let id: UUID
     let name: String
     let sales: [Sale]
