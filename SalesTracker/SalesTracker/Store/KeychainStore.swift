@@ -25,7 +25,7 @@ struct KeychainStore {
             kSecValueData: valueData
         ]
 
-        SecItemDelete(query as CFDictionary)
+        remove(valueFor: key)
 
         let status = SecItemAdd(query as CFDictionary, nil)
 
@@ -54,6 +54,15 @@ struct KeychainStore {
             throw KeychainError.itemNotFound
         }
         return retrievedValue
+    }
+
+    func remove(valueFor key: String) {
+        let query: [CFString: Any] = [
+            kSecClass: kSecClassGenericPassword,
+            kSecAttrAccount: key
+        ]
+
+        SecItemDelete(query as CFDictionary)
     }
 }
 
