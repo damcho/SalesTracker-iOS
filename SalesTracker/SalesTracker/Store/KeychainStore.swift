@@ -18,13 +18,14 @@ struct KeychainStore {
         guard let valueData = value.data(using: .utf8) else {
             throw KeychainError.encoding
         }
+
         let query: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrAccount: key,
             kSecValueData: valueData
         ]
 
-        remove(valueFor: key)
+        SecItemDelete(query as CFDictionary)
 
         let status = SecItemAdd(query as CFDictionary, nil)
 
@@ -53,15 +54,6 @@ struct KeychainStore {
             throw KeychainError.itemNotFound
         }
         return retrievedValue
-    }
-
-    func remove(valueFor key: String) {
-        let query: [CFString: Any] = [
-            kSecClass: kSecClassGenericPassword,
-            kSecAttrAccount: key
-        ]
-
-        SecItemDelete(query as CFDictionary)
     }
 }
 
