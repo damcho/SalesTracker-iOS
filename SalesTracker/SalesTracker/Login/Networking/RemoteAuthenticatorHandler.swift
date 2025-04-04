@@ -38,8 +38,8 @@ extension RemoteAuthenticatorHandler: Authenticable {
             return try mapper(
                 httpResult.httpResponse, httpResult.data
             )
-        } catch is HTTPError {
-            throw LoginError.connectivity
+        } catch let error as HTTPError {
+            throw error
         }
     }
 }

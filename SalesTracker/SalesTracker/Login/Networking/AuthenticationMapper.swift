@@ -31,7 +31,7 @@ enum AuthenticationMapper {
             )
             throw LoginError.authentication(errorData.message)
         case 400, 402 ..< 499:
-            throw LoginError.connectivity
+            throw HTTPError.notFound
         case success:
             return try JSONDecoder().decode(DecodableAuthenticationResult.self, from: data).toAuthenticationResult()
         default:

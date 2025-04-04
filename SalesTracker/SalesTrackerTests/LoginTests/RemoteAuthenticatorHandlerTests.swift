@@ -13,7 +13,7 @@ import Testing
 struct RemoteAuthenticatorHandlerTests {
     @Test
     func throws_connectivity_error_on_http_error() async throws {
-        await #expect(throws: LoginError.connectivity, performing: {
+        await #expect(throws: HTTPError.notFound, performing: {
             let sut = makeSUT(httpStub: .failure(HTTPError.notFound))
             _ = try await sut.authenticate(with: anyLoginCredentials)
         })
@@ -21,11 +21,11 @@ struct RemoteAuthenticatorHandlerTests {
 
     @Test
     func throws_on_mapping_error() async throws {
-        await #expect(throws: LoginError.connectivity, performing: {
+        await #expect(throws: HTTPError.notFound, performing: {
             let sut = makeSUT(
                 httpStub: .success((validToken.data, successfulHTTPResponse)),
                 mapper: { _, _ in
-                    throw HTTPError.other
+                    throw HTTPError.notFound
                 }
             )
             _ = try await sut.authenticate(with: anyLoginCredentials)

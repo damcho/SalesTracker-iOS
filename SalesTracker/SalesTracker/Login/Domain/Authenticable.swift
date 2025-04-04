@@ -21,7 +21,6 @@ protocol Authenticable {
 }
 
 enum LoginError: Error, Equatable {
-    case connectivity
     case authentication(String)
 }
 
@@ -30,8 +29,6 @@ enum LoginError: Error, Equatable {
 extension LoginError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .connectivity:
-            "No internet connection"
         case let .authentication(message):
             message
         }

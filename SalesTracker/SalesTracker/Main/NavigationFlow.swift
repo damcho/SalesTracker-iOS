@@ -65,6 +65,9 @@ class NavigationFLow: ObservableObject {
             let productsList = ProductsListComposer.compose(
                 accessToken: accessToken,
                 authErrorHandler: { [weak self] in
+                    SalesTrackerApp.keychain.remove(
+                        valueFor: SalesTrackerApp.keychain.authTokenStoreKey
+                    )
                     self?.popToRoot()
                 }
             )

@@ -31,6 +31,6 @@ struct ErrorView: View {
     let errorView = ErrorView(
         viewModel: errorViewModel
     )
-    errorViewModel.display(LoginError.connectivity)
+    errorViewModel.display(LoginError.authentication("invalid credentials"))
     return errorView
 }
