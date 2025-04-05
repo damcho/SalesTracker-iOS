@@ -9,11 +9,9 @@ import SwiftUI
 
 struct LoginScreen: View {
     let navigationTitle: String
-    let usernameView: UsernameView
-    let passwordView: PasswordView
     let activityIndicatorView: ActivityIndicatorView
     let loginButtonView: LoginButtonView
-
+    @StateObject var loginScreenViewModel: LoginScreenViewModel
     var body: some View {
         VStack {
             Rectangle()
@@ -23,9 +21,18 @@ struct LoginScreen: View {
                 }
                 .frame(height: 60)
             Spacer()
-            Text("Login").font(.system(.title))
-            usernameView
-            passwordView
+            Text("Log in").font(.system(.title))
+
+            TextField(
+                "Username",
+                text: $loginScreenViewModel.username
+            ).loginTextfield()
+
+            SecureField(
+                "Password",
+                text: $loginScreenViewModel.password
+            ).loginTextfield()
+
             loginButtonView
             Spacer()
         }.navigationTitle(Text(navigationTitle))

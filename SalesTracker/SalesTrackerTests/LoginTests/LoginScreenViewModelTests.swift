@@ -20,13 +20,13 @@ final class LoginScreenViewModelTests {
         let (sut, spy) = makeSUT()
         #expect(spy.enableCalls == [])
 
-        sut.didEnterUsername("aUsername")
+        sut.username = "username"
         #expect(spy.enableCalls == [false])
 
-        sut.didEnterPassword("aPassword")
+        sut.password = "password"
         #expect(spy.enableCalls == [false, true])
 
-        sut.didEnterUsername("")
+        sut.username = ""
         #expect(spy.enableCalls == [false, true, false])
     }
 

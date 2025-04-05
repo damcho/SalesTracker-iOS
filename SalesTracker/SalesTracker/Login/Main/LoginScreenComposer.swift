@@ -90,22 +90,13 @@ enum LoginScreenComposer {
         )
         return LoginScreen(
             navigationTitle: "Sales Tracker",
-            usernameView: UsernameView(
-                viewModel: TextfieldViewModel(
-                    didChangeCallback: loginScreenViewModel.didEnterUsername(_:)
-                )
-            ),
-            passwordView: PasswordView(
-                viewModel: TextfieldViewModel(
-                    didChangeCallback: loginScreenViewModel.didEnterPassword(_:)
-                )
-            ),
             activityIndicatorView: ActivityIndicatorView(
                 viewModel: activityIndicatorViewModel
             ),
             loginButtonView: LoginButtonView(
                 loginButtonViewModel: loginButtonViewModel
-            )
+            ),
+            loginScreenViewModel: loginScreenViewModel
         ).withErrorHandler(errorViewModel)
     }
 }
