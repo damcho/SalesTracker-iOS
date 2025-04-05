@@ -62,6 +62,7 @@ extension ProductListAcceptanceTests {
     func makeSUT(stub: Result<[Product], Error>) -> ProductListView {
         ProductsListComposer.compose(
             with: ProductSalesLoadableStub(stub: stub),
+            errorViewModel: ErrorViewModel(dismisErrorAction: {}),
             authErrorHandler: {}
         )
     }

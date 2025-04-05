@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 typealias ProductSelectionHandler = (Product) -> Void
 
@@ -50,15 +51,27 @@ enum ProductsListComposer {
         with productsLoadable: ProductSalesLoadable,
         authErrorHandler: @escaping () -> Void
     )
+        -> any View
+    {
+        let errorViewModel = ErrorViewModel(dismisErrorAction: authErrorHandler)
+        return compose(
+            with: productsLoadable,
+            errorViewModel: errorViewModel,
+            authErrorHandler: authErrorHandler
+        ).withErrorHandler(errorViewModel)
+    }
+
+    @MainActor
+    static func compose(
+        with productsLoadable: ProductSalesLoadable,
+        errorViewModel: ErrorViewModel,
+        authErrorHandler: @escaping () -> Void
+    )
         -> ProductListView
     {
-        let errorViewModel = ErrorViewModel()
         let productSalesAdapter = ProductSalesLoaderAdapter(
             productSalesLoader: ErrorDisplayableDecorator(
-                decoratee: AuthenticationErrorDecorator(
-                    authErrorHandler: authErrorHandler,
-                    decoratee: productsLoadable
-                ),
+                decoratee: productsLoadable,
                 errorDisplayable: errorViewModel
             ),
             productsOrder: { view1, view2 in
@@ -68,7 +81,6 @@ enum ProductsListComposer {
 
         return ProductListView(
             navigationBarTitle: "Products",
-            errorView: ErrorView(viewModel: errorViewModel),
             onRefresh: {
                 try await productSalesAdapter.loadProductsAndSales()
             }
@@ -80,7 +92,7 @@ enum ProductsListComposer {
         accessToken: String,
         authErrorHandler: @escaping () -> Void
     )
-        -> ProductListView
+        -> any View
     {
         compose(
             with: composeProductSalesLoader(

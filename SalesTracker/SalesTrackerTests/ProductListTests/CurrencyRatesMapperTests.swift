@@ -9,7 +9,7 @@ import Foundation
 @testable import SalesTracker
 import Testing
 
-struct CurrencyRatesMapperTests: MapperSpecs {
+struct CurrencyRatesMapperTests {
     @Test
     func throws_connectivity_error_on_not_found_status_code() async throws {
         #expect(throws: HTTPError.notFound, performing: {

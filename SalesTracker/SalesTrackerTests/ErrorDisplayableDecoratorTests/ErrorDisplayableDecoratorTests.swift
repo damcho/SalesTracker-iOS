@@ -19,7 +19,7 @@ struct ErrorDisplayableDecoratorTests {
             }
         })
 
-        #expect(await errorDisplayableSpy.errorDisplayMessages == [.hidesError, .displayedError])
+        #expect(await errorDisplayableSpy.errorDisplayMessages == [.displayedError])
     }
 
     @Test
@@ -30,7 +30,7 @@ struct ErrorDisplayableDecoratorTests {
             "some string"
         }
 
-        #expect(await errorDisplayableSpy.errorDisplayMessages == [.hidesError])
+        #expect(await errorDisplayableSpy.errorDisplayMessages == [])
     }
 }
 

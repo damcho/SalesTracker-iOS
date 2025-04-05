@@ -19,7 +19,7 @@ struct SalesTrackerApp: App {
             NavigationStack(
                 path: $navigation.navigationPath,
                 root: {
-                    navigation.resolveInitialScreen()
+                    AnyView(navigation.resolveInitialScreen())
                         .navigationDestination(
                             for: Screen.self,
                             destination: { screen in

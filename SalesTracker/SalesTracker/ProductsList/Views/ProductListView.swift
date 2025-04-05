@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ProductListView: View {
     let navigationBarTitle: String
-    let errorView: ErrorView
 
     let onRefresh: () async throws -> [ProductSalesView]
     @State var productSalesViews: [ProductSalesView] = []
@@ -20,8 +19,6 @@ struct ProductListView: View {
                 ForEach(productSalesViews) { productSalesView in
                     productSalesView
                 }
-            } header: {
-                errorView
             }
         }
         .navigationTitle(Text(navigationBarTitle))
@@ -40,9 +37,6 @@ struct ProductListView: View {
 #Preview {
     ProductListView(
         navigationBarTitle: "Products",
-        errorView: ErrorView(
-            viewModel: ErrorViewModel()
-        ),
         onRefresh: {
             [
                 ProductSalesView(

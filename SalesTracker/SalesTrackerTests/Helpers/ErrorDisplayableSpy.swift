@@ -10,7 +10,6 @@ import Foundation
 
 enum ErrorMessages {
     case displayedError
-    case hidesError
 }
 
 final class ErrorDisplayableSpy: ErrorDisplayable {
@@ -19,9 +18,5 @@ final class ErrorDisplayableSpy: ErrorDisplayable {
     func display(_ error: any Error) {
         errorDisplayMessages.append(.displayedError)
         isMainThread = Thread.isMainThread
-    }
-
-    func removeError() {
-        errorDisplayMessages.append(.hidesError)
     }
 }

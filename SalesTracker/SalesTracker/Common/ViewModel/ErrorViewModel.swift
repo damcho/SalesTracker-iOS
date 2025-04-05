@@ -9,21 +9,23 @@ import Foundation
 
 @MainActor
 final class ErrorViewModel: ObservableObject {
-    @Published var errorMessage: String = ""
+    @Published var shouldDisplayAlert: Bool = false
+    var alertErrorTitle: String = ""
+    var alertErrorMessage: String = ""
+
+    let dismisErrorAction: () -> Void
+
+    init(dismisErrorAction: @escaping () -> Void) {
+        self.dismisErrorAction = dismisErrorAction
+    }
 }
 
 // MARK: ErrorDisplayable
 
 extension ErrorViewModel: ErrorDisplayable {
-    func removeError() {
-        errorMessage = ""
-    }
-
     func display(_ error: any Error) {
-        if let alocalizedError = error as? LocalizedError {
-            errorMessage = alocalizedError.localizedDescription
-        } else {
-            errorMessage = "An error occurred."
-        }
+        shouldDisplayAlert = true
+        alertErrorTitle = "Session Error"
+        alertErrorMessage = error.localizedDescription
     }
 }

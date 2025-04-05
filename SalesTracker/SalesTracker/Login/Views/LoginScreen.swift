@@ -9,7 +9,6 @@ import SwiftUI
 
 struct LoginScreen: View {
     let navigationTitle: String
-    let errorView: ErrorView
     let usernameView: UsernameView
     let passwordView: PasswordView
     let activityIndicatorView: ActivityIndicatorView
@@ -21,7 +20,6 @@ struct LoginScreen: View {
                 .fill(Color.clear)
                 .overlay {
                     activityIndicatorView
-                    errorView
                 }
                 .frame(height: 60)
             Spacer()
@@ -35,5 +33,7 @@ struct LoginScreen: View {
 }
 
 #Preview {
-    LoginScreenComposer.composeLoginScreen(successfulAuthAction: { _ in })
+    LoginScreenComposer.composeLoginScreen(
+        successfulAuthAction: { _ in }
+    )
 }

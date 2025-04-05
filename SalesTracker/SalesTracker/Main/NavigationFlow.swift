@@ -49,7 +49,7 @@ class NavigationFLow: ObservableObject {
         navigationPath.removeLast(navigationPath.count)
     }
 
-    func resolveInitialScreen() -> LoginScreen {
+    func resolveInitialScreen() -> any View {
         LoginScreenComposer.composeLoginScreen(
             successfulAuthAction: { accesstoken in
                 self.push(.productsList(accesstoken))
