@@ -25,7 +25,7 @@ final class ErrorViewModel: ObservableObject {
 extension ErrorViewModel: ErrorDisplayable {
     func display(_ error: any Error) {
         shouldDisplayAlert = true
-        alertErrorTitle = "Session Error"
+        alertErrorTitle = "Authentication Error"
         alertErrorMessage = error.localizedDescription
     }
 }

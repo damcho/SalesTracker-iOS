@@ -21,7 +21,7 @@ struct LoginScreen: View {
                 }
                 .frame(height: 60)
             Spacer()
-            Text("Log in").font(.system(.title))
+            Text("Log In").font(.system(.largeTitle))
 
             TextField(
                 "Username",
