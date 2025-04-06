@@ -12,6 +12,7 @@ struct ProductListView: View {
 
     let onRefresh: () async throws -> [ProductSalesView]
     @State var productSalesViews: [ProductSalesView] = []
+    @State var activityIndicatoEnabled: Bool = false
 
     var body: some View {
         List {
@@ -23,13 +24,19 @@ struct ProductListView: View {
         }
         .navigationTitle(Text(navigationBarTitle))
         .refreshable {
-            do {
-                productSalesViews = try await onRefresh()
-            } catch {}
+            await retrieveProducts()
         }.task {
-            do {
-                productSalesViews = try await onRefresh()
-            } catch {}
+            await retrieveProducts()
+        }.enableActivityIndicator($activityIndicatoEnabled)
+    }
+
+    func retrieveProducts() async {
+        do {
+            activityIndicatoEnabled = true
+            productSalesViews = try await onRefresh()
+            activityIndicatoEnabled = false
+        } catch {
+            activityIndicatoEnabled = false
         }
     }
 }
