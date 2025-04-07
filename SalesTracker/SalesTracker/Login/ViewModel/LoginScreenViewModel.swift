@@ -47,4 +47,9 @@ final class LoginScreenViewModel: ObservableObject {
             )
         )
     }
+
+    func onappear() {
+        username = ""
+        password = ""
+    }
 }

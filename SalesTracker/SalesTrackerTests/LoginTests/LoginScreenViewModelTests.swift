@@ -45,6 +45,19 @@ final class LoginScreenViewModelTests {
             sut.didTapLogin()
         }
     }
+
+    @Test
+    func clears_username_and_pwd_on_appear() async throws {
+        let (sut, _) = makeSUT()
+
+        sut.username = "username"
+        sut.password = "password"
+
+        sut.onappear()
+
+        #expect(sut.username == "")
+        #expect(sut.password == "")
+    }
 }
 
 extension LoginScreenViewModelTests {

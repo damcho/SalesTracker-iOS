@@ -35,7 +35,11 @@ struct LoginScreen: View {
 
             loginButtonView
             Spacer()
-        }.navigationTitle(Text(navigationTitle))
+        }
+        .onAppear {
+            loginScreenViewModel.onappear()
+        }
+        .navigationTitle(Text(navigationTitle))
     }
 }
 
