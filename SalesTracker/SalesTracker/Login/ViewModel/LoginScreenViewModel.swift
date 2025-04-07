@@ -28,7 +28,7 @@ final class LoginScreenViewModel: ObservableObject {
 
     init(
         loginEnabler: LoginEnabler,
-        authenticator: @escaping Authenticator,
+        authenticator: @escaping Authenticator
     ) {
         self.LoginEnabler = loginEnabler
         self.authenticate = authenticator

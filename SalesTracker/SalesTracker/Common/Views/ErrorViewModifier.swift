@@ -14,7 +14,7 @@ struct ErrorViewModifier: ViewModifier {
         content
             .alert(
                 errorViewModel.alertErrorTitle,
-                isPresented: $errorViewModel.shouldDisplayAlert,
+                isPresented: $errorViewModel.shouldDisplayAlert
             ) {
                 Button("OK") {
                     errorViewModel.dismisErrorAction()
