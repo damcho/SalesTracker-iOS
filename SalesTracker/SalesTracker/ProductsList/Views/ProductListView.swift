@@ -32,7 +32,7 @@ struct ProductListView: View {
 
     func retrieveProducts() async {
         do {
-            activityIndicatoEnabled = true
+            activityIndicatoEnabled = productSalesViews.isEmpty
             productSalesViews = try await onRefresh()
             activityIndicatoEnabled = false
         } catch {
