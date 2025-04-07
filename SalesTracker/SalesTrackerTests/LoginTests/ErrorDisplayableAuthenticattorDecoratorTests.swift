@@ -37,7 +37,7 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
             _ = try await sut.authenticate(with: anyLoginCredentials)
         }
 
-        #expect(errorDisplayableSpy.errorDisplayMessages == [.hidesError, .displayedError])
+        #expect(errorDisplayableSpy.errorDisplayMessages == [.displayedError])
     }
 
     @Test
@@ -46,7 +46,7 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
 
         _ = try await sut.authenticate(with: anyLoginCredentials)
 
-        await #expect(errorDisplayableSpy.errorDisplayMessages == [.hidesError])
+        await #expect(errorDisplayableSpy.errorDisplayMessages == [])
     }
 
     @MainActor
@@ -72,7 +72,7 @@ struct ErrorDisplayableAuthenticattorDecoratorTests {
 
         _ = try await sut.authenticate(with: anyLoginCredentials)
 
-        #expect(errorDisplayableSpy.errorDisplayMessages == [.hidesError])
+        #expect(errorDisplayableSpy.errorDisplayMessages == [])
     }
 }
 

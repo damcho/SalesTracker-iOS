@@ -61,6 +61,22 @@ struct KeychainStoreTests {
 
         #expect(try sut.retrieveValue(for: aKey) == aValue)
     }
+
+    @Test
+    func removes_stored_value() async throws {
+        let aKey = "aKey"
+        let aValue = "aValue1"
+
+        let sut = makeSUT()
+
+        try sut.store(aValue, for: aKey)
+
+        sut.remove(valueFor: aKey)
+
+        #expect(throws: KeychainError.itemNotFound, performing: {
+            try sut.retrieveValue(for: aKey)
+        })
+    }
 }
 
 extension KeychainStoreTests {

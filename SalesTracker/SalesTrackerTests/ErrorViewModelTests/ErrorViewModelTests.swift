@@ -11,32 +11,19 @@ import Testing
 
 struct ErrorViewModelTests {
     @Test
-    func displays_custom_error_message_on_localized_error_implemented() async throws {
-        await expect(
-            LocalizedErrorImplementation.someLocalizedError.errorDescription!,
-            for: LocalizedErrorImplementation.someLocalizedError
-        )
-        await expect(
-            "An error occurred.",
-            for: anyError
-        )
+    func displays_alert_on_any_error() async throws {
+        let sut = await makeSUT()
+
+        await sut.display(LoginError.authentication("invalid token"))
+
+        #expect(await sut.shouldDisplayAlert == true)
     }
+}
 
-    @Test
-    func displays_empty_string_on_remove_error_called() async throws {
-        let sut = await ErrorViewModel()
-
-        await sut.removeError()
-
-        #expect(await sut.errorMessage == "")
-    }
-
-    func expect(_ expectedErrorMessage: String, for error: Error) async {
-        let sut = await ErrorViewModel()
-
-        await sut.display(error)
-
-        #expect(await sut.errorMessage == expectedErrorMessage)
+extension ErrorViewModelTests {
+    @MainActor
+    func makeSUT() -> ErrorViewModel {
+        .init(dismisErrorAction: {})
     }
 }
 

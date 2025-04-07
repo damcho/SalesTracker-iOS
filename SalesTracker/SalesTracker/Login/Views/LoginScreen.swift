@@ -9,31 +9,42 @@ import SwiftUI
 
 struct LoginScreen: View {
     let navigationTitle: String
-    let errorView: ErrorView
-    let usernameView: UsernameView
-    let passwordView: PasswordView
     let activityIndicatorView: ActivityIndicatorView
     let loginButtonView: LoginButtonView
-
+    @StateObject var loginScreenViewModel: LoginScreenViewModel
     var body: some View {
         VStack {
             Rectangle()
                 .fill(Color.clear)
                 .overlay {
                     activityIndicatorView
-                    errorView
                 }
                 .frame(height: 60)
             Spacer()
-            Text("Login").font(.system(.title))
-            usernameView
-            passwordView
+            Text("Log In").font(.system(.largeTitle))
+
+            TextField(
+                "Username",
+                text: $loginScreenViewModel.username
+            ).loginTextfield()
+
+            SecureField(
+                "Password",
+                text: $loginScreenViewModel.password
+            ).loginTextfield()
+
             loginButtonView
             Spacer()
-        }.navigationTitle(Text(navigationTitle))
+        }
+        .onAppear {
+            loginScreenViewModel.onappear()
+        }
+        .navigationTitle(Text(navigationTitle))
     }
 }
 
 #Preview {
-    LoginScreenComposer.composeLoginScreen(successfulAuthAction: { _ in })
+    LoginScreenComposer.composeLoginScreen(
+        successfulAuthAction: { _ in }
+    )
 }

@@ -14,33 +14,24 @@ protocol LoginEnabler: AnyObject {
 
 typealias Authenticator = (LoginCredentials) -> Void
 
-final class LoginScreenViewModel {
-    var username: String = "" {
-        didSet {
-            shouldEnableLogin()
-        }
+final class LoginScreenViewModel: ObservableObject {
+    @Published var username: String = "" {
+        didSet { shouldEnableLogin() }
     }
 
-    var password: String = "" {
-        didSet {
-            shouldEnableLogin()
-        }
+    @Published var password: String = "" {
+        didSet { shouldEnableLogin() }
     }
 
     let LoginEnabler: LoginEnabler
     let authenticate: Authenticator
 
-    init(loginEnabler: LoginEnabler, authenticator: @escaping Authenticator) {
+    init(
+        loginEnabler: LoginEnabler,
+        authenticator: @escaping Authenticator,
+    ) {
         self.LoginEnabler = loginEnabler
         self.authenticate = authenticator
-    }
-
-    func didEnterUsername(_ newUsername: String) {
-        username = newUsername
-    }
-
-    func didEnterPassword(_ newPassword: String) {
-        password = newPassword
     }
 
     func shouldEnableLogin() {
@@ -48,11 +39,17 @@ final class LoginScreenViewModel {
     }
 
     func didTapLogin() {
+        LoginEnabler.enable(false)
         authenticate(
             LoginCredentials(
                 username: username,
                 password: password
             )
         )
+    }
+
+    func onappear() {
+        username = ""
+        password = ""
     }
 }

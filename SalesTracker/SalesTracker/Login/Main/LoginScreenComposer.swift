@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum LoginScreenComposer {
     static func composeLogin(
@@ -50,7 +51,7 @@ enum LoginScreenComposer {
     static func composeLogin() -> (LoginButtonViewModel, ActivityIndicatorViewModel, ErrorViewModel, Authenticable) {
         let activityIndicatorViewModel = ActivityIndicatorViewModel()
         let loginButtonViewModel = LoginButtonViewModel()
-        let errorViewModel = ErrorViewModel()
+        let errorViewModel = ErrorViewModel(dismisErrorAction: {})
         let activityIndicatorAuthenticable = composeActivityIndicator(
             for: composeErrorDisplayable(
                 decoratee: TokenStoreAuthenticableDecorator(
@@ -69,7 +70,7 @@ enum LoginScreenComposer {
     }
 
     @MainActor
-    static func composeLoginScreen(successfulAuthAction: @escaping (String) -> Void) -> LoginScreen {
+    static func composeLoginScreen(successfulAuthAction: @escaping (String) -> Void) -> any View {
         let (
             loginButtonViewModel,
             activityIndicatorViewModel,
@@ -89,25 +90,13 @@ enum LoginScreenComposer {
         )
         return LoginScreen(
             navigationTitle: "Sales Tracker",
-            errorView: ErrorView(
-                viewModel: errorViewModel
-            ),
-            usernameView: UsernameView(
-                viewModel: TextfieldViewModel(
-                    didChangeCallback: loginScreenViewModel.didEnterUsername(_:)
-                )
-            ),
-            passwordView: PasswordView(
-                viewModel: TextfieldViewModel(
-                    didChangeCallback: loginScreenViewModel.didEnterPassword(_:)
-                )
-            ),
             activityIndicatorView: ActivityIndicatorView(
                 viewModel: activityIndicatorViewModel
             ),
             loginButtonView: LoginButtonView(
                 loginButtonViewModel: loginButtonViewModel
-            )
-        )
+            ),
+            loginScreenViewModel: loginScreenViewModel
+        ).withErrorHandler(errorViewModel)
     }
 }

@@ -20,13 +20,13 @@ final class LoginScreenViewModelTests {
         let (sut, spy) = makeSUT()
         #expect(spy.enableCalls == [])
 
-        sut.didEnterUsername("aUsername")
+        sut.username = "username"
         #expect(spy.enableCalls == [false])
 
-        sut.didEnterPassword("aPassword")
+        sut.password = "password"
         #expect(spy.enableCalls == [false, true])
 
-        sut.didEnterUsername("")
+        sut.username = ""
         #expect(spy.enableCalls == [false, true, false])
     }
 
@@ -44,6 +44,19 @@ final class LoginScreenViewModelTests {
             sut.simulateLoginCredentialsFilled()
             sut.didTapLogin()
         }
+    }
+
+    @Test
+    func clears_username_and_pwd_on_appear() async throws {
+        let (sut, _) = makeSUT()
+
+        sut.username = "username"
+        sut.password = "password"
+
+        sut.onappear()
+
+        #expect(sut.username == "")
+        #expect(sut.password == "")
     }
 }
 

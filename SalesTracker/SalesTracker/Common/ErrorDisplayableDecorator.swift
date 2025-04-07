@@ -8,7 +8,6 @@
 @MainActor
 protocol ErrorDisplayable {
     func display(_ error: Error)
-    func removeError()
 }
 
 struct ErrorDisplayableDecorator<ObjectType> {
@@ -17,7 +16,6 @@ struct ErrorDisplayableDecorator<ObjectType> {
 
     func perform<R>(_ action: () async throws -> R) async throws -> R {
         do {
-            await errorDisplayable.removeError()
             return try await action()
         } catch {
             await errorDisplayable.display(error)
