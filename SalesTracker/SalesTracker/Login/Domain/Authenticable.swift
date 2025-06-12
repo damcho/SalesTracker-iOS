@@ -19,18 +19,3 @@ struct LoginCredentials: Equatable {
 protocol Authenticable {
     func authenticate(with credentials: LoginCredentials) async throws -> AuthenticationResult
 }
-
-enum LoginError: Error, Equatable {
-    case authentication(String)
-}
-
-// MARK: LocalizedError
-
-extension LoginError: LocalizedError {
-    public var errorDescription: String? {
-        switch self {
-        case let .authentication(message):
-            message
-        }
-    }
-}

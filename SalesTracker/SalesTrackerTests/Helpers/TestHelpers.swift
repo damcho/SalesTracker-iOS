@@ -46,9 +46,9 @@ var notFoundHTTPResponse: HTTPURLResponse {
     )!
 }
 
-var invalidCredentialsAuthError: (error: LoginError, http: Data) {
+var invalidCredentialsAuthError: (error: SalesTrackerError, http: Data) {
     (
-        LoginError.authentication("Invalid credentials"),
+        SalesTrackerError.authentication("Invalid credentials"),
         #"{"message": "Invalid credentials"}"#.data(using: .utf8)!
     )
 }
@@ -61,8 +61,8 @@ var validToken: (data: Data, string: String) {
     (#"{"access_token": "aToken"}"#.data(using: .utf8)!, "aToken")
 }
 
-var authError: LoginError {
-    LoginError.authentication("")
+var authError: SalesTrackerError {
+    SalesTrackerError.authentication("")
 }
 
 var anyLoginCredentials: LoginCredentials {

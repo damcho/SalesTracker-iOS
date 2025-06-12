@@ -23,7 +23,7 @@ enum ProductsListMapper {
                 DecodableHTTPErrorMessage.self,
                 from: result.data
             )
-            throw LoginError.authentication(errorData.message)
+            throw SalesTrackerError.authentication(errorData.message)
         case 400, 402 ..< 499:
             throw HTTPError.notFound
         case success:

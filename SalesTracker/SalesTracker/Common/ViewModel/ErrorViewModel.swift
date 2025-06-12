@@ -7,11 +7,29 @@
 
 import Foundation
 
+enum SalesTrackerError: Error, Equatable {
+    case authentication(String)
+    case other(String)
+}
+
+// MARK: LocalizedError
+
+extension SalesTrackerError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case let .authentication(message):
+            message
+        case let .other(message):
+            message
+        }
+    }
+}
+
 @MainActor
 final class ErrorViewModel: ObservableObject {
-    @Published var shouldDisplayAlert: Bool = false
-    var alertErrorTitle: String = ""
-    var alertErrorMessage: String = ""
+    var shouldDisplayAlert: Bool = false
+    var errorTitle = ""
+    @Published var errorMessage: String = ""
 
     let dismisErrorAction: () -> Void
 
@@ -23,9 +41,16 @@ final class ErrorViewModel: ObservableObject {
 // MARK: ErrorDisplayable
 
 extension ErrorViewModel: ErrorDisplayable {
-    func display(_ error: any Error) {
-        shouldDisplayAlert = true
-        alertErrorTitle = "An error occurred"
-        alertErrorMessage = error.localizedDescription
+    func display(_ error: SalesTrackerError) {
+        switch error {
+        case let .authentication(message):
+            errorTitle = "Authentication Error"
+            shouldDisplayAlert = true
+            errorMessage = message
+        case let .other(message):
+            errorTitle = ""
+            shouldDisplayAlert = false
+            errorMessage = message
+        }
     }
 }
