@@ -16,12 +16,14 @@ struct ErrorView: View {
                 HStack {
                     Text(errorText)
                         .frame(minWidth: 0, maxWidth: .infinity)
-                        .padding()
+                        .padding(.all, 5)
                         .foregroundColor(.white)
                         .background(Color.red)
                         .cornerRadius(5)
                         .shadow(radius: 10)
-                }.padding()
+                }
+                .padding()
+                .padding(.top, 50)
                 Spacer()
             }
         }
@@ -29,6 +31,6 @@ struct ErrorView: View {
 }
 
 #Preview {
-    @Previewable @State var aString = "Error Test"
+    @Previewable @State var aString = "Error Test long enough to fit in at least two lines"
     ErrorView(errorText: $aString)
 }

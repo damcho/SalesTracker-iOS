@@ -25,6 +25,7 @@ struct ErrorViewModifier: ViewModifier {
             }
             ErrorView(errorText: $errorViewModel.errorMessage)
                 .transition(.move(edge: .top))
+                .ignoresSafeArea(.container, edges: .top)
         }
         .animation(.easeInOut, value: errorViewModel.errorMessage)
     }
