@@ -39,7 +39,6 @@ final class LoginScreenViewModel: ObservableObject {
     }
 
     func didTapLogin() {
-        LoginEnabler.enable(false)
         authenticate(
             LoginCredentials(
                 username: username,

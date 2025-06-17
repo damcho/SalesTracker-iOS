@@ -27,12 +27,35 @@ struct ErrorViewModelTests {
 
         #expect(await sut.shouldDisplayAlert == false)
     }
+
+    @Test
+    func empty_error_message_on_dismissed_error() async throws {
+        let sut = await makeSUT()
+        await sut.display(SalesTrackerError.authentication("invalid token"))
+
+        await sut.dismiss()
+
+        await #expect(sut.errorMessage.isEmpty)
+        await #expect(sut.shouldDisplayAlert == false)
+    }
+
+    @Test
+    func calls_dismiss_action_on_dismissed_error() async throws {
+        var didCallDismissAction = false
+        let sut = await makeSUT(dismissAction: {
+            didCallDismissAction = true
+        })
+
+        await sut.dismiss()
+
+        #expect(didCallDismissAction == true)
+    }
 }
 
 extension ErrorViewModelTests {
     @MainActor
-    func makeSUT() -> ErrorViewModel {
-        .init(dismisErrorAction: {})
+    func makeSUT(dismissAction: (() -> Void)? = nil) -> ErrorViewModel {
+        .init(dismisErrorAction: dismissAction)
     }
 }
 

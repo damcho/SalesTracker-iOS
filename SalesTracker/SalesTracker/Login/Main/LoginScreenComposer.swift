@@ -51,7 +51,7 @@ enum LoginScreenComposer {
     static func composeLogin() -> (LoginButtonViewModel, ActivityIndicatorViewModel, ErrorViewModel, Authenticable) {
         let activityIndicatorViewModel = ActivityIndicatorViewModel()
         let loginButtonViewModel = LoginButtonViewModel()
-        let errorViewModel = ErrorViewModel(dismisErrorAction: {})
+        let errorViewModel = ErrorViewModel()
         let activityIndicatorAuthenticable = composeActivityIndicator(
             for: composeErrorDisplayable(
                 decoratee: TokenStoreAuthenticableDecorator(
@@ -81,13 +81,21 @@ enum LoginScreenComposer {
             with: loginButtonViewModel,
             authAction: { credentials in
                 Task {
-                    let response = try await activityIndicatorAuthenticable.authenticate(
-                        with: credentials
-                    )
-                    successfulAuthAction(response.authToken)
+                    do {
+                        loginButtonViewModel.enable(false)
+                        let response = try await activityIndicatorAuthenticable.authenticate(
+                            with: credentials
+                        )
+                        successfulAuthAction(response.authToken)
+                    } catch {
+                        loginButtonViewModel.enable(true)
+                    }
                 }
             }
         )
+        errorViewModel.dismisErrorAction = {
+            loginScreenViewModel.onappear()
+        }
         return LoginScreen(
             navigationTitle: "Sales Tracker",
             activityIndicatorView: ActivityIndicatorView(

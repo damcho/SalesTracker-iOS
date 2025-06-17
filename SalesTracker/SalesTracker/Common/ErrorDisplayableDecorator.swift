@@ -7,6 +7,7 @@
 
 @MainActor
 protocol ErrorDisplayable {
+    func removeErrorMessage()
     func display(_ error: SalesTrackerError)
 }
 
@@ -18,6 +19,7 @@ struct ErrorDisplayableDecorator<ObjectType> {
 
     func perform<R>(_ action: ActionType<R>) async throws -> R {
         do {
+            await errorDisplayable.removeErrorMessage()
             return try await action()
         } catch let error as SalesTrackerError {
             await errorDisplayable.display(error)

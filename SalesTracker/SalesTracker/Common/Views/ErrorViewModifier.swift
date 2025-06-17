@@ -10,31 +10,21 @@ import SwiftUI
 
 struct ErrorViewModifier: ViewModifier {
     @StateObject var errorViewModel: ErrorViewModel
+
     func body(content: Content) -> some View {
         ZStack {
-            if !errorViewModel.errorMessage.isEmpty {
-                if errorViewModel.shouldDisplayAlert {
-                    content.alert(
-                        errorViewModel.errorTitle,
-                        isPresented: $errorViewModel.shouldDisplayAlert
-                    ) {
-                        Button("OK") {
-                            errorViewModel.dismisErrorAction()
-                        }
-                    } message: {
-                        Text(errorViewModel.errorMessage)
-                    }
-                } else {
-                    content
-                    ErrorView(errorText: $errorViewModel.errorMessage)
-                        .transition(.move(edge: .top))
-                        .onTapGesture {
-                            errorViewModel.errorMessage = ""
-                        }
+            content.alert(
+                errorViewModel.alertErrorTitle,
+                isPresented: $errorViewModel.shouldDisplayAlert
+            ) {
+                Button("OK") {
+                    errorViewModel.dismiss()
                 }
-            } else {
-                content
+            } message: {
+                Text(errorViewModel.alertErrorMessage)
             }
+            ErrorView(errorText: $errorViewModel.errorMessage)
+                .transition(.move(edge: .top))
         }
         .animation(.easeInOut, value: errorViewModel.errorMessage)
     }

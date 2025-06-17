@@ -13,6 +13,8 @@ enum ErrorMessages {
 }
 
 final class ErrorDisplayableSpy: ErrorDisplayable {
+    func removeErrorMessage() {}
+
     var isMainThread = false
     var errorDisplayMessages: [ErrorMessages] = []
     func display(_ error: SalesTrackerError) {

@@ -27,14 +27,26 @@ extension SalesTrackerError: LocalizedError {
 
 @MainActor
 final class ErrorViewModel: ObservableObject {
-    var shouldDisplayAlert: Bool = false
-    var errorTitle = ""
+    @Published var shouldDisplayAlert: Bool = false
     @Published var errorMessage: String = ""
 
-    let dismisErrorAction: () -> Void
+    var alertErrorTitle = "Authentication Error"
+    var alertErrorMessage = ""
 
-    init(dismisErrorAction: @escaping () -> Void) {
+    var dismisErrorAction: (() -> Void)?
+
+    init(dismisErrorAction: (() -> Void)? = nil) {
         self.dismisErrorAction = dismisErrorAction
+    }
+
+    func removeErrorMessage() {
+        errorMessage = ""
+        shouldDisplayAlert = false
+    }
+
+    func dismiss() {
+        removeErrorMessage()
+        dismisErrorAction?()
     }
 }
 
@@ -44,11 +56,9 @@ extension ErrorViewModel: ErrorDisplayable {
     func display(_ error: SalesTrackerError) {
         switch error {
         case let .authentication(message):
-            errorTitle = "Authentication Error"
             shouldDisplayAlert = true
-            errorMessage = message
+            alertErrorMessage = message
         case let .other(message):
-            errorTitle = ""
             shouldDisplayAlert = false
             errorMessage = message
         }
