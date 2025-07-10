@@ -14,7 +14,7 @@ struct ActivityIndicatorViewModifier: ViewModifier {
         ZStack {
             content
             if shouldEnable {
-                ProgressView()
+                ProgressView().padding()
             }
         }
     }

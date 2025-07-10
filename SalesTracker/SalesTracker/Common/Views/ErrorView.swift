@@ -31,6 +31,6 @@ struct ErrorView: View {
 }
 
 #Preview {
-    @Previewable @State var aString = "Error Test long enough to fit in at least two lines"
+    @Previewable @State var aString = "The connection appears to be offline"
     ErrorView(errorText: $aString)
 }
