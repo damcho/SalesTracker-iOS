@@ -17,7 +17,7 @@ SalesTracker is a comprehensive sales management application that allows users t
 
 ### **Frontend**
 - **SwiftUI** - Modern declarative UI framework
-- **iOS 18.4+** - Latest iOS features and capabilities
+- **iOS 17.0+** - Modern iOS features and capabilities
 - **Swift** - Primary programming language
 
 ### **Architecture**
@@ -153,7 +153,7 @@ SalesTracker/
 
 ### **Requirements**
 - Xcode 15.0+
-- iOS 18.4+
+- iOS 17.0+
 - Swift 5.9+
 
 ### **Installation**

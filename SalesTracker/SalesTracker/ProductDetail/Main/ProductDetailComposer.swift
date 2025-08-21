@@ -13,7 +13,6 @@ enum ProductDetailComposer {
         .month(.abbreviated)
         .day(.defaultDigits)
         .hour(.defaultDigits(amPM: .abbreviated))
-        .minute(.omitted)
         .locale(Locale(identifier: "en_US"))
 
     static let globalCurrencyCode: String = "USD"
