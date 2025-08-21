@@ -11,7 +11,8 @@ import SwiftUI
 struct ListRowPrimaryTextModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(.system(.title3))
+            .font(.system(.title3, design: .rounded, weight: .medium))
+            .foregroundColor(.primary)
     }
 }
 

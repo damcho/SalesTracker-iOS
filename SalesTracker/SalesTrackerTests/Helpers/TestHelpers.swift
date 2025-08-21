@@ -83,7 +83,7 @@ func performActionInBackgroundThread(
 )
     -> Task<Void, Error>
 {
-    Task {
+    Task.detached {
         try await action()
     }
 }

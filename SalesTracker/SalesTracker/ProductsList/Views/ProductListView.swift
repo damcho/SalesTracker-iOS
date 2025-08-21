@@ -15,19 +15,50 @@ struct ProductListView: View {
     @State var activityIndicatoEnabled: Bool = false
 
     var body: some View {
-        List {
-            Section {
-                ForEach(productSalesViews) { productSalesView in
-                    productSalesView
+        Group {
+            if productSalesViews.isEmpty, !activityIndicatoEnabled {
+                EmptyProductListView()
+            } else {
+                List {
+                    Section {
+                        ForEach(productSalesViews) { productSalesView in
+                            productSalesView
+                                .listRowBackground(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(Color(.systemBackground))
+                                        .padding(.vertical, 2)
+                                )
+                        }
+                    } header: {
+                        if !productSalesViews.isEmpty {
+                            HStack {
+                                Text("Your Products")
+                                    .font(.system(.subheadline, design: .rounded, weight: .medium))
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("\(productSalesViews.count) items")
+                                    .font(.system(.caption, design: .rounded))
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.horizontal, 4)
+                        }
+                    }
+                    .listSectionSeparator(.hidden)
                 }
+                .listStyle(.insetGrouped)
+                .scrollContentBackground(.hidden)
+                .background(Color(.systemGroupedBackground))
             }
         }
         .navigationTitle(Text(navigationBarTitle))
+        .navigationBarTitleDisplayMode(.large)
         .refreshable {
             await retrieveProducts()
-        }.task {
+        }
+        .task {
             await retrieveProducts()
-        }.enableActivityIndicator($activityIndicatoEnabled)
+        }
+        .enableActivityIndicator($activityIndicatoEnabled)
     }
 
     func retrieveProducts() async {

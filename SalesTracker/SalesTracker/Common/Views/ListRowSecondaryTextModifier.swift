@@ -11,7 +11,8 @@ import SwiftUI
 struct ListRowSecondaryTextModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(.system(.caption))
+            .font(.system(.subheadline, design: .rounded))
+            .foregroundColor(.secondary)
     }
 }
 

@@ -17,14 +17,40 @@ struct ProductSalesView: View, Identifiable {
                 with: viewModel.product
             )
         } label: {
-            HStack(spacing: 10, content: {
-                Text(viewModel.productName).lineLimit(2).primaryListText()
+            HStack(spacing: 16) {
+                // Product icon
+                Image(systemName: "cube.box.fill")
+                    .font(.system(.title2))
+                    .foregroundStyle(.blue.gradient)
+                    .frame(width: 40, height: 40)
+                    .background(
+                        Circle()
+                            .fill(Color.blue.opacity(0.1))
+                    )
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(viewModel.productName)
+                        .lineLimit(2)
+                        .primaryListText()
+                        .multilineTextAlignment(.leading)
+
+                    Text("Total Sales")
+                        .font(.system(.caption, design: .rounded))
+                        .foregroundColor(.secondary)
+                }
+
                 Spacer()
-                Text(viewModel.salesAmount)
-                    .primaryListText()
-            })
+
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text(viewModel.salesAmount)
+                        .font(.system(.title3, design: .rounded, weight: .semibold))
+                        .foregroundColor(.primary)
+                }
+            }
+            .padding(.vertical, 8)
         }
         .contentShape(Rectangle())
+        .buttonStyle(PlainButtonStyle())
     }
 }
 
